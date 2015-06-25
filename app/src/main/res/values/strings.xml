@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Silet Record</string>
+    <string name="drawer_open">Settings</string>
+    <string name="drawer_close">Silent Record</string>
+</resources>
