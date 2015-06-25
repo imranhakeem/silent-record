@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private String[] mListTitles = {"Ok", "NOY"};
+    private String[] mListTitles;
     private ListView mDrawerList;
 
     @Override
@@ -28,9 +29,45 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle = getActionBarDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList = (ListView) findViewById(R.id.list_drawer);
+        mListTitles = new String[] {
+                getString(R.string.title_section1),
+                getString(R.string.title_section2),
+                getString(R.string.title_section3),
+                getString(R.string.title_section4),
+                getString(R.string.title_section5),
+        };
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mListTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    }
+
+    private void selectItem(int position) {
+
+        // Handle Nav Options
+        Intent intent;
+        switch (position) {
+            case 0:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+            case 1:
+                intent = new Intent(this, VideoListActivity.class);
+                startActivity(intent);
+                break;
+            case 2:
+                intent = new Intent(this, AboutUsActivity.class);
+                startActivity(intent);
+                break;
+            case 3:
+                intent = new Intent(this, ReportActivity.class);
+                startActivity(intent);
+                break;
+            case 4:
+                intent = new Intent(this, ContactActivity.class);
+                startActivity(intent);
+                break;
+        }
+
     }
 
     @Override
@@ -73,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+            mDrawerLayout.closeDrawer(mDrawerList);
         }
     }
 }
