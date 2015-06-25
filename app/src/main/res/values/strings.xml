@@ -2,4 +2,6 @@
     <string name="app_name">Silet Record</string>
     <string name="drawer_open">Settings</string>
     <string name="drawer_close">Silent Record</string>
+    <string name="appwidget_text">Test</string>
+    <string name="add_widget">Add widget</string>
 </resources>
