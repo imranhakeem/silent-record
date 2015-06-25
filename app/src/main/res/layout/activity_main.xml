@@ -14,10 +14,10 @@
 
     <ListView
         android:id="@+id/list_drawer"
-        android:layout_width="240dp"
+        android:layout_width="170dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#f1f2f7"
+        android:background="#212121"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent" />
 

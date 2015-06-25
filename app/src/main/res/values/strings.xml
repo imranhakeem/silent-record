@@ -1,5 +1,12 @@
 <resources>
-    <string name="app_name">Silet Record</string>
+
+    <string name="title_section1">Settings</string>
+    <string name="title_section2">Video List</string>
+    <string name="title_section3">About us</string>
+    <string name="title_section4">Report an Issue</string>
+    <string name="title_section5">Contact us</string>
+
+    <string name="app_name">Silent Record</string>
     <string name="drawer_open">Settings</string>
     <string name="drawer_close">Silent Record</string>
     <string name="appwidget_text">Test</string>

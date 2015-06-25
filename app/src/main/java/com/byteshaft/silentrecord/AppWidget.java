@@ -16,7 +16,6 @@ public class AppWidget extends AppWidgetProvider {
         }
     }
 
-
     @Override
     public void onEnabled(Context context) {
     }
