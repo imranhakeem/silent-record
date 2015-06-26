@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord;
 
+import android.app.NotificationManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -33,6 +35,9 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     private MaterialTabHost mMaterialTabHost;
     private Resources mResources;
     private Fragment mFragment;
+    private NotificationCompat.Builder mBuilder;
+    private int mNotificationID = 001;
+    private NotificationManager mNotifyManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,14 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         mViewPager.setAdapter(mViewPagerAdapter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.notification_template_icon_bg)
+                .setContentTitle("Notification")
+                .setContentText("Test")
+                .setAutoCancel(false)
+                .setOngoing(true);
+        mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyManager.notify(mNotificationID, mBuilder.build());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
