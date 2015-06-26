@@ -9,6 +9,6 @@ public class WidgetReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-                  
+
     }
 }
