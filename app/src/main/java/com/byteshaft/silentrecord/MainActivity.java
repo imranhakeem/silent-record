@@ -1,9 +1,7 @@
 package com.byteshaft.silentrecord;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,10 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,6 +32,7 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     private ViewPager mViewPager;
     private MaterialTabHost mMaterialTabHost;
     private Resources mResources;
+    private Fragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,27 +75,21 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     private void selectItem(int position) {
 
         // Handle Nav Options
-        Intent intent;
         switch (position) {
             case 0:
-                intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                mFragment = new SettingFragment();
                 break;
             case 1:
-                intent = new Intent(this, VideoListActivity.class);
-                startActivity(intent);
+                mFragment = new VideoFragment();
                 break;
             case 2:
-                intent = new Intent(this, AboutUsActivity.class);
-                startActivity(intent);
+               mFragment = new AboutFragment();
                 break;
             case 3:
-                intent = new Intent(this, ReportActivity.class);
-                startActivity(intent);
+               mFragment = new ReportFragment();
                 break;
             case 4:
-                intent = new Intent(this, ContactActivity.class);
-                startActivity(intent);
+                mFragment = new ContactFragment();
                 break;
         }
 
@@ -172,20 +163,20 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         }
 
         public Fragment getItem(int num) {
-            Fragment result = new Fragment();
+            mFragment = new Fragment();
 
             switch (num) {
                 case 0:
-                    result = new VideosActivity();
+                    mFragment = new VideosActivity();
                     break;
                 case 1:
-                    result = new ImagesActivity();
+                    mFragment = new ImagesActivity();
                     break;
                 case 2:
-                    result = new ScheduleActivity();
+                    mFragment = new ScheduleActivity();
                     break;
             }
-            return result;
+            return mFragment;
         }
 
         @Override

@@ -16,22 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="Settings" />
-        <activity
-            android:name=".ReportActivity"
-            android:label="Report an Issue" />
-        <activity
-            android:name=".AboutUsActivity"
-            android:label="About Us" />
-        <activity
-            android:name=".ContactActivity"
-            android:label="Contact us" />
-        <activity
-            android:name=".VideoListActivity"
-            android:label="Video List" />
-
         <receiver android:name=".AppWidget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -42,5 +26,4 @@
                 android:resource="@xml/app_widget_info" />
         </receiver>
     </application>
-
 </manifest>
