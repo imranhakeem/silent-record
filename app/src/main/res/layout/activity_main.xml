@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         app:primaryColor="#000000"
-        app:accentColor="#FF0000"
+        app:accentColor="#1E90FF"
         app:hasIcons="true" />
 
     <android.support.v4.view.ViewPager

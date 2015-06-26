@@ -93,6 +93,12 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
                 break;
         }
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mListTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override
