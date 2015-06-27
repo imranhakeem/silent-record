@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--video resolution-->
+
+    <string-array name="video_resolution">
+
+        <item>1920x1080</item>
+        <item>1280x720</item>
+        <item>864x480</item>
+        <item>640x480</item>
+        <item>480x320</item>
+        <item>176x144</item>
+    </string-array>
+
+    <string-array name="video_resolution_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <string-array name="video_format">
+        <item>mp4</item>
+        <item>3gp</item>
+    </string-array>
+
+    <string-array name="format_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!--image resolution -->
+
+    <string-array name="image_resolution">
+
+        <item>1920x1080</item>
+        <item>1280x720</item>
+        <item>864x480</item>
+        <item>640x480</item>
+        <item>480x320</item>
+        <item>176x144</item>
+    </string-array>
+
+    <string-array name="image_resolution_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+</resources>

@@ -1,6 +1,7 @@
 package com.byteshaft.silentrecord;
 
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -92,7 +93,8 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         // Handle Nav Options
         switch (position) {
             case 0:
-                mFragment = new SettingFragment();
+                Intent intent = new Intent(MainActivity.this, Settings.class);
+                startActivity(intent);
                 break;
             case 1:
                 mFragment = new VideoFragment();
@@ -108,8 +110,8 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
                 break;
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
 
         mDrawerList.setItemChecked(position, true);
         setTitle(mListTitles[position]);
