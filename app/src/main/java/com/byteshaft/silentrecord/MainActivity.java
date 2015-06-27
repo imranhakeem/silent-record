@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,7 +28,7 @@ import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 
 
-public class MainActivity extends ActionBarActivity implements MaterialTabListener{
+public class MainActivity extends AppCompatActivity implements MaterialTabListener{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -41,7 +42,6 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     private int mNotificationID = 001;
     private NotificationManager mNotifyManager;
     boolean isMainActivityActive = false;
-    android.support.v7.app.ActionBar actionBar;
 
     @Override
     protected void onPause() {
@@ -71,10 +71,8 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
         mViewPager = (ViewPager) findViewById(R.id.pager);
