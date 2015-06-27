@@ -11,4 +11,6 @@
     <string name="drawer_close">Silent Record</string>
     <string name="appwidget_text">Test</string>
     <string name="add_widget">Add widget</string>
+    <string name="Settings">Settings</string>
+
 </resources>
