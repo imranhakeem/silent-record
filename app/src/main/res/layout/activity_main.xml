@@ -9,19 +9,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-    <it.neokree.materialtabs.MaterialTabHost
-        android:id="@+id/tab_host"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        app:primaryColor="#000000"
-        app:accentColor="#1E90FF"
-        app:hasIcons="true" />
+        <it.neokree.materialtabs.MaterialTabHost
+            android:id="@+id/tab_host"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:primaryColor="#689F39"
+            app:accentColor="#FF0000"
+            app:hasIcons="true" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tab_host" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tab_host" />
     </RelativeLayout>
 
     <FrameLayout
