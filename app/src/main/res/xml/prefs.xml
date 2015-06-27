@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+
+        android:title="Video">
+
+        <SwitchPreference
+            android:key="video_visibility"
+            android:title="Hide videos"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+    <ListPreference
+        android:title="Select video resolution"
+        android:summary="video resolution"
+        android:key="video_resolution"
+        android:defaultValue="2"
+        android:entries="@array/video_resolution"
+        android:entryValues="@array/video_resolution_values"/>
+
+    <ListPreference
+        android:title="Select video format"
+        android:summary="video format"
+        android:key="video_format"
+        android:defaultValue="1"
+        android:entries="@array/video_format"
+        android:entryValues="@array/format_values" />
+
+    <PreferenceCategory
+        android:title="Image">
+
+    <SwitchPreference
+        android:key="image_visibility"
+        android:title="Hide Images"
+        android:defaultValue="true" />
+
+        <ListPreference
+            android:title="Select Image resolution"
+            android:summary="Image resolution"
+            android:key="image_resolution"
+            android:defaultValue="2"
+            android:entries="@array/image_resolution"
+            android:entryValues="@array/image_resolution_values"/>
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -72,6 +73,8 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -80,10 +83,11 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         mViewPager.setAdapter(mViewPagerAdapter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        RemoteViews notify_view = new RemoteViews(getPackageName(), R.layout.notification);
         mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.notification_template_icon_bg)
-                .setContentTitle("Notification")
-                .setContentText("Test")
+                .setContent(notify_view)
+                .setShowWhen(false)
                 .setAutoCancel(false)
                 .setOngoing(true);
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -118,7 +122,8 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         // Handle Nav Options
         switch (position) {
             case 0:
-                mFragment = new SettingFragment();
+                Intent intent = new Intent(MainActivity.this, Settings.class);
+                startActivity(intent);
                 break;
             case 1:
                 mFragment = new VideoFragment();
@@ -134,8 +139,8 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
                 break;
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
 
         mDrawerList.setItemChecked(position, true);
         setTitle(mListTitles[position]);

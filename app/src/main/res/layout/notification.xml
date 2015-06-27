@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Silent Recorder"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="#D50000"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"/>
+
+    <LinearLayout
+        android:layout_width="115dp"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/widget_background"
+        android:layout_margin="2dp"
+        android:padding="2dp">
+
+        <ImageButton
+            android:id="@+id/photo_button_widget"
+            android:adjustViewBounds="true"
+            android:layout_margin="2dp"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight=".50"
+            android:background="@drawable/widget_effect_one"
+            android:clickable="true"/>
+
+        <ImageButton
+            android:id="@+id/video_button_widget"
+            android:adjustViewBounds="true"
+            android:layout_margin="2dp"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight=".50"
+            android:background="@drawable/widget_effect_two"
+            android:clickable="true"/>
+    </LinearLayout>
+</RelativeLayout>
