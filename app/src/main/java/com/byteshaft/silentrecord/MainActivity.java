@@ -40,10 +40,39 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     private NotificationCompat.Builder mBuilder;
     private int mNotificationID = 001;
     private NotificationManager mNotifyManager;
+    boolean isMainActivityActive = false;
+    android.support.v7.app.ActionBar actionBar;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isMainActivityActive = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isMainActivityActive = true;
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.out.println(isMainActivityActive);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        if (!isMainActivityActive) {
+            startActivity(intent);
+        } else {
+            onStop();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
@@ -89,7 +118,7 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     }
 
     private void selectItem(int position) {
-
+        isMainActivityActive = false;
         // Handle Nav Options
         switch (position) {
             case 0:
@@ -175,6 +204,7 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
+            mMaterialTabHost.setVisibility(View.GONE);
             mDrawerLayout.closeDrawer(mDrawerList);
         }
     }
