@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -52,10 +53,11 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         mViewPager.setAdapter(mViewPagerAdapter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        RemoteViews notify_view = new RemoteViews(getPackageName(), R.layout.notification);
         mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.notification_template_icon_bg)
-                .setContentTitle("Notification")
-                .setContentText("Test")
+                .setContent(notify_view)
+                .setShowWhen(false)
                 .setAutoCancel(false)
                 .setOngoing(true);
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
