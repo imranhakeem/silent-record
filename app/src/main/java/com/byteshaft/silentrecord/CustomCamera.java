@@ -13,6 +13,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class CustomCamera extends ContextWrapper implements CameraStateChangeListener,
         Camera.ShutterCallback, Camera.PictureCallback {
@@ -73,7 +77,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     private void startRecording(Camera camera) {
-        String path = Environment.getExternalStorageDirectory() + File.separator + "test.3gp";
+        String path = Environment.getExternalStorageDirectory() + File.separator + getTimeStamp() + "test.3gp";
         mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setCamera(camera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -119,7 +123,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     @Override
     public void onPictureTaken(byte[] bytes, Camera camera) {
-        String out = Environment.getExternalStorageDirectory() + File.separator + "test.jpg";
+        String out = Environment.getExternalStorageDirectory() + File.separator + getTimeStamp() + "test.jpg";
         File file = new File(out);
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
@@ -137,5 +141,13 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     @Override
     public void onShutter() {
 
+    }
+
+    private String getTimeStamp() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat("yyyyMMddhhmmss");
+        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+        return simpleDateFormat.format(calendar.getTime());
     }
 }
