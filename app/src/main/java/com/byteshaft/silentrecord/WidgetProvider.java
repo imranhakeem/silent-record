@@ -3,6 +3,7 @@ package com.byteshaft.silentrecord;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.widget.RemoteViews;
 
 public class WidgetProvider extends AppWidgetProvider {
 
@@ -14,6 +15,7 @@ public class WidgetProvider extends AppWidgetProvider {
             updateAppWidget(context, appWidgetManager, appWidgetIds[i]);
         }
     }
+
 
     @Override
     public void onEnabled(Context context) {
