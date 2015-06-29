@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -120,8 +119,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         // Handle Nav Options
         switch (position) {
             case 0:
-                Intent intent = new Intent(MainActivity.this, Settings.class);
-                startActivity(intent);
+                mFragment = new SettingFragment();
                 break;
             case 1:
                 mFragment = new VideoFragment();
@@ -137,8 +135,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 break;
         }
 
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
 
         mDrawerList.setItemChecked(position, true);
         setTitle(mListTitles[position]);
