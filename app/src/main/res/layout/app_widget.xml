@@ -16,9 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight=".50"
-            android:background="@drawable/widget_effect_one"
-            android:clickable="true"
-            android:onClick="photoWidget"/>
+            android:background="@drawable/widget_effect_one"/>
 
         <ImageButton
             android:id="@+id/video_button_widget"
@@ -27,8 +25,6 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight=".50"
-            android:background="@drawable/widget_effect_two"
-            android:clickable="true"
-            android:onClick="videoWidget"/>
+            android:background="@drawable/widget_effect_two"/>
     </LinearLayout>
 </RelativeLayout>
