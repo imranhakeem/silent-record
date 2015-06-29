@@ -1,17 +1,15 @@
 package com.byteshaft.silentrecord;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+
+import com.github.machinarius.preferencefragment.PreferenceFragment;
 
 
-public class SettingFragment extends Fragment {
-    @Nullable
+public class SettingFragment extends PreferenceFragment {
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.setting_fragment, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.prefs);
     }
 }
