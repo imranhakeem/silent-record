@@ -47,6 +47,14 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     private void takePicture(Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
+        // mute camera shutter sound when pic take
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        int id = 0;
+        Camera.getCameraInfo(id, info);
+        if (info.canDisableShutterSound) {
+            camera.enableShutterSound(false);
+        }
+
         parameters.setRotation(90);
         camera.setParameters(parameters);
         camera.setDisplayOrientation(90);
