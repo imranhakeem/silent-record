@@ -250,5 +250,4 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 return null;
         }
     }
-
 }
