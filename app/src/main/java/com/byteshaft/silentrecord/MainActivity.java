@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 .setContent(notify_view)
                 .setShowWhen(false)
                 .setAutoCancel(false)
-                .setOngoing(true);
+                .setOngoing(false);
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyManager.notify(mNotificationID, mBuilder.build());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -120,8 +118,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         // Handle Nav Options
         switch (position) {
             case 0:
-                Intent intent = new Intent(MainActivity.this, Settings.class);
-                startActivity(intent);
+                mFragment = new SettingFragment();
                 break;
             case 1:
                 mFragment = new VideoFragment();
@@ -137,8 +134,9 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 break;
         }
 
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+        fragmentManager.popBackStack();
 
         mDrawerList.setItemChecked(position, true);
         setTitle(mListTitles[position]);
@@ -253,5 +251,4 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 return null;
         }
     }
-
 }

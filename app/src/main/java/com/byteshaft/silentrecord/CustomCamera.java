@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class CustomCamera extends ContextWrapper implements CameraStateChangeListener,
         Camera.ShutterCallback, Camera.PictureCallback {
@@ -22,6 +25,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     private Flashlight mFlashlight;
     private int mCameraRequest;
     private MediaRecorder mMediaRecorder;
+    private Helpers mHelpers;
 
     private static class CameraRequest {
         static final int START_RECORDING = 1;
@@ -32,6 +36,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         super(base);
         mFlashlight = new Flashlight(getApplicationContext());
         mFlashlight.setCameraStateChangedListener(this);
+        mHelpers = new Helpers(base);
     }
 
     static CustomCamera getInstance(Context context) {
@@ -48,7 +53,16 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     private void takePicture(Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
+        // mute camera shutter sound when pic take
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        int id = 0;
+        Camera.getCameraInfo(id, info);
+        if (info.canDisableShutterSound) {
+            camera.enableShutterSound(false);
+        }
+
         parameters.setRotation(90);
+        parameters.setZoom(Integer.valueOf(mHelpers.readZoomSettings()));
         camera.setParameters(parameters);
         camera.setDisplayOrientation(90);
         camera.startPreview();
@@ -67,7 +81,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
         camera.unlock();
-        String path = Environment.getExternalStorageDirectory() + File.separator + "test.3gp";
+        String path = Environment.getExternalStorageDirectory() + File.separator + getTimeStamp() + "test.3gp";
         mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setCamera(camera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -119,7 +133,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     @Override
     public void onPictureTaken(byte[] bytes, Camera camera) {
-        String out = Environment.getExternalStorageDirectory() + File.separator + "test.jpg";
+        String out = Environment.getExternalStorageDirectory() + File.separator + getTimeStamp() + "test.jpg";
         File file = new File(out);
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
@@ -137,5 +151,13 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     @Override
     public void onShutter() {
 
+    }
+
+    private String getTimeStamp() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat("yyyyMMddhhmmss");
+        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+        return simpleDateFormat.format(calendar.getTime());
     }
 }
