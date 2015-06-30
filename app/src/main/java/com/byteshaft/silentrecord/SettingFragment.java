@@ -12,12 +12,17 @@ import java.util.ArrayList;
 
 public class SettingFragment extends PreferenceFragment {
 
+    private Preference mPreference;
+    private Camera mCamera;
     ListPreference listPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.prefs);
+        mPreference = findPreference("camera_zoom_control");
+        listPreference = (ListPreference) mPreference;
+        listPreference.setEntryValues(getCameraZoomControl());
         Preference videoPrefs = findPreference("video_resolution");
         listPreference = (ListPreference) videoPrefs;
         listPreference.setEntries(getBackCameraResolution());
@@ -27,6 +32,27 @@ public class SettingFragment extends PreferenceFragment {
         listPreference = (ListPreference) imagePrefs;
         listPreference.setEntries(getBackCameraResolution());
         listPreference.setEntryValues(getBackCameraResolution());
+    }
+
+    String[] getCameraZoomControl() {
+        ArrayList<String> list = new ArrayList<>();
+        mCamera = Camera.open();
+        Camera.Parameters parameters = mCamera.getParameters();
+        int zoom  = parameters.getMaxZoom();
+        if (parameters.isZoomSupported()) {
+            for (int i = 1; i <= 3; i++) {
+                String res = String.valueOf((zoom / 3) * i);
+                list.add(res);
+                System.out.println(res);
+            }
+        }
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+        return list.toArray(new String[list.size()]);
+
     }
 
     String[] getBackCameraResolution() {

@@ -44,4 +44,15 @@
         <!--<item>6</item>-->
     </string-array>
 
+    <string-array name="camera_zoom_controls">
+        <item> 2x</item>
+        <item> 3x</item>
+        <item> 4x</item>
+    </string-array>
+    <string-array name="camera_zoom_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>
