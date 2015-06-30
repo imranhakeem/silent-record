@@ -25,6 +25,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     private Flashlight mFlashlight;
     private int mCameraRequest;
     private MediaRecorder mMediaRecorder;
+    private Helpers mHelpers;
 
     private static class CameraRequest {
         static final int START_RECORDING = 1;
@@ -35,6 +36,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         super(base);
         mFlashlight = new Flashlight(getApplicationContext());
         mFlashlight.setCameraStateChangedListener(this);
+        mHelpers = new Helpers(base);
     }
 
     static CustomCamera getInstance(Context context) {
@@ -60,6 +62,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         }
 
         parameters.setRotation(90);
+        parameters.setZoom(Integer.valueOf(mHelpers.readZoomSettings()));
         camera.setParameters(parameters);
         camera.setDisplayOrientation(90);
         camera.startPreview();

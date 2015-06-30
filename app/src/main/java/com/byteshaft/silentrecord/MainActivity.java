@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 .setContent(notify_view)
                 .setShowWhen(false)
                 .setAutoCancel(false)
-                .setOngoing(true);
+                .setOngoing(false);
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyManager.notify(mNotificationID, mBuilder.build());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+        fragmentManager.popBackStack();
 
         mDrawerList.setItemChecked(position, true);
         setTitle(mListTitles[position]);

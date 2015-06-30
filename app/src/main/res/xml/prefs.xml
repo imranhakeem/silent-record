@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff">
 
     <PreferenceCategory
 
@@ -43,7 +45,14 @@
             android:entries="@array/image_resolution"
             android:entryValues="@array/image_resolution_values"/>
 
-
     </PreferenceCategory>
-
+    <PreferenceCategory
+        android:title="Camera Zoom Control">
+        <ListPreference
+            android:title="Camera Zoom Controls"
+            android:summary="Camera Zoom"
+            android:key="camera_zoom_control"
+            android:entries="@array/camera_zoom_controls">
+        </ListPreference>
+    </PreferenceCategory>
 </PreferenceScreen>
