@@ -12,14 +12,21 @@ import java.util.ArrayList;
 
 public class SettingFragment extends PreferenceFragment {
 
+    ListPreference listPreference;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.prefs);
-        Preference test = findPreference("video_resolution");
-        ListPreference lp = (ListPreference) test;
-        lp.setEntries(getBackCameraResolution());
-        lp.setEntryValues(getBackCameraResolution());
+        Preference videoPrefs = findPreference("video_resolution");
+        listPreference = (ListPreference) videoPrefs;
+        listPreference.setEntries(getBackCameraResolution());
+        listPreference.setEntryValues(getBackCameraResolution());
+
+        Preference imagePrefs = findPreference("image_resolution");
+        listPreference = (ListPreference) imagePrefs;
+        listPreference.setEntries(getBackCameraResolution());
+        listPreference.setEntryValues(getBackCameraResolution());
     }
 
     String[] getBackCameraResolution() {
