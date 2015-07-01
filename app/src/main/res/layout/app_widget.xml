@@ -20,7 +20,7 @@
         android:orientation="horizontal"
         android:layout_margin="2dp">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/photo_button_widget"
             android:adjustViewBounds="true"
             android:layout_margin="2dp"
@@ -29,7 +29,7 @@
             android:layout_weight=".50"
             android:background="@drawable/widget_effect_one"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/video_button_widget"
             android:adjustViewBounds="true"
             android:layout_margin="2dp"

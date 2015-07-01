@@ -1,6 +1,10 @@
 package com.byteshaft.silentrecord;
 
+import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -22,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.byteshaft.silentrecord.com.byteshaft.silentrecord.utils.CameraCharacteristics;
 
@@ -93,6 +98,17 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         RemoteViews notify_view = new RemoteViews(getPackageName(), R.layout.notification);
+        Intent buttonsIntent = new Intent(getApplicationContext(), NotificationHandler.class);
+        buttonsIntent.setAction("perform_notification_button");
+        buttonsIntent.putExtra("do_action", "take_picture");
+        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 0, buttonsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notify_view.setOnClickPendingIntent(R.id.photo_button_widget, pendingIntent1);
+
+        Intent buttonsIntent2 = new Intent(getApplicationContext(), NotificationHandler.class);
+        buttonsIntent.setAction("perform_notification_button");
+        buttonsIntent2.putExtra("do_action", "record_video");
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, buttonsIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
+        notify_view.setOnClickPendingIntent(R.id.video_button_widget, pendingIntent2);
         mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.notification_template_icon_bg)
                 .setContent(notify_view)
