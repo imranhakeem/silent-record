@@ -21,6 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".NotificationHandler">
+            <intent-filter>
+                <action android:name="perform_notification_button"/>
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".WidgetProvider">
