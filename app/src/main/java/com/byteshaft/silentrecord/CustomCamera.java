@@ -2,9 +2,11 @@ package com.byteshaft.silentrecord;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.view.SurfaceHolder;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
@@ -90,7 +92,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
         mMediaRecorder.setOrientationHint(90);
-        mMediaRecorder.setVideoSize(640, 480);
+        mMediaRecorder.setVideoSize(getWidth(), getHeight());
         mMediaRecorder.setPreviewDisplay(holder.getSurface());
         mMediaRecorder.setOutputFile(path);
         try {
@@ -159,5 +161,26 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
                 new SimpleDateFormat("yyyyMMddhhmmss");
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    private int getWidth() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String out = preferences.getString("video_resolution", null);
+        if (out == null) {
+            return 640;
+        }
+
+        String[] dimensions = out.split("X");
+        return Integer.valueOf(dimensions[0]);
+    }
+
+    private int getHeight() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String out = preferences.getString("video_resolution", null);
+        if (out == null) {
+            return 480;
+        }
+        String[] dimensions = out.split("X");
+        return Integer.valueOf(dimensions[1]);
     }
 }
