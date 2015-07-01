@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.view.SurfaceHolder;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
+import com.byteshaft.silentrecord.utils.Silencer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,6 +65,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         camera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean b, Camera camera) {
+                Silencer.silentSystemStream(2000);
                 camera.takePicture(CustomCamera.this, null, null, CustomCamera.this);
             }
         });
@@ -94,6 +95,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mMediaRecorder.setOutputFile(path);
         try {
             mMediaRecorder.prepare();
+            Silencer.silentSystemStream(2000);
             mMediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,6 +103,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     void stopRecording() {
+        Silencer.silentSystemStream(2000);
         mMediaRecorder.stop();
         mMediaRecorder.reset();
         mMediaRecorder.release();
@@ -161,7 +164,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     private int[] getVideoDimensions() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
         String out = preferences.getString("video_resolution", null);
         if (out == null) {
             return new int[] {640, 480};
@@ -172,7 +175,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     private int[] getPictureDimension() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
         String out = preferences.getString("image_resolution", null);
         if (out == null) {
             return new int[] {640, 480};
@@ -183,12 +186,12 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     private String getPictureSceneMode() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
         return preferences.getString("picture_scene_mode", "auto");
     }
 
     private String getVideoSceneMode() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
         return preferences.getString("video_scene_mode", "auto");
     }
 }

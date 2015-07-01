@@ -1,4 +1,4 @@
-package com.byteshaft.silentrecord.com.byteshaft.silentrecord.utils;
+package com.byteshaft.silentrecord.utils;
 
 import android.content.Context;
 import android.content.ContextWrapper;
