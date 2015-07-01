@@ -1,9 +1,15 @@
 package com.byteshaft.silentrecord;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
@@ -21,8 +27,10 @@ public class SettingFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.prefs);
         mPreference = findPreference("camera_zoom_control");
+        Preference reset = findPreference("reset");
         listPreference = (ListPreference) mPreference;
         listPreference.setEntryValues(getCameraZoomControl());
+        listPreference.setValueIndex(0);
         Preference videoPrefs = findPreference("video_resolution");
         listPreference = (ListPreference) videoPrefs;
         listPreference.setEntries(getBackCameraResolution());
@@ -32,6 +40,31 @@ public class SettingFragment extends PreferenceFragment {
         listPreference = (ListPreference) imagePrefs;
         listPreference.setEntries(getBackCameraResolution());
         listPreference.setEntryValues(getBackCameraResolution());
+        reset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                alertDialog.setMessage("Are you sure?");
+                alertDialog.setCancelable(true);
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPreferences shared = PreferenceManager.
+                                getDefaultSharedPreferences(getActivity());
+                        shared.edit().putString("camera_zoom_control", "0").apply();
+                    }
+                });
+                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                alertDialog.create();
+                alertDialog.show();
+                return false;
+            }
+        });
     }
 
     String[] getCameraZoomControl() {

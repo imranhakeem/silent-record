@@ -45,14 +45,16 @@
     </string-array>
 
     <string-array name="camera_zoom_controls">
-        <item> 2x</item>
-        <item> 3x</item>
-        <item> 4x</item>
+        <item>default</item>
+        <item>2x</item>
+        <item>3x</item>
+        <item>4x</item>
     </string-array>
     <string-array name="camera_zoom_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
 </resources>

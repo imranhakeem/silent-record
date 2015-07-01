@@ -16,7 +16,7 @@ public class Helpers extends ContextWrapper {
 
     String readZoomSettings() {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String zoomControl = mSharedPreferences.getString("camera_zoom_control", "20");
+        String zoomControl = mSharedPreferences.getString("camera_zoom_control", "0");
         return zoomControl;
     }
 }
