@@ -12,15 +12,13 @@ import android.preference.PreferenceManager;
 
 public class Helpers extends ContextWrapper {
 
-    SharedPreferences mSharedPreferences;
-
     public Helpers(Context base) {
         super(base);
     }
 
     String readZoomSettings() {
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        return mSharedPreferences.getString("camera_zoom_control", "20");
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        return preferences.getString("camera_zoom_control", "20");
     }
 
     void showCameraResourceBusyDialog(final Activity activity) {
@@ -41,12 +39,12 @@ public class Helpers extends ContextWrapper {
     }
 
     boolean isAppRunningForTheFirstTime() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
         return preferences.getBoolean("first_run", true);
     }
 
     void setIsAppRunningForTheFirstTime(boolean firstTime) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
         preferences.edit().putBoolean("first_run", firstTime).apply();
     }
 
