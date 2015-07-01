@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.byteshaft.ezflashlight.Flashlight;
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 
 public class ScheduleActivity extends Fragment implements View.OnClickListener {
