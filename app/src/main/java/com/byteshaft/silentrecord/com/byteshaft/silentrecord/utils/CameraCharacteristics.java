@@ -4,15 +4,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 
-import com.github.machinarius.preferencefragment.PreferenceFragment;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 public class CameraCharacteristics extends ContextWrapper {
 

@@ -30,9 +30,9 @@
     <ListPreference
         android:title="Select scene mode"
         android:summary="scene modes"
-        android:key="camera_modes"
-        android:entries="@array/scene_modes"
-        android:entryValues="@array/scene_values"/>
+        android:key="video_scene_mode"
+        android:entries="@array/video_scene_modes"
+        android:entryValues="@array/video_scene_values"/>
 
     <PreferenceCategory
         android:title="Image">
@@ -48,6 +48,13 @@
             android:key="image_resolution"
             android:entries="@array/image_resolution"
             android:entryValues="@array/image_resolution_values"/>
+
+        <ListPreference
+            android:title="Select scene mode"
+            android:summary="scene modes"
+            android:key="picture_scene_mode"
+            android:entries="@array/picture_scene_modes"
+            android:entryValues="@array/picture_scene_values"/>
 
     </PreferenceCategory>
     <PreferenceCategory
