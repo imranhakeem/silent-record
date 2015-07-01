@@ -23,36 +23,31 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="scene_modes">
+    </string-array>
+
+    <string-array name="scene_values">
+    </string-array>
+
     <!--image resolution -->
 
     <string-array name="image_resolution">
-
-        <!--<item>1920x1080</item>-->
-        <!--<item>1280x720</item>-->
-        <!--<item>864x480</item>-->
-        <!--<item>640x480</item>-->
-        <!--<item>480x320</item>-->
-        <!--<item>176x144</item>-->
     </string-array>
 
     <string-array name="image_resolution_values">
-        <!--<item>1</item>-->
-        <!--<item>2</item>-->
-        <!--<item>3</item>-->
-        <!--<item>4</item>-->
-        <!--<item>5</item>-->
-        <!--<item>6</item>-->
     </string-array>
 
     <string-array name="camera_zoom_controls">
-        <item> 2x</item>
-        <item> 3x</item>
-        <item> 4x</item>
+        <item>No zoom</item>
+        <item>2x</item>
+        <item>3x</item>
+        <item>4x</item>
     </string-array>
     <string-array name="camera_zoom_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
 </resources>

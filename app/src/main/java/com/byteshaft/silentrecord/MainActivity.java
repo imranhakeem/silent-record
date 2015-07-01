@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
+
+import com.byteshaft.silentrecord.com.byteshaft.silentrecord.utils.CameraCharacteristics;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -52,13 +55,23 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     protected void onResume() {
         super.onResume();
         isMainActivityActive = true;
+        Helpers helpers = new Helpers(getApplicationContext());
+        if (helpers.isAppRunningForTheFirstTime()) {
+            Camera camera = helpers.openCamera();
+            if (camera != null) {
+                new CameraCharacteristics(getApplicationContext(), camera);
+                helpers.setIsAppRunningForTheFirstTime(false);
+                camera.release();
+            } else {
+                helpers.showCameraResourceBusyDialog(this);
+            }
+        }
 
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        System.out.println(isMainActivityActive);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         if (!isMainActivityActive) {
             startActivity(intent);
