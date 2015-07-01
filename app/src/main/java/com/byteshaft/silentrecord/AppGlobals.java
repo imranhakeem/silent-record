@@ -17,7 +17,7 @@ public class AppGlobals extends Application {
         sPreferences = PreferenceManager.getDefaultSharedPreferences(sContext);
     }
 
-    static SharedPreferences getPreferenceManager() {
+    public static SharedPreferences getPreferenceManager() {
         return sPreferences;
     }
 

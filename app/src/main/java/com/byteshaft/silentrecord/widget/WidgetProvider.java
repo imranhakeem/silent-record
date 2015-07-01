@@ -1,4 +1,4 @@
-package com.byteshaft.silentrecord;
+package com.byteshaft.silentrecord.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import com.byteshaft.silentrecord.R;
 
 public class WidgetProvider extends AppWidgetProvider {
 

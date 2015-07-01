@@ -31,7 +31,9 @@ import com.byteshaft.silentrecord.fragments.ReportFragment;
 import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
 import com.byteshaft.silentrecord.fragments.VideoFragment;
+import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
+import com.byteshaft.silentrecord.utils.Helpers;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -177,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.executePendingTransactions();
         fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
         fragmentManager.popBackStack();
         mPositionGlobal = DUMMY_POSITION;
