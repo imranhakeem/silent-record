@@ -24,7 +24,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 
-import com.byteshaft.silentrecord.com.byteshaft.silentrecord.utils.CameraCharacteristics;
+import com.byteshaft.silentrecord.fragments.AboutFragment;
+import com.byteshaft.silentrecord.fragments.ContactFragment;
+import com.byteshaft.silentrecord.fragments.ImagesActivity;
+import com.byteshaft.silentrecord.fragments.ReportFragment;
+import com.byteshaft.silentrecord.fragments.ScheduleActivity;
+import com.byteshaft.silentrecord.fragments.SettingFragment;
+import com.byteshaft.silentrecord.fragments.VideoFragment;
+import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;

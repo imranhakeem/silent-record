@@ -1,9 +1,10 @@
-package com.byteshaft.silentrecord;
+package com.byteshaft.silentrecord.fragments;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
 
 
+import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 

@@ -18,7 +18,7 @@ public class Helpers extends ContextWrapper {
 
     String readZoomSettings() {
         SharedPreferences preferences = AppGlobals.getPreferenceManager();
-        return preferences.getString("camera_zoom_control", "20");
+        return preferences.getString("camera_zoom_control", "0");
     }
 
     void showCameraResourceBusyDialog(final Activity activity) {
@@ -49,10 +49,8 @@ public class Helpers extends ContextWrapper {
     }
 
     Camera openCamera() {
-        Camera camera;
         try {
-            camera = Camera.open();
-            return camera;
+            return Camera.open();
         } catch (RuntimeException e) {
             return null;
         }
