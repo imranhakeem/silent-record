@@ -9,6 +9,7 @@ public class WidgetReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         String widget = intent.getStringExtra("key");
 
         if (widget.equals("1")) {
