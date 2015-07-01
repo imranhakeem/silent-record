@@ -33,7 +33,6 @@ public class WidgetProvider extends AppWidgetProvider {
 
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
             Toast.makeText(context, "Widget Enabled", Toast.LENGTH_SHORT).show();
-
         }
     }
 
