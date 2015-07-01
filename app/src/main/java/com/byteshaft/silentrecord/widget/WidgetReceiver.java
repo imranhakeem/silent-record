@@ -1,4 +1,4 @@
-package com.byteshaft.silentrecord;
+package com.byteshaft.silentrecord.widget;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
+import com.byteshaft.silentrecord.CustomCamera;
 
 public class WidgetReceiver extends BroadcastReceiver {
 

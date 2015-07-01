@@ -10,6 +10,7 @@ import android.view.SurfaceHolder;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
+import com.byteshaft.silentrecord.utils.Helpers;
 import com.byteshaft.silentrecord.utils.Silencer;
 
 import java.io.File;
@@ -41,14 +42,14 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mHelpers = new Helpers(base);
     }
 
-    static CustomCamera getInstance(Context context) {
+    public static CustomCamera getInstance(Context context) {
         if (sCustomCamera == null) {
             sCustomCamera = new CustomCamera(context);
         }
         return sCustomCamera;
     }
 
-    void takePicture() {
+    public void takePicture() {
         mCameraRequest = CameraRequest.TAKE_PICTURE;
         mFlashlight.setupCameraPreview();
     }
@@ -71,7 +72,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         });
     }
 
-    void startRecording() {
+    public void startRecording() {
         mCameraRequest = CameraRequest.START_RECORDING;
         mFlashlight.setupCameraPreview();
     }
@@ -102,7 +103,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         }
     }
 
-    void stopRecording() {
+    public void stopRecording() {
         Silencer.silentSystemStream(2000);
         mMediaRecorder.stop();
         mMediaRecorder.reset();
