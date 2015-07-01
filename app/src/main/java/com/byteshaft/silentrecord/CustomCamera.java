@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.view.SurfaceHolder;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
@@ -15,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class CustomCamera extends ContextWrapper implements CameraStateChangeListener,
@@ -79,26 +79,33 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mFlashlight.setupCameraPreview();
     }
 
-    private void startRecording(Camera camera) {
+    private void startRecording(Camera camera, SurfaceHolder holder) {
+        camera.unlock();
         String path = Environment.getExternalStorageDirectory() + File.separator + getTimeStamp() + "test.3gp";
         mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setCamera(camera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        mMediaRecorder.setOrientationHint(90);
+        mMediaRecorder.setVideoSize(640, 480);
+        mMediaRecorder.setPreviewDisplay(holder.getSurface());
         mMediaRecorder.setOutputFile(path);
         try {
             mMediaRecorder.prepare();
+            mMediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mMediaRecorder.start();
     }
 
     void stopRecording() {
         mMediaRecorder.stop();
         mMediaRecorder.reset();
         mMediaRecorder.release();
+        mFlashlight.releaseAllResources();
         mMediaRecorder = null;
     }
 
@@ -108,13 +115,13 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     @Override
-    public void onCameraViewSetup(Camera camera) {
+    public void onCameraViewSetup(Camera camera, SurfaceHolder holder) {
         switch (mCameraRequest) {
             case CameraRequest.TAKE_PICTURE:
                 takePicture(camera);
                 break;
             case CameraRequest.START_RECORDING:
-                startRecording(camera);
+                startRecording(camera, holder);
                 break;
         }
     }
