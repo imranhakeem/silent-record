@@ -1,10 +1,7 @@
 package com.byteshaft.silentrecord;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -26,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.byteshaft.silentrecord.com.byteshaft.silentrecord.utils.CameraCharacteristics;
 
@@ -49,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     private int mNotificationID = 001;
     private NotificationManager mNotifyManager;
     boolean isMainActivityActive = false;
+    int mPositionGlobal = -1;
+    final int DUMMY_POSITION = -1;
 
     @Override
     protected void onPause() {
@@ -80,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         if (!isMainActivityActive) {
             startActivity(intent);
+            overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
         } else {
             onStop();
         }
@@ -144,7 +143,14 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
     private void selectItem(int position) {
         isMainActivityActive = false;
-        // Handle Nav Options
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mListTitles[position]);
+        mPositionGlobal = position;
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    void newFragment(int position) {
+
         switch (position) {
             case 0:
                 mFragment = new SettingFragment();
@@ -153,10 +159,10 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 mFragment = new VideoFragment();
                 break;
             case 2:
-               mFragment = new AboutFragment();
+                mFragment = new AboutFragment();
                 break;
             case 3:
-               mFragment = new ReportFragment();
+                mFragment = new ReportFragment();
                 break;
             case 4:
                 mFragment = new ContactFragment();
@@ -166,10 +172,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
         fragmentManager.popBackStack();
-
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mListTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mPositionGlobal = DUMMY_POSITION;
     }
 
     @Override
@@ -204,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 invalidateOptionsMenu();
+                newFragment(mPositionGlobal);
             }
         };
     }
