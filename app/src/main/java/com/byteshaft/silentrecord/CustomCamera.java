@@ -55,16 +55,10 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     private void takePicture(Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
-        // mute camera shutter sound when pic take
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        int id = 0;
-        Camera.getCameraInfo(id, info);
-        if (info.canDisableShutterSound) {
-            camera.enableShutterSound(false);
-        }
-
         parameters.setRotation(90);
         parameters.setZoom(Integer.valueOf(mHelpers.readZoomSettings()));
+        parameters.setPictureSize(getPictureDimension()[0], getPictureDimension()[1]);
+        parameters.setSceneMode(getPictureSceneMode());
         camera.setParameters(parameters);
         camera.setDisplayOrientation(90);
         camera.startPreview();
@@ -82,6 +76,9 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.setSceneMode(getVideoSceneMode());
+        camera.setParameters(parameters);
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + File.separator + getTimeStamp() + "test.3gp";
         mMediaRecorder = new MediaRecorder();
@@ -92,7 +89,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
         mMediaRecorder.setOrientationHint(90);
-        mMediaRecorder.setVideoSize(getWidth(), getHeight());
+        mMediaRecorder.setVideoSize(getVideoDimensions()[0], getVideoDimensions()[1]);
         mMediaRecorder.setPreviewDisplay(holder.getSurface());
         mMediaRecorder.setOutputFile(path);
         try {
@@ -163,24 +160,35 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         return simpleDateFormat.format(calendar.getTime());
     }
 
-    private int getWidth() {
+    private int[] getVideoDimensions() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String out = preferences.getString("video_resolution", null);
         if (out == null) {
-            return 640;
+            return new int[] {640, 480};
         }
 
         String[] dimensions = out.split("X");
-        return Integer.valueOf(dimensions[0]);
+        return new int[] {Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1])};
     }
 
-    private int getHeight() {
+    private int[] getPictureDimension() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String out = preferences.getString("video_resolution", null);
+        String out = preferences.getString("image_resolution", null);
         if (out == null) {
-            return 480;
+            return new int[] {640, 480};
         }
+
         String[] dimensions = out.split("X");
-        return Integer.valueOf(dimensions[1]);
+        return new int[] {Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1])};
+    }
+
+    private String getPictureSceneMode() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return preferences.getString("picture_scene_mode", "auto");
+    }
+
+    private String getVideoSceneMode() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return preferences.getString("video_scene_mode", "auto");
     }
 }

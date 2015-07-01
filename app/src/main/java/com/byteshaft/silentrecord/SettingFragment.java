@@ -22,7 +22,12 @@ public class SettingFragment extends PreferenceFragment {
         listPreference.setEntryValues(characteristics.getSupportedVideoResolutions());
         setDefaultEntryIfNotPreviouslySet(listPreference);
 
-        listPreference = (ListPreference) findPreference("camera_modes");
+        listPreference = (ListPreference) findPreference("picture_scene_mode");
+        listPreference.setEntries(characteristics.getSupportedSceneModes());
+        listPreference.setEntryValues(characteristics.getSupportedSceneModes());
+        setDefaultEntryIfNotPreviouslySet(listPreference);
+
+        listPreference = (ListPreference) findPreference("video_scene_mode");
         listPreference.setEntries(characteristics.getSupportedSceneModes());
         listPreference.setEntryValues(characteristics.getSupportedSceneModes());
         setDefaultEntryIfNotPreviouslySet(listPreference);
