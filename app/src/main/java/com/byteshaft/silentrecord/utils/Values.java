@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import com.byteshaft.silentrecord.AppGlobals;
 
-public class SettingsValues {
+public class Values {
 
     public static int[] getVideoDimensions() {
         SharedPreferences preferences = AppGlobals.getPreferenceManager();
