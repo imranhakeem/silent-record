@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             case 4:
                 mFragment = new ContactFragment();
                 break;
+            default:
+                return;
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
