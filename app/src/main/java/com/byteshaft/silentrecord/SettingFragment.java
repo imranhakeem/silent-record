@@ -26,11 +26,13 @@ public class SettingFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.prefs);
+
         mPreference = findPreference("camera_zoom_control");
         Preference reset = findPreference("reset");
         listPreference = (ListPreference) mPreference;
         listPreference.setEntryValues(getCameraZoomControl());
         listPreference.setValueIndex(0);
+
         Preference videoPrefs = findPreference("video_resolution");
         listPreference = (ListPreference) videoPrefs;
         listPreference.setEntries(getBackCameraResolution());

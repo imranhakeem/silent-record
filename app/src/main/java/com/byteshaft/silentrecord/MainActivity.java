@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 
+
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
+        Helpers helpers = new Helpers(getApplicationContext());
+        helpers.spyPicturesDirectory();
+        helpers.spyVideosDirectory();
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mResources = getResources();

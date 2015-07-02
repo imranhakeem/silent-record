@@ -81,7 +81,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
         camera.unlock();
-        String path = Environment.getExternalStorageDirectory() + File.separator + getTimeStamp() + "test.3gp";
+        String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
         mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setCamera(camera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -133,7 +133,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     @Override
     public void onPictureTaken(byte[] bytes, Camera camera) {
-        String out = Environment.getExternalStorageDirectory() + File.separator + getTimeStamp() + "test.jpg";
+        String out = Environment.getExternalStorageDirectory() + "/" + "SpyPics" + "/" + getTimeStamp() + ".jpg";
         File file = new File(out);
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
