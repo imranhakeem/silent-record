@@ -2,6 +2,7 @@ package com.byteshaft.silentrecord;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -9,6 +10,8 @@ import android.view.SurfaceHolder;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
+import com.byteshaft.silentrecord.utils.Helpers;
+import com.byteshaft.silentrecord.utils.Silencer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,47 +42,45 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mHelpers = new Helpers(base);
     }
 
-    static CustomCamera getInstance(Context context) {
+    public static CustomCamera getInstance(Context context) {
         if (sCustomCamera == null) {
             sCustomCamera = new CustomCamera(context);
         }
         return sCustomCamera;
     }
 
-    void takePicture() {
+    public void takePicture() {
         mCameraRequest = CameraRequest.TAKE_PICTURE;
         mFlashlight.setupCameraPreview();
     }
 
     private void takePicture(Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
-        // mute camera shutter sound when pic take
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        int id = 0;
-        Camera.getCameraInfo(id, info);
-        if (info.canDisableShutterSound) {
-            camera.enableShutterSound(false);
-        }
-
         parameters.setRotation(90);
         parameters.setZoom(Integer.valueOf(mHelpers.readZoomSettings()));
+        parameters.setPictureSize(getPictureDimension()[0], getPictureDimension()[1]);
+        parameters.setSceneMode(getPictureSceneMode());
         camera.setParameters(parameters);
         camera.setDisplayOrientation(90);
         camera.startPreview();
         camera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean b, Camera camera) {
+                Silencer.silentSystemStream(2000);
                 camera.takePicture(CustomCamera.this, null, null, CustomCamera.this);
             }
         });
     }
 
-    void startRecording() {
+    public void startRecording() {
         mCameraRequest = CameraRequest.START_RECORDING;
         mFlashlight.setupCameraPreview();
     }
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.setSceneMode(getVideoSceneMode());
+        camera.setParameters(parameters);
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
         mMediaRecorder = new MediaRecorder();
@@ -90,18 +91,20 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
         mMediaRecorder.setOrientationHint(90);
-        mMediaRecorder.setVideoSize(640, 480);
+        mMediaRecorder.setVideoSize(getVideoDimensions()[0], getVideoDimensions()[1]);
         mMediaRecorder.setPreviewDisplay(holder.getSurface());
         mMediaRecorder.setOutputFile(path);
         try {
             mMediaRecorder.prepare();
+            Silencer.silentSystemStream(2000);
             mMediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    void stopRecording() {
+    public void stopRecording() {
+        Silencer.silentSystemStream(2000);
         mMediaRecorder.stop();
         mMediaRecorder.reset();
         mMediaRecorder.release();
@@ -159,5 +162,37 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
                 new SimpleDateFormat("yyyyMMddhhmmss");
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    private int[] getVideoDimensions() {
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        String out = preferences.getString("video_resolution", null);
+        if (out == null) {
+            return new int[] {640, 480};
+        }
+
+        String[] dimensions = out.split("X");
+        return new int[] {Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1])};
+    }
+
+    private int[] getPictureDimension() {
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        String out = preferences.getString("image_resolution", null);
+        if (out == null) {
+            return new int[] {640, 480};
+        }
+
+        String[] dimensions = out.split("X");
+        return new int[] {Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1])};
+    }
+
+    private String getPictureSceneMode() {
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        return preferences.getString("picture_scene_mode", "auto");
+    }
+
+    private String getVideoSceneMode() {
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        return preferences.getString("video_scene_mode", "auto");
     }
 }

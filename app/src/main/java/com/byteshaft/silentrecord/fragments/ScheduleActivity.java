@@ -1,4 +1,4 @@
-package com.byteshaft.silentrecord;
+package com.byteshaft.silentrecord.fragments;
 
 
 import android.os.Bundle;
@@ -9,8 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.byteshaft.ezflashlight.Flashlight;
 import com.byteshaft.ezflashlight.FlashlightGlobals;
+import com.byteshaft.silentrecord.CustomCamera;
+import com.byteshaft.silentrecord.R;
 
 public class ScheduleActivity extends Fragment implements View.OnClickListener {
 

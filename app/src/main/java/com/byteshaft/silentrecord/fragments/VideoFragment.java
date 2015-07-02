@@ -1,4 +1,4 @@
-package com.byteshaft.silentrecord;
+package com.byteshaft.silentrecord.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +11,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.utils.Helpers;
+
 public class VideoFragment extends Fragment {
 
     private Helpers mHelpers;
@@ -19,7 +22,7 @@ public class VideoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.video_fragment, container, false);
-        mHelpers = new Helpers(getActivity());
+       mHelpers = new Helpers(getActivity());
         ListView listView = (ListView) rootView.findViewById(R.id.video_list);
         ArrayList<String> arrayList = mHelpers.getNameFromFolder();
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.
