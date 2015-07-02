@@ -7,9 +7,13 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
+import android.os.Environment;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
+
+import java.io.File;
+import java.util.ArrayList;
 
 
 public class Helpers extends ContextWrapper {
@@ -56,5 +60,32 @@ public class Helpers extends ContextWrapper {
         } catch (RuntimeException e) {
             return null;
         }
+    }
+
+    public void spyVideosDirectory() {
+        File recordingsDirectory = new File(Environment.getExternalStorageDirectory() + "/" + "SpyVideos");
+        if (!recordingsDirectory.exists()) {
+            recordingsDirectory.mkdir();
+        }
+    }
+
+    public void spyPicturesDirectory() {
+        File recordingsDirectory = new File(Environment.getExternalStorageDirectory() + "/" + "SpyPics");
+        if (!recordingsDirectory.exists()) {
+            recordingsDirectory.mkdir();
+        }
+    }
+
+    public ArrayList<String> getNameFromFolder() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        File filePath = Environment.getExternalStorageDirectory();
+        File fileDirectory = new File(filePath, "SpyVideos");
+        for (File file : fileDirectory.listFiles()) {
+            if (file.isFile()) {
+                String name = file.getName();
+                arrayList.add(name);
+            }
+        }
+        return arrayList;
     }
 }
