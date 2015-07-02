@@ -17,7 +17,6 @@
         android:title="Select video resolution"
         android:summary="video resolution"
         android:key="video_resolution"
-        android:defaultValue="2"
         android:entries="@array/video_resolution"
         android:entryValues="@array/video_resolution_values"/>
 
@@ -25,9 +24,15 @@
         android:title="Select video format"
         android:summary="video format"
         android:key="video_format"
-        android:defaultValue="1"
         android:entries="@array/video_format"
         android:entryValues="@array/format_values" />
+
+    <ListPreference
+        android:title="Select scene mode"
+        android:summary="scene modes"
+        android:key="video_scene_mode"
+        android:entries="@array/video_scene_modes"
+        android:entryValues="@array/video_scene_values"/>
 
     <PreferenceCategory
         android:title="Image">
@@ -41,9 +46,15 @@
             android:title="Select Image resolution"
             android:summary="Image resolution"
             android:key="image_resolution"
-            android:defaultValue="2"
             android:entries="@array/image_resolution"
             android:entryValues="@array/image_resolution_values"/>
+
+        <ListPreference
+            android:title="Select scene mode"
+            android:summary="scene modes"
+            android:key="picture_scene_mode"
+            android:entries="@array/picture_scene_modes"
+            android:entryValues="@array/picture_scene_values"/>
 
     </PreferenceCategory>
     <PreferenceCategory

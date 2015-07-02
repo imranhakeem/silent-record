@@ -1,4 +1,4 @@
-package com.byteshaft.silentrecord;
+package com.byteshaft.silentrecord.fragments;
 
 
 
@@ -11,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.byteshaft.silentrecord.utils.Helpers;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 import com.byteshaft.ezflashlight.FlashlightGlobals;
+import com.byteshaft.silentrecord.CustomCamera;
+import com.byteshaft.silentrecord.R;
 
 import java.util.Calendar;
 
@@ -33,6 +36,11 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     private Helpers mHelpers;
     private Button mPicButton;
     private Button mVideoBtn;
+    int mYear;
+    int mMonth;
+    int mDay;
+    int mHours;
+    int mMinutes;
 
 
     @Nullable
@@ -75,17 +83,9 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     }
 
     private void setBackgroundForButtonPresent() {
-        if (mHelpers.getDate()) {
-            mBtnDatePicker.setBackgroundResource(R.drawable.date_set);
-        } else {
             mBtnDatePicker.setBackgroundResource(R.drawable.date);
-        }
-        if (mHelpers.getTime()) {
-            mBtnTimePicker.setBackgroundResource(R.drawable.time_set);
-        } else {
             mBtnTimePicker.setBackgroundResource(R.drawable.time);
-        }
-        if (mHelpers.getTime() && mHelpers.getDate()) {
+        if (mHelpers.getPicAlarmStatus()) {
             mPicButton.setBackgroundResource(R.drawable.pic_set);
         } else {
             mPicButton.setBackgroundResource(R.drawable.pic);
@@ -120,6 +120,25 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                 timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
                 break;
             case R.id.buttonPic:
+                System.out.println("OK");
+                if (!mHelpers.getPicAlarmStatus() &&!mHelpers.getTime() && !mHelpers.getDate()) {
+                    System.out.println("toast");
+                    Toast.makeText(getActivity(),"please select date or time first", Toast.LENGTH_SHORT).show();
+                } else if (mHelpers.getPicAlarmStatus()) {
+                    System.out.println("black");
+                    mPicButton.setBackgroundResource(R.drawable.pic);
+                    mHelpers.removePreviousAlarm();
+                    mBtnDatePicker.setBackgroundResource(R.drawable.date);
+                    mBtnTimePicker.setBackgroundResource(R.drawable.time);
+                    mHelpers.setPicAlarm(false);
+                    mHelpers.setDate(false);
+                    mHelpers.setTime(false);
+                } else if (mHelpers.getTime() && mHelpers.getDate()) {
+                    System.out.println("green");
+                    mPicButton.setBackgroundResource(R.drawable.pic_set);
+                    mHelpers.setPicAlarm(true);
+                    mHelpers.setAlarm(mDay,mMonth,mYear,mHours,mMinutes);
+                }
 
                 break;
             case R.id.buttonVideo:
@@ -131,6 +150,9 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
         Toast.makeText(getActivity(),"year: "+ year + "Month :"+ month +"Day :" +day,Toast.LENGTH_SHORT).show();
         mBtnDatePicker.setBackgroundResource(R.drawable.date_set);
+        mYear = year;
+        mMonth = month;
+        mDay = day;
         mHelpers.setDate(true);
     }
 
@@ -138,6 +160,8 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int hours, int minutes) {
         Toast.makeText(getActivity(),"Hours: "+ hours + "Minutes :"+ minutes,Toast.LENGTH_SHORT).show();
         mBtnTimePicker.setBackgroundResource(R.drawable.time_set);
+        mHours = hours;
+        mMinutes = minutes;
         mHelpers.setTime(true);
 
 

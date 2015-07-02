@@ -1,0 +1,142 @@
+package com.byteshaft.silentrecord.utils;
+
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.hardware.Camera;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.byteshaft.silentrecord.AppGlobals;
+import com.byteshaft.silentrecord.R;
+
+import java.util.Calendar;
+
+
+public class Helpers extends ContextWrapper {
+
+    private AlarmManager mAlarmManager;
+    private PendingIntent mPIntent;
+
+    public Helpers(Context base) {
+        super(base);
+    }
+
+    public String readZoomSettings() {
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        return preferences.getString("camera_zoom_control", "0");
+    }
+
+    public void showCameraResourceBusyDialog(final Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Camera busy");
+        builder.setMessage("The App needs to read camera capabilities on first run, " +
+                "please make sure camera is not in use by any other app");
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                activity.finish();
+            }
+        });
+        builder.create();
+        builder.show();
+    }
+
+    public boolean isAppRunningForTheFirstTime() {
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        return preferences.getBoolean("first_run", true);
+    }
+
+    public void setIsAppRunningForTheFirstTime(boolean firstTime) {
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        preferences.edit().putBoolean("first_run", firstTime).apply();
+    }
+
+    public Camera openCamera() {
+        try {
+            return Camera.open();
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    private SharedPreferences getPreferenceManager() {
+        return PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    }
+
+    public void setPicAlarm(boolean picAlarm) {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        sharedPreferences.edit().putBoolean("picAlarm", picAlarm).commit();
+    }
+
+    public boolean getPicAlarmStatus() {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        return sharedPreferences.getBoolean("picAlarm", false);
+    }
+
+    public void videoAlarmset(boolean picAlarm) {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        sharedPreferences.edit().putBoolean("picAlarm", picAlarm).commit();
+    }
+
+    public boolean getVideoAlarmStatus() {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        return sharedPreferences.getBoolean("picAlarm", false);
+    }
+
+    public void setTime(boolean value) {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        sharedPreferences.edit().putBoolean("time_set", value).commit();
+    }
+
+    public boolean getTime() {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        return sharedPreferences.getBoolean("time_set", false);
+    }
+
+    public void setDate(boolean value) {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        sharedPreferences.edit().putBoolean("date_time", value).commit();
+    }
+
+    public boolean getDate() {
+        SharedPreferences sharedPreferences = getPreferenceManager();
+        return sharedPreferences.getBoolean("date_time", false);
+    }
+
+    private AlarmManager getAlarmManager() {
+        return (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+    }
+
+    public void removePreviousAlarm(){
+        System.out.println(mPIntent == null);
+        if (mPIntent != null) {
+            mAlarmManager.cancel(mPIntent);
+        }
+    }
+
+    public void setAlarm(int date, int month,
+                                   int year, int hour, int minutes) {
+        mAlarmManager = getAlarmManager();
+        Intent intent = new Intent("com.byteShaft.videoRecordingAlarm");
+        mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DATE,date);  //1-31
+        calendar.set(Calendar.MONTH, month);  //first month is 0!!! January is zero!!!
+        calendar.set(Calendar.YEAR,year);//year...
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour);  //HOUR
+        calendar.set(Calendar.MINUTE, minutes);       //MIN
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, mPIntent);
+        Log.i(AppGlobals.getLogTag(getClass()), "setting alarm of :" + calendar.getTime());
+    }
+}
