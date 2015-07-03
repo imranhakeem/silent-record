@@ -44,7 +44,7 @@ public class RecordingNotification {
         intent.setAction("perform_notification_button");
         intent.putExtra("do_action", command);
         return PendingIntent.getBroadcast(
-                sContext.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                sContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private static NotificationCompat.Builder getNotificationCharacteristics(RemoteViews contentView) {

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.CustomCamera;
@@ -41,14 +42,12 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.button_record:
-                if (mIsRecording) {
+                if (CustomCamera.isRecording()) {
                     camera.stopRecording();
                     mVideoButton.setText("Start recording");
-                    mIsRecording = false;
-                } else {
+                } else if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
                     camera.startRecording();
                     mVideoButton.setText("Stop recording");
-                    mIsRecording = true;
                 }
                 break;
         }
