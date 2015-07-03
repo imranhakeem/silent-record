@@ -15,4 +15,5 @@
         android:clickable="true"
         android:divider="@android:color/white">
     </ListView>
+
 </LinearLayout>

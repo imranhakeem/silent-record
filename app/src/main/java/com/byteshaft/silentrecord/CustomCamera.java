@@ -78,11 +78,15 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
+        String fileName = getTimeStamp();
+        if (mHelpers.isVideoHiderOn()) {
+            fileName = "." + getTimeStamp();
+        }
         Camera.Parameters parameters = camera.getParameters();
         parameters.setSceneMode(getVideoSceneMode());
         camera.setParameters(parameters);
         camera.unlock();
-        String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
+        String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ fileName + ".3gp";
         mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setCamera(camera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -136,7 +140,11 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     @Override
     public void onPictureTaken(byte[] bytes, Camera camera) {
-        String out = Environment.getExternalStorageDirectory() + "/" + "SpyPics" + "/" + getTimeStamp() + ".jpg";
+        String fileName = getTimeStamp();
+        if (mHelpers.isImageHiderOn()) {
+            fileName = "." + getTimeStamp();
+        }
+        String out = Environment.getExternalStorageDirectory() + "/" + "SpyPics" + "/" + fileName + ".jpg";
         File file = new File(out);
         try {
             FileOutputStream outputStream = new FileOutputStream(file);

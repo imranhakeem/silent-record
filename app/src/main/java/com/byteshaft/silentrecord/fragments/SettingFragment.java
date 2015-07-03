@@ -7,15 +7,18 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-
+import android.preference.SwitchPreference;
 
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
+import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
-public class SettingFragment extends PreferenceFragment {
+public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
 
     ListPreference listPreference;
+    SwitchPreference switchPreference;
+    Helpers helpers;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,13 @@ public class SettingFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.prefs);
         CameraCharacteristics characteristics = new CameraCharacteristics(
                 getActivity().getApplicationContext());
+
+        helpers = new Helpers(getActivity());
+
+        switchPreference = (SwitchPreference) findPreference("video_visibility");
+        switchPreference.setOnPreferenceChangeListener(this);
+        switchPreference = (SwitchPreference) findPreference("image_visibility");
+        switchPreference.setOnPreferenceChangeListener(this);
 
         listPreference = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(listPreference, characteristics.getSupportedVideoResolutions());
@@ -84,4 +94,37 @@ public class SettingFragment extends PreferenceFragment {
         listPreference.setEntries(data);
         listPreference.setEntryValues(data);
     }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+        switch (preference.getKey()) {
+            case "video_visibility":
+                if (!helpers.isVideoHiderOn()) {
+//                    hideDirectory();
+                } else {
+                    System.out.println("off");
+                }
+                break;
+            case "image_visibility":
+                if (!helpers.isImageHiderOn()) {
+
+                    System.out.println("on");
+                } else {
+
+                    System.out.println("off");
+                }
+        }
+        return true;
+    }
+
+//    private void hideDirectory() {
+//        File sdcard = Environment.getExternalStorageDirectory();
+//        File from = new File(sdcard, "SpyVideos");
+//        File to = new File(sdcard, ".SpyVideos");
+//        boolean success = from.renameTo(to);
+//        if (success) {
+//            Toast.makeText(getActivity().getApplicationContext(), "Hidden", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 }

@@ -88,4 +88,29 @@ public class Helpers extends ContextWrapper {
         }
         return arrayList;
     }
+
+//    public ArrayList<String> hideVideoFiles() {
+//        ArrayList<String> videoList = new ArrayList<>();
+//        File filePath = Environment.getExternalStorageDirectory();
+//        File filedir = new File(filePath, "/SpyVideos");
+//            for (File file : filedir.listFiles()) {
+//                if (isVideoHiderOn()) {
+//                    File fileName = new File(file.getName());
+//                    File hiddenFiles = new File("." + file.getName());
+//                    fileName.renameTo(hiddenFiles);
+//                }
+//            }
+//        return videoList;
+//    }
+
+
+    public boolean isImageHiderOn() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("image_visibility", false);
+    }
+
+    public boolean isVideoHiderOn() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("video_visibility", false);
+    }
 }
