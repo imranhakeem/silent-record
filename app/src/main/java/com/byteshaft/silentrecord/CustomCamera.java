@@ -7,6 +7,7 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
@@ -32,6 +33,9 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     private int mCameraRequest;
     private CustomMediaRecorder mMediaRecorder;
     private Helpers mHelpers;
+    private static boolean sIsRecording;
+    private static boolean sIsTakingPicture;
+    boolean test;
 
     private static class CameraRequest {
         static final int START_RECORDING = 1;
@@ -52,8 +56,17 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         return sCustomCamera;
     }
 
+    public static boolean isRecording() {
+        return sIsRecording;
+    }
+
+    public static boolean isTakingPicture() {
+        return sIsTakingPicture;
+    }
+
     public void takePicture() {
         mCameraRequest = CameraRequest.TAKE_PICTURE;
+        sIsTakingPicture = true;
         mFlashlight.setupCameraPreview();
     }
 
@@ -78,6 +91,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     public void startRecording() {
         mCameraRequest = CameraRequest.START_RECORDING;
+        sIsRecording = true;
         mFlashlight.setupCameraPreview();
     }
 
@@ -99,8 +113,8 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     public void stopRecording() {
         Silencer.silentSystemStream(2000);
         mMediaRecorder.stop();
-        RecordingNotification.hide();
         mFlashlight.releaseAllResources();
+        sIsRecording = false;
     }
 
     @Override
@@ -122,7 +136,14 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     @Override
     public void onCameraBusy() {
-
+        switch (mCameraRequest) {
+            case CameraRequest.START_RECORDING:
+                sIsRecording = false;
+                break;
+            case CameraRequest.TAKE_PICTURE:
+                sIsTakingPicture = false;
+                break;
+        }
     }
 
     @Override
@@ -144,6 +165,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
             e.printStackTrace();
         }
         mFlashlight.releaseAllResources();
+        sIsTakingPicture = false;
     }
 
     @Override

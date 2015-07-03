@@ -69,6 +69,5 @@ public class CustomMediaRecorder extends MediaRecorder {
         super.stop();
         RecordingNotification.hide();
         reset();
-        release();
     }
 }
