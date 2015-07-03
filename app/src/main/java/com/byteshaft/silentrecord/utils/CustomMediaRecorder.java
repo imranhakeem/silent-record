@@ -1,6 +1,5 @@
 package com.byteshaft.silentrecord.utils;
 
-import android.content.Context;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.view.SurfaceHolder;
@@ -12,29 +11,16 @@ import java.io.IOException;
 public class CustomMediaRecorder extends MediaRecorder {
 
     private static CustomMediaRecorder sInstance;
-    private Context mContext;
-    private SurfaceHolder mHolder;
 
-    private CustomMediaRecorder(Context context) {
+    private CustomMediaRecorder() {
         super();
-        mContext = context;
-    }
-
-    public static CustomMediaRecorder getInstance(Context context) {
-        if (sInstance == null) {
-            sInstance = new CustomMediaRecorder(context);
-        }
-        return sInstance;
     }
 
     public static CustomMediaRecorder getInstance() {
         if (sInstance == null) {
-            throw new RuntimeException("Wrong getInstance() called, " +
-                    "class needs to be initialized first by calling " +
-                    "getInstance(Camera, SurfaceHolder");
-        } else {
-            return sInstance;
+            sInstance = new CustomMediaRecorder();
         }
+        return sInstance;
     }
 
     @Override
