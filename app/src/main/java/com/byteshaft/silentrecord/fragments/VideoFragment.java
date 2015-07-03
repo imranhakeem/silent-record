@@ -19,7 +19,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.byteshaft.silentrecord.R;
@@ -37,6 +39,7 @@ public class VideoFragment extends ListFragment {
     private View rootView;
     private Context mContext;
     private ArrayList<String> mVideoFilesNames;
+    private ThumbnailCreation mListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,16 +52,14 @@ public class VideoFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         mHelpers = new Helpers(getActivity());
         mVideoFilesNames = mHelpers.getNameFromFolder();
-        getListView().setAdapter(new ThumbnailCreation(getActivity().getApplicationContext(),
-                R.layout.row, mVideoFilesNames));
+        mListAdapter = new ThumbnailCreation(getActivity().getApplicationContext(),
+                R.layout.row, mVideoFilesNames);
+        getListView().setAdapter(mListAdapter);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String path = getPathForVideo(mVideoFilesNames.get(i));
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri data = Uri.parse("file://" + path);
-                intent.setDataAndType(data, "video/*");
-                startActivity(intent);
+                playVideo(path);
             }
         });
         getListView().setDivider(null);
@@ -78,6 +79,31 @@ public class VideoFragment extends ListFragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
+                item.getMenuInfo();
+        int menuItemIndex = item.getItemId();
+        String[] menuItems = {"Play", "Delete" , "Details"};
+        String menuItemName = menuItems[menuItemIndex];
+        switch (menuItemName) {
+            case "Play":
+                playVideo(getPathForVideo(mVideoFilesNames.get(info.position)));
+                break;
+            case "Delete":
+                if (deleteFile(getPathForVideo(mVideoFilesNames.get(info.position)))) {
+                    mListAdapter.remove(mListAdapter.getItem(info.position));
+                    mListAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Could not delete file", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case "Hide":
+                if (hideFile(getPathForVideo(mVideoFilesNames.get(info.position)))) {
+                    mListAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Could not delete file", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
         return super.onContextItemSelected(item);
     }
 
@@ -144,6 +170,30 @@ public class VideoFragment extends ListFragment {
     }
 
     private String getPathForVideo(String fileName) {
-        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyVideos/" + fileName;
+        return getExternalLocation() + "/SpyVideos/" + fileName;
+    }
+
+    private String getExternalLocation() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath();
+    }
+
+    private void playVideo(String filePath) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri data = Uri.parse("file://" + filePath);
+        intent.setDataAndType(data, "video/*");
+        startActivity(intent);
+    }
+
+    private boolean deleteFile(String filePath) {
+        File file = new File(filePath);
+        return file.delete();
+    }
+
+    private boolean hideFile(String filePath) {
+        String directory = getExternalLocation();
+        File file1 = new File(filePath);
+        String fileNameOld = file1.getName();
+        File file2 = new File(directory, "." + fileNameOld);
+        return file1.renameTo(file2);
     }
 }
