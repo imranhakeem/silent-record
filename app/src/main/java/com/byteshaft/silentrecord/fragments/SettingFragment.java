@@ -1,12 +1,8 @@
 package com.byteshaft.silentrecord.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 
 import com.byteshaft.silentrecord.R;
@@ -53,34 +49,6 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         listPreference = (ListPreference) findPreference("camera_zoom_control");
         listPreference.setEntryValues(characteristics.getSupportedZoomLevels());
         setDefaultEntryIfNotPreviouslySet(listPreference);
-
-        Preference reset = findPreference("reset");
-        reset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                alertDialog.setMessage("Are you sure?");
-                alertDialog.setCancelable(true);
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        SharedPreferences shared = PreferenceManager.
-                                getDefaultSharedPreferences(getActivity());
-                        shared.edit().putString("camera_zoom_control", "0").apply();
-                    }
-                });
-                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                alertDialog.create();
-                alertDialog.show();
-                return false;
-            }
-        });
-
     }
 
     private void setDefaultEntryIfNotPreviouslySet(ListPreference listPreference) {

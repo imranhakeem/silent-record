@@ -14,6 +14,8 @@ import com.byteshaft.silentrecord.R;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.Locale;
 
 
 public class Helpers extends ContextWrapper {
