@@ -35,7 +35,6 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     private Helpers mHelpers;
     private static boolean sIsRecording;
     private static boolean sIsTakingPicture;
-    boolean test;
 
     private static class CameraRequest {
         static final int START_RECORDING = 1;
@@ -101,7 +100,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         camera.setParameters(parameters);
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
-        mMediaRecorder = CustomMediaRecorder.getInstance(getApplicationContext());
+        mMediaRecorder = CustomMediaRecorder.getInstance();
         mMediaRecorder.setOutputFile(path);
         mMediaRecorder.start(camera, holder);
     }
