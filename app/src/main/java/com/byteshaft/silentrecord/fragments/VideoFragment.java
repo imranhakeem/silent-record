@@ -7,8 +7,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,31 +31,54 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-public class VideoFragment extends Fragment {
+public class VideoFragment extends ListFragment {
 
     private Helpers mHelpers;
     private View rootView;
     private Context mContext;
+    private ArrayList<String> mVideoFilesNames;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.video_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.video_fragment, container, false);
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mHelpers = new Helpers(getActivity());
-        ListView listView = (ListView) rootView.findViewById(R.id.video_list);
-        final ArrayList<String> arrayList = mHelpers.getNameFromFolder();
-        listView.setAdapter(new ThumbnailCreation(getActivity().getApplicationContext(),
-                R.layout.row, arrayList));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mVideoFilesNames = mHelpers.getNameFromFolder();
+        getListView().setAdapter(new ThumbnailCreation(getActivity().getApplicationContext(),
+                R.layout.row, mVideoFilesNames));
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String path = getPathForVideo(arrayList.get(i));
+                String path = getPathForVideo(mVideoFilesNames.get(i));
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 Uri data = Uri.parse("file://" + path);
                 intent.setDataAndType(data, "video/*");
                 startActivity(intent);
             }
         });
-        return rootView;
+        getListView().setDivider(null);
+        registerForContextMenu(getListView());
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        menu.setHeaderTitle(mVideoFilesNames.get(info.position));
+        String[] menuItems = {"Play", "Delete" , "Hide"};
+        for (int i = 0; i < menuItems.length; i++) {
+            menu.add(Menu.NONE, i, i, menuItems[i]);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);
     }
 
     static class ViewHolder {
