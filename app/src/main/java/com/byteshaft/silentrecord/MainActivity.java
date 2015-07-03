@@ -35,6 +35,8 @@ import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 
+import java.util.ArrayList;
+
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
@@ -54,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     private int mNotificationID = 001;
     private NotificationManager mNotifyManager;
     boolean isMainActivityActive = false;
-    int mPositionGlobal = -1;
-    final int DUMMY_POSITION = -1;
+//    int mPosition = -1;
 
     @Override
     protected void onPause() {
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         isMainActivityActive = false;
         mDrawerList.setItemChecked(position, true);
         setTitle(mListTitles[position]);
-        mPositionGlobal = position;
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         fragmentManager.executePendingTransactions();
         fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
         fragmentManager.popBackStack();
-        mPositionGlobal = DUMMY_POSITION;
     }
 
     @Override
@@ -202,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 invalidateOptionsMenu();
-                newFragment(mPositionGlobal);
+//                newFragment(mPosition);
             }
         };
     }
@@ -224,10 +223,10 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
+            newFragment(position);
             mMaterialTabHost.setVisibility(View.GONE);
             mDrawerLayout.closeDrawer(mDrawerList);
         }

@@ -67,7 +67,4 @@
             android:entries="@array/camera_zoom_controls">
         </ListPreference>
     </PreferenceCategory>
-    <Preference android:title="Reset Zoom Settings"
-        android:key="reset">
-    </Preference>
 </PreferenceScreen>
