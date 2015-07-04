@@ -38,7 +38,7 @@
                 android:resource="@xml/app_widget_info" />
         </receiver>
         <receiver android:name=".widget.WidgetReceiver"/>
-        <receiver android:name=".fragments.StartRecordingReceiver">
+        <receiver android:name=".receivers.StartRecordingReceiver">
             <intent-filter>
                 <action android:name="com.byteShaft.Alarm"/>
             </intent-filter>

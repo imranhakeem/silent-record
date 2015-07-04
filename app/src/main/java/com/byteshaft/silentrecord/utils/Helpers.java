@@ -69,51 +69,47 @@ public class Helpers extends ContextWrapper {
         }
     }
 
-    private SharedPreferences getPreferenceManager() {
-        return PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    public static  void setPicAlarm(boolean picAlarm) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("picAlarm", picAlarm).apply();
     }
 
-    public void setPicAlarm(boolean picAlarm) {
-        SharedPreferences sharedPreferences = getPreferenceManager();
-        sharedPreferences.edit().putBoolean("picAlarm", picAlarm).commit();
-    }
-
-    public boolean getPicAlarmStatus() {
-        SharedPreferences sharedPreferences = getPreferenceManager();
+    public static boolean getPicAlarmStatus() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("picAlarm", false);
     }
 
-    public void setVideoAlarm(boolean videoAlarm) {
-        SharedPreferences sharedPreferences = getPreferenceManager();
-        sharedPreferences.edit().putBoolean("videoAlarm", videoAlarm).commit();
+    public static  void setVideoAlarm(boolean videoAlarm) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("videoAlarm", videoAlarm).apply();
     }
 
-    public boolean getVideoAlarmStatus() {
-        SharedPreferences sharedPreferences = getPreferenceManager();
+    public static  boolean getVideoAlarmStatus() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("videoAlarm", false);
     }
 
-    public void setTime(boolean value) {
-        SharedPreferences sharedPreferences = getPreferenceManager();
-        sharedPreferences.edit().putBoolean("time_set", value).commit();
+    public static void setTime(boolean value) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("time_set", value).apply();
     }
 
-    public boolean getTime() {
-        SharedPreferences sharedPreferences = getPreferenceManager();
+    public static boolean getTime() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("time_set", false);
     }
 
-    public void setDate(boolean value) {
-        SharedPreferences sharedPreferences = getPreferenceManager();
-        sharedPreferences.edit().putBoolean("date_time", value).commit();
+    public static void setDate(boolean value) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("date_time", value).apply();
     }
 
-    public boolean getDate() {
-        SharedPreferences sharedPreferences = getPreferenceManager();
+    public static boolean getDate() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("date_time", false);
     }
 
-    private AlarmManager getAlarmManager() {
+    private  AlarmManager getAlarmManager() {
         return (AlarmManager) getSystemService(Context.ALARM_SERVICE);
     }
 

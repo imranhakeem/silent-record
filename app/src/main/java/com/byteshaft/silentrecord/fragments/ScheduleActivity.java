@@ -71,12 +71,12 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     private void setBackgroundForButtonPresent() {
             mBtnDatePicker.setBackgroundResource(R.drawable.date);
             mBtnTimePicker.setBackgroundResource(R.drawable.time);
-        if (mHelpers.getPicAlarmStatus()) {
+        if (Helpers.getPicAlarmStatus()) {
             mPicButton.setBackgroundResource(R.drawable.pic_set);
         } else {
             mPicButton.setBackgroundResource(R.drawable.pic);
         }
-        if (mHelpers.getVideoAlarmStatus()) {
+        if (Helpers.getVideoAlarmStatus()) {
             System.out.println("this");
             mVideoBtn.setBackgroundResource(R.drawable.video_alarm);
         } else {
@@ -96,36 +96,36 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                 timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
                 break;
             case R.id.buttonPic:
-                if (!mHelpers.getPicAlarmStatus() &&!mHelpers.getTime() && !mHelpers.getDate()) {
+                if (!Helpers.getPicAlarmStatus() &&!Helpers.getTime() && !Helpers.getDate()) {
                     Toast.makeText(getActivity(),"please select date or time first", Toast.LENGTH_SHORT).show();
-                } else if (mHelpers.getPicAlarmStatus()) {
+                } else if (Helpers.getPicAlarmStatus()) {
                     mPicButton.setBackgroundResource(R.drawable.pic);
                     mHelpers.removePreviousAlarm();
                     mBtnDatePicker.setBackgroundResource(R.drawable.date);
                     mBtnTimePicker.setBackgroundResource(R.drawable.time);
-                    mHelpers.setPicAlarm(false);
-                    mHelpers.setDate(false);
-                    mHelpers.setTime(false);
-                } else if (mHelpers.getTime() && mHelpers.getDate()) {
+                    Helpers.setPicAlarm(false);
+                    Helpers.setDate(false);
+                    Helpers.setTime(false);
+                } else if (Helpers.getTime() && Helpers.getDate()) {
                     mPicButton.setBackgroundResource(R.drawable.pic_set);
-                    mHelpers.setPicAlarm(true);
+                    Helpers.setPicAlarm(true);
                     mHelpers.setAlarm(mDay,mMonth,mYear,mHours,mMinutes, "pic");
                 }
                 break;
             case R.id.buttonVideo:
-                if (!mHelpers.getVideoAlarmStatus() &&!mHelpers.getTime() && !mHelpers.getDate()) {
+                if (!Helpers.getVideoAlarmStatus() &&!Helpers.getTime() && !Helpers.getDate()) {
                     Toast.makeText(getActivity(),"please select date or time first", Toast.LENGTH_SHORT).show();
-                } else if (mHelpers.getVideoAlarmStatus()) {
+                } else if (Helpers.getVideoAlarmStatus()) {
                     mVideoBtn.setBackgroundResource(R.drawable.alarm_not_set);
                     mHelpers.removePreviousAlarm();
                     mBtnDatePicker.setBackgroundResource(R.drawable.date);
                     mBtnTimePicker.setBackgroundResource(R.drawable.time);
-                    mHelpers.setVideoAlarm(false);
-                    mHelpers.setDate(false);
-                    mHelpers.setTime(false);
-                } else if (mHelpers.getTime() && mHelpers.getDate()) {
+                    Helpers.setVideoAlarm(false);
+                    Helpers.setDate(false);
+                    Helpers.setTime(false);
+                } else if (Helpers.getTime() && Helpers.getDate()) {
                     mVideoBtn.setBackgroundResource(R.drawable.video_alarm);
-                    mHelpers.setVideoAlarm(true);
+                    Helpers.setVideoAlarm(true);
                     mHelpers.setAlarm(mDay,mMonth,mYear,mHours,mMinutes, "video");
                 }
                 break;
@@ -139,7 +139,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
         mYear = year;
         mMonth = month;
         mDay = day;
-        mHelpers.setDate(true);
+        Helpers.setDate(true);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
         mBtnTimePicker.setBackgroundResource(R.drawable.time_set);
         mHours = hours;
         mMinutes = minutes;
-        mHelpers.setTime(true);
+        Helpers.setTime(true);
 
 
     }

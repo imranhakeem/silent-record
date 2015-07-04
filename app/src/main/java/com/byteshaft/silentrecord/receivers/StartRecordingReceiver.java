@@ -1,4 +1,4 @@
-package com.byteshaft.silentrecord.fragments;
+package com.byteshaft.silentrecord.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
