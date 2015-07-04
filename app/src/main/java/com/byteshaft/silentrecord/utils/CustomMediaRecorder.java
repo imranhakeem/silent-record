@@ -27,7 +27,6 @@ public class CustomMediaRecorder extends MediaRecorder {
     public void start() throws IllegalStateException {
         super.start();
         NotificationWidget.show();
-
     }
 
     public void start(Camera camera, SurfaceHolder holder) {
