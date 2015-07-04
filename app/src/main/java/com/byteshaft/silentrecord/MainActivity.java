@@ -32,8 +32,6 @@ import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
-
-
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
@@ -96,9 +94,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
-        Helpers helpers = new Helpers(getApplicationContext());
-        helpers.spyVideosDirectory();
-        helpers.spyPicturesDirectory();
+        Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.VIDEOS);
+        Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.PICTURES);
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mResources = getResources();
@@ -125,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 getString(R.string.title_section3),
                 getString(R.string.title_section4),
                 getString(R.string.title_section5),
+                getString(R.string.title_section6),
         };
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mListTitles));
@@ -146,15 +144,18 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 setTheme(R.style.SettingsTheme);
                 break;
             case 1:
-                mFragment = new VideoFragment();
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.PICTURES);
                 break;
             case 2:
-                mFragment = new AboutFragment();
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
                 break;
             case 3:
-                mFragment = new ReportFragment();
+                mFragment = new AboutFragment();
                 break;
             case 4:
+                mFragment = new ReportFragment();
+                break;
+            case 5:
                 mFragment = new ContactFragment();
                 break;
             default:
