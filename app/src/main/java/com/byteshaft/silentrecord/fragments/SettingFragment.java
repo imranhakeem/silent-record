@@ -1,6 +1,5 @@
 package com.byteshaft.silentrecord.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -98,7 +97,7 @@ public class SettingFragment extends PreferenceFragment implements
                     NotificationWidget.hide();
                     break;
                 }
-        }
+            }
                 return true;
         }
     }
