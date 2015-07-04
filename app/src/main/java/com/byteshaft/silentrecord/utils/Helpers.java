@@ -18,6 +18,8 @@ import com.byteshaft.silentrecord.R;
 import java.util.Calendar;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.Locale;
 
 
 public class Helpers extends ContextWrapper {
@@ -83,14 +85,14 @@ public class Helpers extends ContextWrapper {
         return sharedPreferences.getBoolean("picAlarm", false);
     }
 
-    public void videoAlarmset(boolean picAlarm) {
+    public void setVideoAlarm(boolean videoAlarm) {
         SharedPreferences sharedPreferences = getPreferenceManager();
-        sharedPreferences.edit().putBoolean("picAlarm", picAlarm).commit();
+        sharedPreferences.edit().putBoolean("videoAlarm", videoAlarm).commit();
     }
 
     public boolean getVideoAlarmStatus() {
         SharedPreferences sharedPreferences = getPreferenceManager();
-        return sharedPreferences.getBoolean("picAlarm", false);
+        return sharedPreferences.getBoolean("videoAlarm", false);
     }
 
     public void setTime(boolean value) {
@@ -118,16 +120,16 @@ public class Helpers extends ContextWrapper {
     }
 
     public void removePreviousAlarm(){
-        System.out.println(mPIntent == null);
         if (mPIntent != null) {
             mAlarmManager.cancel(mPIntent);
         }
     }
 
     public void setAlarm(int date, int month,
-                                   int year, int hour, int minutes) {
+                                   int year, int hour, int minutes, String operationType) {
         mAlarmManager = getAlarmManager();
-        Intent intent = new Intent("com.byteShaft.videoRecordingAlarm");
+        Intent intent = new Intent("com.byteShaft.Alarm");
+        intent.putExtra("operationType",operationType);
         mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DATE, date);  //1-31

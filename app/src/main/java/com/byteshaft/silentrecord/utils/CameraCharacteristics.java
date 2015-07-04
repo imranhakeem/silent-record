@@ -71,6 +71,7 @@ public class CameraCharacteristics extends ContextWrapper {
         StringBuilder builder = new StringBuilder();
         int zoom  = mParameters.getMaxZoom();
         if (mParameters.isZoomSupported()) {
+            builder.append("0,");
             for (int i = 1; i <= 3; i++) {
                 String res = String.valueOf((zoom / 3) * i);
                 builder.append(res);

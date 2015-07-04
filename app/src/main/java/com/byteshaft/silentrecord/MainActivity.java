@@ -35,6 +35,8 @@ import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 
+import java.util.ArrayList;
+
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
@@ -54,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     private int mNotificationID = 001;
     private NotificationManager mNotifyManager;
     boolean isMainActivityActive = false;
-    int mPositionGlobal = -1;
-    final int DUMMY_POSITION = -1;
+//    int mPosition = -1;
 
     @Override
     protected void onPause() {
@@ -108,26 +109,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         mViewPager.setAdapter(mViewPagerAdapter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        RemoteViews notify_view = new RemoteViews(getPackageName(), R.layout.notification);
-        Intent buttonsIntent = new Intent(getApplicationContext(), NotificationHandler.class);
-        buttonsIntent.setAction("perform_notification_button");
-        buttonsIntent.putExtra("do_action", "take_picture");
-        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 0, buttonsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notify_view.setOnClickPendingIntent(R.id.photo_button_widget, pendingIntent1);
-
-        Intent buttonsIntent2 = new Intent(getApplicationContext(), NotificationHandler.class);
-        buttonsIntent.setAction("perform_notification_button");
-        buttonsIntent2.putExtra("do_action", "record_video");
-        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, buttonsIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
-        notify_view.setOnClickPendingIntent(R.id.video_button_widget, pendingIntent2);
-        mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.notification_template_icon_bg)
-                .setContent(notify_view)
-                .setShowWhen(false)
-                .setAutoCancel(false)
-                .setOngoing(false);
-        mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyManager.notify(mNotificationID, mBuilder.build());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
@@ -157,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         isMainActivityActive = false;
         mDrawerList.setItemChecked(position, true);
         setTitle(mListTitles[position]);
-        mPositionGlobal = position;
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
@@ -179,13 +159,14 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             case 4:
                 mFragment = new ContactFragment();
                 break;
+            default:
+                return;
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.executePendingTransactions();
         fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
         fragmentManager.popBackStack();
-        mPositionGlobal = DUMMY_POSITION;
     }
 
     @Override
@@ -220,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 invalidateOptionsMenu();
-                newFragment(mPositionGlobal);
+//                newFragment(mPosition);
             }
         };
     }
@@ -242,10 +223,10 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
+            newFragment(position);
             mMaterialTabHost.setVisibility(View.GONE);
             mDrawerLayout.closeDrawer(mDrawerList);
         }

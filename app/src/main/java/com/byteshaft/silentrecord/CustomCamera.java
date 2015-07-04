@@ -7,10 +7,14 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
+import com.byteshaft.silentrecord.notification.RecordingNotification;
+import com.byteshaft.silentrecord.utils.CustomMediaRecorder;
 import com.byteshaft.silentrecord.utils.Helpers;
+import com.byteshaft.silentrecord.utils.Values;
 import com.byteshaft.silentrecord.utils.Silencer;
 
 import java.io.File;
@@ -27,8 +31,10 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     private static CustomCamera sCustomCamera;
     private Flashlight mFlashlight;
     private int mCameraRequest;
-    private MediaRecorder mMediaRecorder;
+    private CustomMediaRecorder mMediaRecorder;
     private Helpers mHelpers;
+    private static boolean sIsRecording;
+    private static boolean sIsTakingPicture;
 
     private static class CameraRequest {
         static final int START_RECORDING = 1;
@@ -49,8 +55,17 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         return sCustomCamera;
     }
 
+    public static boolean isRecording() {
+        return sIsRecording;
+    }
+
+    public static boolean isTakingPicture() {
+        return sIsTakingPicture;
+    }
+
     public void takePicture() {
         mCameraRequest = CameraRequest.TAKE_PICTURE;
+        sIsTakingPicture = true;
         mFlashlight.setupCameraPreview();
     }
 
@@ -58,8 +73,9 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         Camera.Parameters parameters = camera.getParameters();
         parameters.setRotation(90);
         parameters.setZoom(Integer.valueOf(mHelpers.readZoomSettings()));
-        parameters.setPictureSize(getPictureDimension()[0], getPictureDimension()[1]);
-        parameters.setSceneMode(getPictureSceneMode());
+        parameters.setPictureSize(
+                Values.getPictureDimension()[0], Values.getPictureDimension()[1]);
+        parameters.setSceneMode(Values.getPictureSceneMode());
         camera.setParameters(parameters);
         camera.setDisplayOrientation(90);
         camera.startPreview();
@@ -74,42 +90,26 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     public void startRecording() {
         mCameraRequest = CameraRequest.START_RECORDING;
+        sIsRecording = true;
         mFlashlight.setupCameraPreview();
     }
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
         Camera.Parameters parameters = camera.getParameters();
-        parameters.setSceneMode(getVideoSceneMode());
+        parameters.setSceneMode(Values.getVideoSceneMode());
         camera.setParameters(parameters);
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
-        mMediaRecorder = new MediaRecorder();
-        mMediaRecorder.setCamera(camera);
-        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
-        mMediaRecorder.setOrientationHint(90);
-        mMediaRecorder.setVideoSize(getVideoDimensions()[0], getVideoDimensions()[1]);
-        mMediaRecorder.setPreviewDisplay(holder.getSurface());
+        mMediaRecorder = CustomMediaRecorder.getInstance();
         mMediaRecorder.setOutputFile(path);
-        try {
-            mMediaRecorder.prepare();
-            Silencer.silentSystemStream(2000);
-            mMediaRecorder.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mMediaRecorder.start(camera, holder);
     }
 
     public void stopRecording() {
         Silencer.silentSystemStream(2000);
         mMediaRecorder.stop();
-        mMediaRecorder.reset();
-        mMediaRecorder.release();
         mFlashlight.releaseAllResources();
-        mMediaRecorder = null;
+        sIsRecording = false;
     }
 
     @Override
@@ -131,7 +131,14 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     @Override
     public void onCameraBusy() {
-
+        switch (mCameraRequest) {
+            case CameraRequest.START_RECORDING:
+                sIsRecording = false;
+                break;
+            case CameraRequest.TAKE_PICTURE:
+                sIsTakingPicture = false;
+                break;
+        }
     }
 
     @Override
@@ -149,6 +156,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
             e.printStackTrace();
         }
         mFlashlight.releaseAllResources();
+        sIsTakingPicture = false;
     }
 
     @Override
@@ -162,37 +170,5 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
                 new SimpleDateFormat("yyyyMMddhhmmss");
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
         return simpleDateFormat.format(calendar.getTime());
-    }
-
-    private int[] getVideoDimensions() {
-        SharedPreferences preferences = AppGlobals.getPreferenceManager();
-        String out = preferences.getString("video_resolution", null);
-        if (out == null) {
-            return new int[] {640, 480};
-        }
-
-        String[] dimensions = out.split("X");
-        return new int[] {Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1])};
-    }
-
-    private int[] getPictureDimension() {
-        SharedPreferences preferences = AppGlobals.getPreferenceManager();
-        String out = preferences.getString("image_resolution", null);
-        if (out == null) {
-            return new int[] {640, 480};
-        }
-
-        String[] dimensions = out.split("X");
-        return new int[] {Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1])};
-    }
-
-    private String getPictureSceneMode() {
-        SharedPreferences preferences = AppGlobals.getPreferenceManager();
-        return preferences.getString("picture_scene_mode", "auto");
-    }
-
-    private String getVideoSceneMode() {
-        SharedPreferences preferences = AppGlobals.getPreferenceManager();
-        return preferences.getString("video_scene_mode", "auto");
     }
 }
