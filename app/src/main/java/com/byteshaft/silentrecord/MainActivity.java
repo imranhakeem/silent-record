@@ -24,7 +24,7 @@ import android.widget.ListView;
 
 import com.byteshaft.silentrecord.fragments.AboutFragment;
 import com.byteshaft.silentrecord.fragments.ContactFragment;
-import com.byteshaft.silentrecord.fragments.PicturesFragment;
+import com.byteshaft.silentrecord.fragments.ImagesActivity;
 import com.byteshaft.silentrecord.fragments.ReportFragment;
 import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                     mFragment = new VideosActivity();
                     break;
                 case 1:
-                    mFragment = new PicturesFragment();
+                    mFragment = new ImagesActivity();
                     break;
                 case 2:
                     mFragment = new ScheduleActivity();

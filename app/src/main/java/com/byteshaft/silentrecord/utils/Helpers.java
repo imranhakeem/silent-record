@@ -1,22 +1,29 @@
 package com.byteshaft.silentrecord.utils;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.os.Environment;
-
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
-
+import java.util.Calendar;
 import java.io.File;
 import java.util.ArrayList;
 
 
 public class Helpers extends ContextWrapper {
+
+    private AlarmManager mAlarmManager;
+    private PendingIntent mPIntent;
 
     public Helpers(Context base) {
         super(base);
@@ -62,6 +69,78 @@ public class Helpers extends ContextWrapper {
         }
     }
 
+    public static  void setPicAlarm(boolean picAlarm) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("picAlarm", picAlarm).apply();
+    }
+
+    public static boolean getPicAlarmStatus() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("picAlarm", false);
+    }
+
+    public static  void setVideoAlarm(boolean videoAlarm) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("videoAlarm", videoAlarm).apply();
+    }
+
+    public static  boolean getVideoAlarmStatus() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("videoAlarm", false);
+    }
+
+    public static void setTime(boolean value) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("time_set", value).apply();
+    }
+
+    public static boolean getTime() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("time_set", false);
+    }
+
+    public static void setDate(boolean value) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("date_time", value).apply();
+    }
+
+    public static boolean getDate() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("date_time", false);
+    }
+
+    private  AlarmManager getAlarmManager() {
+        return (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+    }
+
+    public void removePreviousAlarm(){
+        if (mPIntent != null) {
+            mAlarmManager.cancel(mPIntent);
+        }
+    }
+
+    public void setAlarm(int date, int month,
+                                   int year, int hour, int minutes, String operationType) {
+        mAlarmManager = getAlarmManager();
+        Intent intent = new Intent("com.byteShaft.Alarm");
+        intent.putExtra("operationType",operationType);
+        mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DATE, date);  //1-31
+        calendar.set(Calendar.MONTH, month);  //first month is 0!!! January is zero!!!
+        calendar.set(Calendar.YEAR, year);//year...
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour);  //HOUR
+        calendar.set(Calendar.MINUTE, minutes);       //MIN
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, mPIntent);
+        Log.i(AppGlobals.getLogTag(getClass()), "setting alarm of :" + calendar.getTime());
+    }
+
+    public void spyVideosDirectory() {
+
+    }
+        File recordingsDirectory = new File(Environment.getExternalStorageDirectory() + "/" + "SpyVideos");
     public static void createDirectoryIfNotExists(String directoryName) {
         File recordingsDirectory = new File(Environment.getExternalStorageDirectory(), directoryName);
         if (!recordingsDirectory.exists()) {
