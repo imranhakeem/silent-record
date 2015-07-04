@@ -1,6 +1,7 @@
 package com.byteshaft.silentrecord.fragments;
 
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
@@ -37,6 +38,16 @@ public class SettingFragment extends PreferenceFragment implements
         ListPreference listPreference = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(listPreference, characteristics.getSupportedVideoResolutions());
         setDefaultEntryIfNotPreviouslySet(listPreference);
+        listPreference.setSummary(mHelpers.getValueFromKey("video_resolution"));
+
+        listPreference = (ListPreference) findPreference("video_format");
+        listPreference.setSummary(mHelpers.getValueFromKey("video_format"));
+
+        EditTextPreference editTextPreference = (EditTextPreference) findPreference("max_video");
+        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video"));
+
+        listPreference = (ListPreference) findPreference("video_format");
+        listPreference.setSummary(mHelpers.getValueFromKey("video_format"));
 
         listPreference = (ListPreference) findPreference("picture_scene_mode");
         setEntriesAndValues(listPreference, characteristics.getSupportedSceneModes());
@@ -45,14 +56,17 @@ public class SettingFragment extends PreferenceFragment implements
         listPreference = (ListPreference) findPreference("video_scene_mode");
         setEntriesAndValues(listPreference, characteristics.getSupportedSceneModes());
         setDefaultEntryIfNotPreviouslySet(listPreference);
+        listPreference.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
 
         listPreference = (ListPreference) findPreference("image_resolution");
         setEntriesAndValues(listPreference, characteristics.getSupportedPictureSizes());
         setDefaultEntryIfNotPreviouslySet(listPreference);
+        listPreference.setSummary(mHelpers.getValueFromKey("image_resolution"));
 
         listPreference = (ListPreference) findPreference("camera_zoom_control");
         listPreference.setEntryValues(characteristics.getSupportedZoomLevels());
         setDefaultEntryIfNotPreviouslySet(listPreference);
+        listPreference.setSummary(mHelpers.getValueFromKey("camera_zoom_control"));
     }
 
     @Override
