@@ -141,14 +141,14 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
         switch (position) {
             case 0:
-                mFragment = new SettingFragment();
-                setTheme(R.style.SettingsTheme);
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
                 break;
             case 1:
                 mFragment = new VideoFragment(AppGlobals.DIRECTORY.PICTURES);
                 break;
             case 2:
-                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
+                mFragment = new SettingFragment();
+                setTheme(R.style.SettingsTheme);
                 break;
             case 3:
                 mFragment = new AboutFragment();
