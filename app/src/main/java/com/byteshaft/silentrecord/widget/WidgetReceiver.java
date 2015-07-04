@@ -51,7 +51,7 @@ public class WidgetReceiver extends BroadcastReceiver {
     private void updateWidgetUI() {
         if(!CustomCamera.isRecording()) {
             remoteViews.setViewVisibility(R.id.textview_widget, View.GONE);
-            remoteViews.setImageViewResource(R.id.video_button_widget, R.drawable.camcoder);
+            remoteViews.setImageViewResource(R.id.video_button_widget, R.drawable.widget_effect_two);
             AppWidgetManager.getInstance( AppGlobals.getContext() ).updateAppWidget(thisWidget, remoteViews);
             return;
         }
