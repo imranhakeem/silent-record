@@ -77,9 +77,11 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
             mPicButton.setBackgroundResource(R.drawable.pic);
         }
         if (mHelpers.getVideoAlarmStatus()) {
+            System.out.println("this");
             mVideoBtn.setBackgroundResource(R.drawable.video_alarm);
         } else {
-            mVideoBtn.setBackgroundColor(R.drawable.video);
+            System.out.println("that");
+            mVideoBtn.setBackgroundColor(R.drawable.alarm_not_set);
         }
     }
 
@@ -114,7 +116,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                 if (!mHelpers.getVideoAlarmStatus() &&!mHelpers.getTime() && !mHelpers.getDate()) {
                     Toast.makeText(getActivity(),"please select date or time first", Toast.LENGTH_SHORT).show();
                 } else if (mHelpers.getVideoAlarmStatus()) {
-                    mVideoBtn.setBackgroundResource(R.drawable.video);
+                    mVideoBtn.setBackgroundResource(R.drawable.alarm_not_set);
                     mHelpers.removePreviousAlarm();
                     mBtnDatePicker.setBackgroundResource(R.drawable.date);
                     mBtnTimePicker.setBackgroundResource(R.drawable.time);
