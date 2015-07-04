@@ -12,11 +12,12 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
+import android.os.Environment;
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
-
 import java.util.Calendar;
+import java.io.File;
+import java.util.ArrayList;
 
 
 public class Helpers extends ContextWrapper {
@@ -129,14 +130,41 @@ public class Helpers extends ContextWrapper {
         Intent intent = new Intent("com.byteShaft.videoRecordingAlarm");
         mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, 0);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DATE,date);  //1-31
+        calendar.set(Calendar.DATE, date);  //1-31
         calendar.set(Calendar.MONTH, month);  //first month is 0!!! January is zero!!!
-        calendar.set(Calendar.YEAR,year);//year...
+        calendar.set(Calendar.YEAR, year);//year...
 
         calendar.set(Calendar.HOUR_OF_DAY, hour);  //HOUR
         calendar.set(Calendar.MINUTE, minutes);       //MIN
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, mPIntent);
         Log.i(AppGlobals.getLogTag(getClass()), "setting alarm of :" + calendar.getTime());
+    }
+
+    public void spyVideosDirectory() {
+        File recordingsDirectory = new File(Environment.getExternalStorageDirectory() + "/" + "SpyVideos");
+        if (!recordingsDirectory.exists()) {
+            recordingsDirectory.mkdir();
+        }
+    }
+
+    public void spyPicturesDirectory() {
+        File recordingsDirectory = new File(Environment.getExternalStorageDirectory() + "/" + "SpyPics");
+        if (!recordingsDirectory.exists()) {
+            recordingsDirectory.mkdir();
+        }
+    }
+
+    public ArrayList<String> getNameFromFolder() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        File filePath = Environment.getExternalStorageDirectory();
+        File fileDirectory = new File(filePath, "SpyVideos");
+        for (File file : fileDirectory.listFiles()) {
+            if (file.isFile()) {
+                String name = file.getName();
+                arrayList.add(name);
+            }
+        }
+        return arrayList;
     }
 }

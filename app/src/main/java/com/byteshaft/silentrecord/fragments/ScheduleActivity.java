@@ -31,16 +31,16 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     private Button mBtnDatePicker;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
-    static final String DATEPICKER_TAG = "datepicker";
-    static final String TIMEPICKER_TAG = "timepicker";
+    private static final String DATEPICKER_TAG = "datepicker";
+    private static final String TIMEPICKER_TAG = "timepicker";
     private Helpers mHelpers;
     private Button mPicButton;
     private Button mVideoBtn;
-    int mYear;
-    int mMonth;
-    int mDay;
-    int mHours;
-    int mMinutes;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+    private int mHours;
+    private int mMinutes;
 
 
     @Nullable

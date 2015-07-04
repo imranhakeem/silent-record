@@ -98,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
+        Helpers helpers = new Helpers(getApplicationContext());
+        helpers.spyVideosDirectory();
+        helpers.spyPicturesDirectory();
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mResources = getResources();

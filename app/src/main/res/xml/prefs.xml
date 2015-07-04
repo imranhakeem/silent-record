@@ -63,7 +63,11 @@
             android:title="Camera Zoom Controls"
             android:summary="Camera Zoom"
             android:key="camera_zoom_control"
+            android:defaultValue="0"
             android:entries="@array/camera_zoom_controls">
         </ListPreference>
     </PreferenceCategory>
+    <Preference android:title="Reset Zoom Settings"
+        android:key="reset">
+    </Preference>
 </PreferenceScreen>
