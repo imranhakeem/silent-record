@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mListTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        selectItem(0);
     }
 
     private void selectItem(int position) {
@@ -141,13 +142,13 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
         switch (position) {
             case 0:
-                mFragment = new SettingFragment();
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
                 break;
             case 1:
                 mFragment = new VideoFragment(AppGlobals.DIRECTORY.PICTURES);
                 break;
             case 2:
-                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
+                mFragment = new SettingFragment();
                 break;
             case 3:
                 mFragment = new AboutFragment();
