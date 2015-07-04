@@ -1,6 +1,7 @@
 package com.byteshaft.silentrecord.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,14 +38,19 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class VideoFragment extends ListFragment {
 
-    private Helpers mHelpers;
     private Context mContext;
-    private ArrayList<String> mVideoFilesNames;
+    private ArrayList<String> mFilesNames;
     private ThumbnailCreation mListAdapter;
+    private String mContentType;
 
     public VideoFragment() {
         super();
+    }
 
+    @SuppressLint("ValidFragment")
+    public VideoFragment(String contentType) {
+        this();
+        mContentType = contentType;
     }
 
     @Override
@@ -55,16 +61,15 @@ public class VideoFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mHelpers = new Helpers(getActivity());
-        mVideoFilesNames = Helpers.getFileNamesFromDirectory(AppGlobals.DIRECTORY.VIDEOS);
+        mFilesNames = Helpers.getFileNamesFromDirectory(mContentType);
         mListAdapter = new ThumbnailCreation(getActivity().getApplicationContext(),
-                R.layout.row, mVideoFilesNames);
+                R.layout.row, mFilesNames);
         getListView().setAdapter(mListAdapter);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String path = getPathForVideo(mVideoFilesNames.get(i));
-                playVideo(path);
+                String path = getPathForFile(mFilesNames.get(i));
+                openContent(path);
             }
         });
         getListView().setDivider(null);
@@ -75,7 +80,7 @@ public class VideoFragment extends ListFragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(mVideoFilesNames.get(info.position));
+        menu.setHeaderTitle(mFilesNames.get(info.position));
         String[] menuItems = {"Play", "Delete" , "Hide"};
         for (int i = 0; i < menuItems.length; i++) {
             menu.add(Menu.NONE, i, i, menuItems[i]);
@@ -91,7 +96,7 @@ public class VideoFragment extends ListFragment {
         String menuItemName = menuItems[menuItemIndex];
         switch (menuItemName) {
             case "Play":
-                playVideo(getPathForVideo(mVideoFilesNames.get(info.position)));
+                openContent(getPathForFile(mFilesNames.get(info.position)));
                 break;
             case "Delete":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -101,7 +106,7 @@ public class VideoFragment extends ListFragment {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (deleteFile(getPathForVideo(mVideoFilesNames.get(info.position)))) {
+                        if (deleteFile(getPathForFile(mFilesNames.get(info.position)))) {
                             mListAdapter.remove(mListAdapter.getItem(info.position));
                             mListAdapter.notifyDataSetChanged();
                         }
@@ -117,7 +122,7 @@ public class VideoFragment extends ListFragment {
                 builder.show();
                 break;
             case "Hide":
-                if (hideFile(getPathForVideo(mVideoFilesNames.get(info.position)))) {
+                if (hideFile(getPathForFile(mFilesNames.get(info.position)))) {
                     mListAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Could not delete file", Toast.LENGTH_SHORT).show();
@@ -136,12 +141,20 @@ public class VideoFragment extends ListFragment {
 
     class ThumbnailCreation extends ArrayAdapter<String> {
 
-        private ArrayList<String> mVideos;
+        private ArrayList<String> mFiles;
+        private DisplayImageOptions mOptions;
+        private ImageLoader mImageLoader;
 
-        public ThumbnailCreation(Context context, int resource, ArrayList<String> videos) {
-            super(context, resource, videos);
+        public ThumbnailCreation(Context context, int resource, ArrayList<String> files) {
+            super(context, resource, files);
             mContext = context;
-            mVideos = videos;
+            mFiles = files;
+            mOptions = new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisk(true)
+                    .build();
+            mImageLoader = ImageLoader.getInstance();
+            mImageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
         }
 
         @Override
@@ -153,54 +166,51 @@ public class VideoFragment extends ListFragment {
                 holder = new ViewHolder();
                 holder.fileName = (TextView) convertView.findViewById(R.id.tv);
                 holder.thumbnail = (ImageView) convertView.findViewById(R.id.Thumbnail);
-                DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
-                ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getActivity().getApplicationContext()).defaultDisplayImageOptions(defaultOptions).build();
-                ImageLoader.getInstance().init(config);
-                holder.imageLoader = ImageLoader.getInstance();
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.position = position;
-            holder.fileName.setText(mVideos.get(position));
-            String path = "file://" + getPathForVideo(mVideos.get(position));
-            ImageSize targetSize = new ImageSize(80, 50);
-            holder.imageLoader.loadImage(path, targetSize, new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-                }
-
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                }
-
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    holder.thumbnail.setImageBitmap(loadedImage);
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
-                }
-            });
+            holder.fileName.setText(mFiles.get(position));
+            System.out.println(getPathForFile(mFiles.get(position)));
+            String path = "file://" + getPathForFile(mFiles.get(position));
+            mImageLoader.displayImage(path, holder.thumbnail, mOptions, null);
             return convertView;
         }
     }
 
-    private String getPathForVideo(String fileName) {
-        return getExternalLocation() + "/SpyVideos/" + fileName;
+    private String getPathForFile(String fileName) {
+        String directory = null;
+        switch (mContentType) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                directory = AppGlobals.DIRECTORY.VIDEOS;
+                break;
+            case AppGlobals.DIRECTORY.PICTURES:
+                directory = AppGlobals.DIRECTORY.PICTURES;
+                break;
+        }
+        return getExternalLocation()
+                + File.separator
+                + directory
+                + File.separator
+                + fileName;
     }
 
     private String getExternalLocation() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
-    private void playVideo(String filePath) {
+    private void openContent(String filePath) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri data = Uri.parse("file://" + filePath);
-        intent.setDataAndType(data, "video/*");
+        switch (mContentType) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                intent.setDataAndType(data, "video/*");
+                break;
+            case AppGlobals.DIRECTORY.PICTURES:
+                intent.setDataAndType(data, "image/*");
+                break;
+        }
         startActivity(intent);
     }
 
