@@ -1,7 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.R;
 
 
-public class ImagesActivity extends Fragment  implements View.OnClickListener{
+public class ImagesActivity extends Fragment implements View.OnClickListener{
 
     View view;
     Button mButton;
@@ -38,4 +37,5 @@ public class ImagesActivity extends Fragment  implements View.OnClickListener{
         }
 
     }
+
 }
