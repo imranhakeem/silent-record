@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -48,6 +49,11 @@ public class SettingFragment extends PreferenceFragment implements
         listPreference = (ListPreference) findPreference("camera_zoom_control");
         listPreference.setEntryValues(characteristics.getSupportedZoomLevels());
         setDefaultEntryIfNotPreviouslySet(listPreference);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     private void setDefaultEntryIfNotPreviouslySet(ListPreference listPreference) {

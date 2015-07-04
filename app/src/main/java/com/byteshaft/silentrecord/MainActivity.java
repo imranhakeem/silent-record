@@ -1,7 +1,6 @@
 package com.byteshaft.silentrecord;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RemoteViews;
 
 import com.byteshaft.silentrecord.fragments.AboutFragment;
 import com.byteshaft.silentrecord.fragments.ContactFragment;
@@ -35,7 +33,6 @@ import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 
-import java.util.ArrayList;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -146,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         switch (position) {
             case 0:
                 mFragment = new SettingFragment();
+                setTheme(R.style.SettingsTheme);
                 break;
             case 1:
                 mFragment = new VideoFragment();
