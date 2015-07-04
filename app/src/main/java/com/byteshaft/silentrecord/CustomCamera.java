@@ -99,6 +99,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
         mMediaRecorder = CustomMediaRecorder.getInstance();
+        mMediaRecorder.setMaxDuration(Integer.valueOf(mHelpers.readMaxVideoValue()));
         mMediaRecorder.setOutputFile(path);
         mMediaRecorder.start(camera, holder);
         Toast.makeText(getApplicationContext(), "Recording Started", Toast.LENGTH_SHORT).show();

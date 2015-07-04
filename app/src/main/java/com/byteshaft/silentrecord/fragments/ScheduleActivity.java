@@ -5,7 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.byteshaft.silentrecord.utils.Helpers;
@@ -19,15 +21,14 @@ import java.util.Calendar;
 public class ScheduleActivity extends Fragment implements View.OnClickListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
-    private Button mBtnTimePicker;
     private Button mBtnDatePicker;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
     private static final String DATEPICKER_TAG = "datepicker";
     private static final String TIMEPICKER_TAG = "timepicker";
     private Helpers mHelpers;
-    private Button mPicButton;
-    private Button mVideoBtn;
+    public static Button mPicButton;
+    public static Button mVideoBtn;
     private int mYear;
     private int mMonth;
     private int mDay;
@@ -37,9 +38,9 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule, container, false);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mHelpers = new Helpers(getActivity());
         mBtnDatePicker = (Button) view.findViewById(R.id.btnSetDate);
-        mBtnTimePicker = (Button) view.findViewById(R.id.btnSetTime);
         mPicButton = (Button) view.findViewById(R.id.buttonPic);
         mVideoBtn = (Button) view.findViewById(R.id.buttonVideo);
         setBackgroundForButtonPresent();
@@ -62,25 +63,21 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
             }
         }
         mBtnDatePicker.setOnClickListener(this);
-        mBtnTimePicker.setOnClickListener(this);
+//        mBtnTimePicker.setOnClickListener(this);
         mPicButton.setOnClickListener(this);
         mVideoBtn.setOnClickListener(this);
         return view;
     }
 
     private void setBackgroundForButtonPresent() {
-            mBtnDatePicker.setBackgroundResource(R.drawable.date);
-            mBtnTimePicker.setBackgroundResource(R.drawable.time);
         if (Helpers.getPicAlarmStatus()) {
             mPicButton.setBackgroundResource(R.drawable.pic_set);
         } else {
             mPicButton.setBackgroundResource(R.drawable.pic);
         }
         if (Helpers.getVideoAlarmStatus()) {
-            System.out.println("this");
             mVideoBtn.setBackgroundResource(R.drawable.video_alarm);
         } else {
-            System.out.println("that");
             mVideoBtn.setBackgroundColor(R.drawable.alarm_not_set);
         }
     }
@@ -92,9 +89,6 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                 datePickerDialog.setYearRange(2015, 2037);
                 datePickerDialog.show(getFragmentManager(), DATEPICKER_TAG);
                 break;
-            case R.id.btnSetTime:
-                timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
-                break;
             case R.id.buttonPic:
                 if (!Helpers.getPicAlarmStatus() &&!Helpers.getTime() && !Helpers.getDate()) {
                     Toast.makeText(getActivity(),"please select date or time first", Toast.LENGTH_SHORT).show();
@@ -102,7 +96,6 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                     mPicButton.setBackgroundResource(R.drawable.pic);
                     mHelpers.removePreviousAlarm();
                     mBtnDatePicker.setBackgroundResource(R.drawable.date);
-                    mBtnTimePicker.setBackgroundResource(R.drawable.time);
                     Helpers.setPicAlarm(false);
                     Helpers.setDate(false);
                     Helpers.setTime(false);
@@ -118,8 +111,6 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                 } else if (Helpers.getVideoAlarmStatus()) {
                     mVideoBtn.setBackgroundResource(R.drawable.alarm_not_set);
                     mHelpers.removePreviousAlarm();
-                    mBtnDatePicker.setBackgroundResource(R.drawable.date);
-                    mBtnTimePicker.setBackgroundResource(R.drawable.time);
                     Helpers.setVideoAlarm(false);
                     Helpers.setDate(false);
                     Helpers.setTime(false);
@@ -134,18 +125,17 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        Toast.makeText(getActivity(),"year: "+ year + "Month :"+ month +"Day :" +day,Toast.LENGTH_SHORT).show();
-        mBtnDatePicker.setBackgroundResource(R.drawable.date_set);
+        Toast.makeText(getActivity(),"Date: "+ day + " Month :"+ month +" Year :" +day,Toast.LENGTH_SHORT).show();
         mYear = year;
         mMonth = month;
         mDay = day;
         Helpers.setDate(true);
+        timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
     }
 
     @Override
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int hours, int minutes) {
-        Toast.makeText(getActivity(),"Hours: "+ hours + "Minutes :"+ minutes,Toast.LENGTH_SHORT).show();
-        mBtnTimePicker.setBackgroundResource(R.drawable.time_set);
+        Toast.makeText(getActivity(),"Hours :"+ hours + " Minutes :"+ minutes,Toast.LENGTH_SHORT).show();
         mHours = hours;
         mMinutes = minutes;
         Helpers.setTime(true);

@@ -90,8 +90,10 @@ public class SettingFragment extends PreferenceFragment implements
                     NotificationWidget.show();
                 } else {
                     NotificationWidget.hide();
-                break;
+                    break;
+                }
         }
         return true;
     }
 }
+
