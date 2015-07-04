@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="light_blue_font_color">#33b5e5 </color>
+    <color name="white_font_color">#000000 </color>
+    <color name="black_background">#FFF</color>
+    <color name="sage">#FFFFFF</color>
+    <color name="customColor">#fff</color>
+    <color name="Selection_Color">#d3d3d3</color>
+
+</resources>
+

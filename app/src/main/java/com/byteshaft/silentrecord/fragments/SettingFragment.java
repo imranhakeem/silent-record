@@ -13,7 +13,7 @@ import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
 public class SettingFragment extends PreferenceFragment implements
-        Preference.OnPreferenceChangeListener{
+        Preference.OnPreferenceChangeListener {
 
     private Helpers mHelpers;
     SwitchPreference notificationSwitch;
@@ -53,6 +53,11 @@ public class SettingFragment extends PreferenceFragment implements
         listPreference = (ListPreference) findPreference("camera_zoom_control");
         listPreference.setEntryValues(characteristics.getSupportedZoomLevels());
         setDefaultEntryIfNotPreviouslySet(listPreference);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     private void setDefaultEntryIfNotPreviouslySet(ListPreference listPreference) {

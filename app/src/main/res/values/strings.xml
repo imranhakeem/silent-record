@@ -1,8 +1,8 @@
 <resources>
 
-    <string name="title_section1">Settings</string>
+    <string name="title_section1">Videos List</string>
     <string name="title_section2">Pictures List</string>
-    <string name="title_section3">Videos List</string>
+    <string name="title_section3">Settings</string>
     <string name="title_section4">About us</string>
     <string name="title_section5">Report an Issue</string>
     <string name="title_section6">Contact us</string>

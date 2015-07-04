@@ -33,7 +33,6 @@ import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
-
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
@@ -142,13 +141,13 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
         switch (position) {
             case 0:
-                mFragment = new SettingFragment();
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
                 break;
             case 1:
                 mFragment = new VideoFragment(AppGlobals.DIRECTORY.PICTURES);
                 break;
             case 2:
-                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
+                mFragment = new SettingFragment();
                 break;
             case 3:
                 mFragment = new AboutFragment();
