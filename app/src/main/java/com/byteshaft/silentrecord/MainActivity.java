@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mListTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        selectItem(0);
     }
 
     private void selectItem(int position) {

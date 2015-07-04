@@ -101,7 +101,7 @@ public class VideoFragment extends ListFragment {
             case "Delete":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Are You Sure");
-                builder.setMessage("Deleted");
+                builder.setMessage("Delete");
                 builder.setCancelable(false);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -109,6 +109,7 @@ public class VideoFragment extends ListFragment {
                         if (deleteFile(getPathForFile(mFilesNames.get(info.position)))) {
                             mListAdapter.remove(mListAdapter.getItem(info.position));
                             mListAdapter.notifyDataSetChanged();
+                            Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
