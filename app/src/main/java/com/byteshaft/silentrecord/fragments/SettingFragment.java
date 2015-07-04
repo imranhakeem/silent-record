@@ -97,9 +97,9 @@ public class SettingFragment extends PreferenceFragment implements
                     NotificationWidget.hide();
                     break;
                 }
-            }
-                return true;
         }
+        return true;
     }
+}
     
 
