@@ -10,11 +10,10 @@ import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
-public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
+public class SettingFragment extends PreferenceFragment implements
+        Preference.OnPreferenceChangeListener{
 
-    ListPreference listPreference;
-    SwitchPreference switchPreference;
-    Helpers helpers;
+    private Helpers mHelpers;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,14 +22,14 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         CameraCharacteristics characteristics = new CameraCharacteristics(
                 getActivity().getApplicationContext());
 
-        helpers = new Helpers(getActivity());
+        mHelpers = new Helpers(getActivity());
 
-        switchPreference = (SwitchPreference) findPreference("video_visibility");
+        SwitchPreference switchPreference = (SwitchPreference) findPreference("video_visibility");
         switchPreference.setOnPreferenceChangeListener(this);
         switchPreference = (SwitchPreference) findPreference("image_visibility");
         switchPreference.setOnPreferenceChangeListener(this);
 
-        listPreference = (ListPreference) findPreference("video_resolution");
+        ListPreference listPreference = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(listPreference, characteristics.getSupportedVideoResolutions());
         setDefaultEntryIfNotPreviouslySet(listPreference);
 
@@ -68,17 +67,18 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
         switch (preference.getKey()) {
             case "video_visibility":
-                if (!helpers.isVideoHiderOn()) {
-                    helpers.hideVideoFiles();
+                if (!mHelpers.isVideoHiderOn()) {
+                    mHelpers.hideVideoFiles();
                 } else {
-                    helpers.unhideFiles();
-                    System.out.println("off");
+                    mHelpers.unhideVideoFiles();
                 }
                 break;
             case "image_visibility":
-                if (!helpers.isImageHiderOn()) {
+                if (!mHelpers.isImageHiderOn()) {
+                    mHelpers.hideImageFiles();
                     System.out.println("on");
                 } else {
+                    mHelpers.unhideImageFiles();
                     System.out.println("off");
                 }
         }
