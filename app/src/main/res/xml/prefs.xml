@@ -4,14 +4,18 @@
     android:background="#000000">
 
     <PreferenceCategory
+        android:title="Widget">
+    <SwitchPreference
+        android:key="notification_widget"
+        android:title="Show notification widget"
+        android:defaultValue="true"/>
+    </PreferenceCategory>
 
-
+    <PreferenceCategory
         android:title="Video">
-
         <SwitchPreference
             android:key="video_visibility"
             android:title="Hide videos" />
-
     </PreferenceCategory>
 
     <ListPreference
@@ -56,8 +60,8 @@
             android:key="picture_scene_mode"
             android:entries="@array/picture_scene_modes"
             android:entryValues="@array/picture_scene_values"/>
-
     </PreferenceCategory>
+
     <PreferenceCategory
         android:title="Camera Zoom Control">
         <ListPreference
@@ -67,6 +71,5 @@
             android:defaultValue="0"
             android:entries="@array/camera_zoom_controls">
         </ListPreference>
-
     </PreferenceCategory>
 </PreferenceScreen>
