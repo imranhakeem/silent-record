@@ -144,10 +144,10 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 mFragment = new SettingFragment();
                 break;
             case 1:
-                mFragment = new ImagesActivity();
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.PICTURES);
                 break;
             case 2:
-                mFragment = new VideoFragment();
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
                 break;
             case 3:
                 mFragment = new AboutFragment();
