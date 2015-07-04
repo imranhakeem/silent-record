@@ -28,7 +28,9 @@ public class StartRecordingReceiver extends BroadcastReceiver {
             Helpers.setPicAlarm(false);
             Helpers.setDate(false);
             Helpers.setTime(false);
-            ScheduleActivity.mPicButton.setBackgroundResource(R.drawable.pic);
+            ScheduleActivity.mPicButton.setBackgroundResource(R.drawable.pic_alarm_notset);
+            ScheduleActivity.mBtnDatePicker.setText("Set a Schedule");
+            ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
         } else if (operationType.equals("com.byteShaft.VideoAlarm")) {
             Log.i(AppGlobals.getLogTag(getClass()),"Capturing video ...");
             if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
@@ -37,7 +39,9 @@ public class StartRecordingReceiver extends BroadcastReceiver {
             Helpers.setVideoAlarm(false);
             Helpers.setDate(false);
             Helpers.setTime(false);
-            ScheduleActivity.mVideoBtn.setBackgroundResource(R.drawable.alarm_not_set);
+            ScheduleActivity.mVideoBtn.setBackgroundResource(R.drawable.video_alarm_notset);
+            ScheduleActivity.mBtnDatePicker.setText("Set a Schedule");
+            ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
         }
 
     }
