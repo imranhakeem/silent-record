@@ -42,6 +42,9 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
         mBtnDatePicker = (Button) view.findViewById(R.id.btnSetDate);
         mPicButton = (Button) view.findViewById(R.id.button_photo_schedule);
         mVideoBtn = (Button) view.findViewById(R.id.button_video_schedule);
+        mBtnDatePicker.setOnClickListener(this);
+        mPicButton.setOnClickListener(this);
+        mVideoBtn.setOnClickListener(this);
         setBackgroundForButtonPresent();
         final Calendar calendar = Calendar.getInstance();
         datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR),
@@ -61,9 +64,6 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                 tpd.setOnTimeSetListener(this);
             }
         }
-        mBtnDatePicker.setOnClickListener(this);
-        mPicButton.setOnClickListener(this);
-        mVideoBtn.setOnClickListener(this);
         return view;
     }
 
@@ -74,25 +74,20 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
             mBtnDatePicker.setClickable(false);
             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
             mVideoBtn.setVisibility(View.INVISIBLE);
-        } else {
-            mPicButton.setBackgroundResource(R.drawable.pic_alarm_notset);
-            mBtnDatePicker.setText("Set a Schedule");
-            mBtnDatePicker.setClickable(true);;
-            mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
-            mVideoBtn.setVisibility(View.VISIBLE);
-        }
-        if (Helpers.getVideoAlarmStatus()) {
+        } else if (Helpers.getVideoAlarmStatus()) {
             mVideoBtn.setBackgroundResource(R.drawable.video_alarm_set);
             mBtnDatePicker.setText("Schedule is set");
             mBtnDatePicker.setClickable(false);
             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
             mPicButton.setVisibility(View.INVISIBLE);
         } else {
+            mPicButton.setBackgroundResource(R.drawable.pic_alarm_notset);
             mVideoBtn.setBackgroundResource(R.drawable.video_alarm_notset);
             mBtnDatePicker.setText("Set a Schedule");
             mBtnDatePicker.setClickable(true);
             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
             mPicButton.setVisibility(View.VISIBLE);
+            mVideoBtn.setVisibility(View.VISIBLE);
         }
     }
 
