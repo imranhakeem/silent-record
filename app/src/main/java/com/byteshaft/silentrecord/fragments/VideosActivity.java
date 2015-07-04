@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.CustomCamera;
@@ -15,13 +17,13 @@ import com.byteshaft.silentrecord.R;
 
 public class VideosActivity extends Fragment implements View.OnClickListener {
 
-    Button mButton;
+    ImageButton mButton;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.videos,container,false);
-        mButton = (Button) view.findViewById(R.id.buttonRecording);
+        mButton = (ImageButton) view.findViewById(R.id.buttonRecording);
         mButton.setOnClickListener(this);
         return view;
     }
@@ -33,10 +35,10 @@ public class VideosActivity extends Fragment implements View.OnClickListener {
             case R.id.buttonRecording:
                 if (CustomCamera.isRecording()) {
                     camera.stopRecording();
-                    mButton.setText("Start recording");
+                    mButton.setImageResource(R.drawable.widget_effect_two);
                 } else if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
                     camera.startRecording();
-                    mButton.setText("Stop recording");
+                    mButton.setImageResource(R.drawable.camcoder_rec_two);
                 }
                 break;
         }
