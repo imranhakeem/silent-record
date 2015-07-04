@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -13,7 +14,7 @@ import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
 public class SettingFragment extends PreferenceFragment implements
-        Preference.OnPreferenceChangeListener{
+        Preference.OnPreferenceChangeListener {
 
     private Helpers mHelpers;
     SwitchPreference notificationSwitch;
@@ -55,6 +56,11 @@ public class SettingFragment extends PreferenceFragment implements
         setDefaultEntryIfNotPreviouslySet(listPreference);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     private void setDefaultEntryIfNotPreviouslySet(ListPreference listPreference) {
         String out = listPreference.getValue();
         if (out == null) {
@@ -90,8 +96,11 @@ public class SettingFragment extends PreferenceFragment implements
                     NotificationWidget.show();
                 } else {
                     NotificationWidget.hide();
-                break;
+                    break;
+                }
         }
-        return true;
+                return true;
+        }
     }
-}
+    
+
