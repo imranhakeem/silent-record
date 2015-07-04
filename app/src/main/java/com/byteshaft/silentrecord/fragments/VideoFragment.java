@@ -96,8 +96,6 @@ public class VideoFragment extends ListFragment {
         String menuItemName = menuItems[menuItemIndex];
         switch (menuItemName) {
             case "Play" :
-                openContent(getPathForFile(mFilesNames.get(info.position)));
-                break;
             case "View":
                 openContent(getPathForFile(mFilesNames.get(info.position)));
                 break;
