@@ -1,7 +1,9 @@
 package com.byteshaft.silentrecord.fragments;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -82,19 +84,34 @@ public class VideoFragment extends ListFragment {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
                 item.getMenuInfo();
         int menuItemIndex = item.getItemId();
-        String[] menuItems = {"Play", "Delete" , "Details"};
+        String[] menuItems = {"Play", "Delete" , "Hide"};
         String menuItemName = menuItems[menuItemIndex];
         switch (menuItemName) {
             case "Play":
                 playVideo(getPathForVideo(mVideoFilesNames.get(info.position)));
                 break;
             case "Delete":
-                if (deleteFile(getPathForVideo(mVideoFilesNames.get(info.position)))) {
-                    mListAdapter.remove(mListAdapter.getItem(info.position));
-                    mListAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Could not delete file", Toast.LENGTH_SHORT).show();
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Are You Sure");
+                builder.setMessage("Deleted");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (deleteFile(getPathForVideo(mVideoFilesNames.get(info.position)))) {
+                            mListAdapter.remove(mListAdapter.getItem(info.position));
+                            mListAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.create();
+                builder.show();
                 break;
             case "Hide":
                 if (hideFile(getPathForVideo(mVideoFilesNames.get(info.position)))) {
