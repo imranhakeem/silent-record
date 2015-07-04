@@ -101,7 +101,7 @@ public class Helpers extends ContextWrapper {
         }
     }
 
-    public void unhideFiles() {
+    public void unhideVideoFiles() {
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyVideos";
         File videosDirectory = new File(rootPath);
         for (File file : videosDirectory.listFiles()) {
@@ -113,6 +113,29 @@ public class Helpers extends ContextWrapper {
         }
     }
 
+    public void hideImageFiles() {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyPics";
+        File videosDirectory = new File(rootPath);
+        for (File file : videosDirectory.listFiles()) {
+            String fileName = file.getName();
+            if (!fileName.startsWith(".")) {
+                File hiddenFile = new File(videosDirectory, "." + fileName);
+                file.renameTo(hiddenFile);
+            }
+        }
+    }
+
+    public void unhideImageFiles() {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyPics";
+        File videosDirectory = new File(rootPath);
+        for (File file : videosDirectory.listFiles()) {
+            String fileName = file.getName();
+            if (fileName.startsWith(".")) {
+                File unhidden = new File(videosDirectory, fileName.substring(1));
+                file.renameTo(unhidden);
+            }
+        }
+    }
 
     public boolean isImageHiderOn() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
