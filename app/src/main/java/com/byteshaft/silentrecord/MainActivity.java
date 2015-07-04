@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 break;
             case 2:
                 mFragment = new SettingFragment();
-                setTheme(R.style.SettingsTheme);
                 break;
             case 3:
                 mFragment = new AboutFragment();
