@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 getString(R.string.title_section3),
                 getString(R.string.title_section4),
                 getString(R.string.title_section5),
+                getString(R.string.title_section6),
         };
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mListTitles));
@@ -148,15 +149,18 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 mFragment = new SettingFragment();
                 break;
             case 1:
-                mFragment = new VideoFragment();
+                mFragment = new ImagesActivity();
                 break;
             case 2:
-                mFragment = new AboutFragment();
+                mFragment = new VideoFragment();
                 break;
             case 3:
-                mFragment = new ReportFragment();
+                mFragment = new AboutFragment();
                 break;
             case 4:
+                mFragment = new ReportFragment();
+                break;
+            case 5:
                 mFragment = new ContactFragment();
                 break;
             default:
