@@ -11,11 +11,10 @@ import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
-public class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
+public class SettingFragment extends PreferenceFragment implements
+        Preference.OnPreferenceChangeListener{
 
-    ListPreference listPreference;
-    SwitchPreference switchPreference;
-    Helpers helpers;
+    private Helpers mHelpers;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,14 +23,14 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         CameraCharacteristics characteristics = new CameraCharacteristics(
                 getActivity().getApplicationContext());
 
-        helpers = new Helpers(getActivity());
+        mHelpers = new Helpers(getActivity());
 
-        switchPreference = (SwitchPreference) findPreference("video_visibility");
+        SwitchPreference switchPreference = (SwitchPreference) findPreference("video_visibility");
         switchPreference.setOnPreferenceChangeListener(this);
         switchPreference = (SwitchPreference) findPreference("image_visibility");
         switchPreference.setOnPreferenceChangeListener(this);
 
-        listPreference = (ListPreference) findPreference("video_resolution");
+        ListPreference listPreference = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(listPreference, characteristics.getSupportedVideoResolutions());
         setDefaultEntryIfNotPreviouslySet(listPreference);
 
@@ -77,10 +76,11 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
                 break;
             case "image_visibility":
                 if (!Helpers.isImageHiderOn()) {
-                    System.out.println("on");
+                    Helpers.hideFilesInDirectory(AppGlobals.DIRECTORY.PICTURES);
                 } else {
-                    System.out.println("off");
+                    Helpers.unHideFilesInDirectory(AppGlobals.DIRECTORY.PICTURES);
                 }
+                break;
         }
         return true;
     }

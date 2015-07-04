@@ -124,7 +124,6 @@ public class Helpers extends ContextWrapper {
         }
     }
 
-
     public static boolean isImageHiderOn() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("image_visibility", false);
