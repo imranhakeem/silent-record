@@ -69,30 +69,19 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         switch (preference.getKey()) {
             case "video_visibility":
                 if (!helpers.isVideoHiderOn()) {
-//                    hideDirectory();
+                    helpers.hideVideoFiles();
                 } else {
+                    helpers.unhideFiles();
                     System.out.println("off");
                 }
                 break;
             case "image_visibility":
                 if (!helpers.isImageHiderOn()) {
-
                     System.out.println("on");
                 } else {
-
                     System.out.println("off");
                 }
         }
         return true;
     }
-
-//    private void hideDirectory() {
-//        File sdcard = Environment.getExternalStorageDirectory();
-//        File from = new File(sdcard, "SpyVideos");
-//        File to = new File(sdcard, ".SpyVideos");
-//        boolean success = from.renameTo(to);
-//        if (success) {
-//            Toast.makeText(getActivity().getApplicationContext(), "Hidden", Toast.LENGTH_SHORT).show();
-//        }
-//    }
 }

@@ -2,20 +2,16 @@ package com.byteshaft.silentrecord;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.SharedPreferences;
 import android.hardware.Camera;
-import android.media.MediaRecorder;
 import android.os.Environment;
 import android.view.SurfaceHolder;
-import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
-import com.byteshaft.silentrecord.notification.RecordingNotification;
 import com.byteshaft.silentrecord.utils.CustomMediaRecorder;
 import com.byteshaft.silentrecord.utils.Helpers;
-import com.byteshaft.silentrecord.utils.Values;
 import com.byteshaft.silentrecord.utils.Silencer;
+import com.byteshaft.silentrecord.utils.Values;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -95,10 +91,6 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     }
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
-        String fileName = getTimeStamp();
-        if (mHelpers.isVideoHiderOn()) {
-            fileName = "." + getTimeStamp();
-        }
         Camera.Parameters parameters = camera.getParameters();
         parameters.setSceneMode(Values.getVideoSceneMode());
         camera.setParameters(parameters);
@@ -147,11 +139,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     @Override
     public void onPictureTaken(byte[] bytes, Camera camera) {
-        String fileName = getTimeStamp();
-        if (mHelpers.isImageHiderOn()) {
-            fileName = "." + getTimeStamp();
-        }
-        String out = Environment.getExternalStorageDirectory() + "/" + "SpyPics" + "/" + fileName + ".jpg";
+        String out = Environment.getExternalStorageDirectory() + "/" + "SpyPics" + "/" + getTimeStamp() + ".jpg";
         File file = new File(out);
         try {
             FileOutputStream outputStream = new FileOutputStream(file);

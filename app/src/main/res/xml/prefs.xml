@@ -66,5 +66,6 @@
             android:defaultValue="0"
             android:entries="@array/camera_zoom_controls">
         </ListPreference>
+
     </PreferenceCategory>
 </PreferenceScreen>

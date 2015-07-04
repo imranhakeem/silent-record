@@ -14,8 +14,6 @@ import com.byteshaft.silentrecord.R;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.Locale;
 
 
 public class Helpers extends ContextWrapper {
@@ -91,19 +89,29 @@ public class Helpers extends ContextWrapper {
         return arrayList;
     }
 
-//    public ArrayList<String> hideVideoFiles() {
-//        ArrayList<String> videoList = new ArrayList<>();
-//        File filePath = Environment.getExternalStorageDirectory();
-//        File filedir = new File(filePath, "/SpyVideos");
-//            for (File file : filedir.listFiles()) {
-//                if (isVideoHiderOn()) {
-//                    File fileName = new File(file.getName());
-//                    File hiddenFiles = new File("." + file.getName());
-//                    fileName.renameTo(hiddenFiles);
-//                }
-//            }
-//        return videoList;
-//    }
+    public void hideVideoFiles() {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyVideos";
+        File videosDirectory = new File(rootPath);
+        for (File file : videosDirectory.listFiles()) {
+            String fileName = file.getName();
+            if (!fileName.startsWith(".")) {
+                File hiddenFile = new File(videosDirectory, "." + fileName);
+                file.renameTo(hiddenFile);
+            }
+        }
+    }
+
+    public void unhideFiles() {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyVideos";
+        File videosDirectory = new File(rootPath);
+        for (File file : videosDirectory.listFiles()) {
+            String fileName = file.getName();
+            if (fileName.startsWith(".")) {
+                File unhidden = new File(videosDirectory, fileName.substring(1));
+                file.renameTo(unhidden);
+            }
+        }
+    }
 
 
     public boolean isImageHiderOn() {
