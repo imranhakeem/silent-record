@@ -12,6 +12,7 @@ public class AppGlobals extends Application {
 
     private static SharedPreferences sPreferences;
     private static Context sContext;
+    static String LOG_TAG = "silent_recorder";
 
     public static class DIRECTORY {
         public static final String PICTURES = "SpyPics";
@@ -32,7 +33,9 @@ public class AppGlobals extends Application {
     public static Context getContext() {
         return sContext;
     }
-
+    public static String getLogTag(Class aClass) {
+        return LOG_TAG + "/" + aClass.getSimpleName();
+    }
     public static File getVideosDirectory() {
         File sdcard = Environment.getExternalStorageDirectory();
         return new File(sdcard, DIRECTORY.VIDEOS);

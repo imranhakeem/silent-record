@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name=".AppGlobals"
@@ -37,6 +38,11 @@
                 android:resource="@xml/app_widget_info" />
         </receiver>
         <receiver android:name=".widget.WidgetReceiver"/>
+        <receiver android:name=".receivers.StartRecordingReceiver">
+            <intent-filter>
+                <action android:name="com.byteShaft.Alarm"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
