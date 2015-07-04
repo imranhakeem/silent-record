@@ -101,5 +101,4 @@ public class SettingFragment extends PreferenceFragment implements
         return true;
     }
 }
-    
 

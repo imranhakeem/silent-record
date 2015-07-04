@@ -34,6 +34,13 @@
         android:entryValues="@array/format_values"
         android:negativeButtonText="OK"/>
 
+    <EditTextPreference
+        android:title="Select Max Video Duration"
+        android:hint="Time in Minutes"
+        android:maxLength="2"
+        android:defaultValue="5"
+        android:key="max_video"/>
+
     <ListPreference
         android:title="Select scene mode"
         android:summary="scene modes"

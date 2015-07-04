@@ -34,6 +34,11 @@ public class Helpers extends ContextWrapper {
         return preferences.getString("camera_zoom_control", "0");
     }
 
+    public String readMaxVideoValue() {
+        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+        return preferences.getString("max_video", "5");
+    }
+
     public void showCameraResourceBusyDialog(final Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Camera busy");
@@ -122,9 +127,15 @@ public class Helpers extends ContextWrapper {
     public void setAlarm(int date, int month,
                                    int year, int hour, int minutes, String operationType) {
         mAlarmManager = getAlarmManager();
-        Intent intent = new Intent("com.byteShaft.Alarm");
+        Intent intent = null;
+        if (operationType.equals("pic")) {
+           intent =new Intent("com.byteShaft.Alarm");
+        } else if (operationType.equals("video")) {
+            intent = new Intent("com.byteShaft.VideoAlarm");
+        }
+        System.out.println(operationType);
         intent.putExtra("operationType",operationType);
-        mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, 0);
+        mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DATE, date);  //1-31
         calendar.set(Calendar.MONTH, month);  //first month is 0!!! January is zero!!!
