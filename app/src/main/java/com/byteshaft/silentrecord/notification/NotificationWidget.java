@@ -11,7 +11,7 @@ import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.NotificationHandler;
 import com.byteshaft.silentrecord.R;
 
-public class RecordingNotification {
+public class NotificationWidget {
 
     private static NotificationManager mNotifyManager;
     private static final int ID = 989;

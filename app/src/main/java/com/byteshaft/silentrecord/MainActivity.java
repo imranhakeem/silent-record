@@ -1,7 +1,6 @@
 package com.byteshaft.silentrecord;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RemoteViews;
 
 import com.byteshaft.silentrecord.fragments.AboutFragment;
 import com.byteshaft.silentrecord.fragments.ContactFragment;
@@ -32,10 +30,9 @@ import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
 import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
+import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
-
-import java.util.ArrayList;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -102,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         Helpers helpers = new Helpers(getApplicationContext());
         helpers.spyVideosDirectory();
         helpers.spyPicturesDirectory();
+        if (helpers.isNotificationWidgetOn()) {
+            NotificationWidget.show();
+        }
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mResources = getResources();
