@@ -7,6 +7,7 @@ import android.preference.SwitchPreference;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
@@ -15,6 +16,7 @@ public class SettingFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener{
 
     private Helpers mHelpers;
+    SwitchPreference notificationSwitch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,10 +27,12 @@ public class SettingFragment extends PreferenceFragment implements
 
         mHelpers = new Helpers(getActivity());
 
-        SwitchPreference switchPreference = (SwitchPreference) findPreference("video_visibility");
-        switchPreference.setOnPreferenceChangeListener(this);
-        switchPreference = (SwitchPreference) findPreference("image_visibility");
-        switchPreference.setOnPreferenceChangeListener(this);
+        SwitchPreference videoSwitch = (SwitchPreference) findPreference("video_visibility");
+        videoSwitch.setOnPreferenceChangeListener(this);
+        SwitchPreference imageSwitch = (SwitchPreference) findPreference("image_visibility");
+        imageSwitch.setOnPreferenceChangeListener(this);
+        notificationSwitch = (SwitchPreference) findPreference("notification_widget");
+        notificationSwitch.setOnPreferenceChangeListener(this);
 
         ListPreference listPreference = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(listPreference, characteristics.getSupportedVideoResolutions());
@@ -80,6 +84,12 @@ public class SettingFragment extends PreferenceFragment implements
                 } else {
                     Helpers.unHideFilesInDirectory(AppGlobals.DIRECTORY.PICTURES);
                 }
+                break;
+            case "notification_widget":
+                if (!mHelpers.isNotificationWidgetOn()) {
+                    NotificationWidget.show();
+                } else {
+                    NotificationWidget.hide();
                 break;
         }
         return true;

@@ -22,17 +22,14 @@ public class WidgetReceiver extends BroadcastReceiver {
         if (widget.equals("1")) {
             if (!FlashlightGlobals.isResourceOccupied()) {
                 customCamera.takePicture();
-                Toast.makeText(context, "Photo Captured", Toast.LENGTH_SHORT).show();
             }
         } else if (widget.equals("2")) {
-            if (mIsRecording) {
+            if (customCamera.isRecording()) {
                 customCamera.stopRecording();
-                Toast.makeText(context, "Recording Stopped", Toast.LENGTH_SHORT).show();
                 mIsRecording = false;
             } else {
-                if (!FlashlightGlobals.isResourceOccupied()) {
+                if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
                     customCamera.startRecording();
-                    Toast.makeText(context, "Recording Started", Toast.LENGTH_SHORT).show();
                     mIsRecording = true;
                     }
                 }

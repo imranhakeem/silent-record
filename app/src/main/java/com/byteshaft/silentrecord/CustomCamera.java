@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
@@ -80,6 +81,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
             public void onAutoFocus(boolean b, Camera camera) {
                 Silencer.silentSystemStream(2000);
                 camera.takePicture(CustomCamera.this, null, null, CustomCamera.this);
+                Toast.makeText(getApplicationContext(), "Photo Captured", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -99,6 +101,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mMediaRecorder = CustomMediaRecorder.getInstance();
         mMediaRecorder.setOutputFile(path);
         mMediaRecorder.start(camera, holder);
+        Toast.makeText(getApplicationContext(), "Recording Started", Toast.LENGTH_SHORT).show();
     }
 
     public void stopRecording() {
@@ -106,6 +109,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mMediaRecorder.stop();
         mFlashlight.releaseAllResources();
         sIsRecording = false;
+        Toast.makeText(getApplicationContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
     }
 
     @Override
