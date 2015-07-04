@@ -5,6 +5,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
 
+import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
@@ -68,15 +69,14 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
         switch (preference.getKey()) {
             case "video_visibility":
-                if (!helpers.isVideoHiderOn()) {
-                    helpers.hideVideoFiles();
+                if (!Helpers.isVideoHiderOn()) {
+                    Helpers.hideFilesInDirectory(AppGlobals.DIRECTORY.VIDEOS);
                 } else {
-                    helpers.unhideFiles();
-                    System.out.println("off");
+                    Helpers.unHideFilesInDirectory(AppGlobals.DIRECTORY.VIDEOS);
                 }
                 break;
             case "image_visibility":
-                if (!helpers.isImageHiderOn()) {
+                if (!Helpers.isImageHiderOn()) {
                     System.out.println("on");
                 } else {
                     System.out.println("off");

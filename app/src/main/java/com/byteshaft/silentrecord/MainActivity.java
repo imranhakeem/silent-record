@@ -1,7 +1,6 @@
 package com.byteshaft.silentrecord;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -22,11 +21,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RemoteViews;
 
 import com.byteshaft.silentrecord.fragments.AboutFragment;
 import com.byteshaft.silentrecord.fragments.ContactFragment;
-import com.byteshaft.silentrecord.fragments.ImagesActivity;
+import com.byteshaft.silentrecord.fragments.PicturesFragment;
 import com.byteshaft.silentrecord.fragments.ReportFragment;
 import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
@@ -34,8 +32,6 @@ import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
-
-import java.util.ArrayList;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -99,9 +95,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
-        Helpers helpers = new Helpers(getApplicationContext());
-        helpers.spyVideosDirectory();
-        helpers.spyPicturesDirectory();
+        Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.VIDEOS);
+        Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.PICTURES);
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mResources = getResources();
@@ -149,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 mFragment = new SettingFragment();
                 break;
             case 1:
-                mFragment = new ImagesActivity();
+                mFragment = new PicturesFragment();
                 break;
             case 2:
                 mFragment = new VideoFragment();
@@ -250,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                     mFragment = new VideosActivity();
                     break;
                 case 1:
-                    mFragment = new ImagesActivity();
+                    mFragment = new PicturesFragment();
                     break;
                 case 2:
                     mFragment = new ScheduleActivity();

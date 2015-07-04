@@ -62,24 +62,17 @@ public class Helpers extends ContextWrapper {
         }
     }
 
-    public void spyVideosDirectory() {
-        File recordingsDirectory = new File(Environment.getExternalStorageDirectory() + "/" + "SpyVideos");
+    public static void createDirectoryIfNotExists(String directoryName) {
+        File recordingsDirectory = new File(Environment.getExternalStorageDirectory(), directoryName);
         if (!recordingsDirectory.exists()) {
             recordingsDirectory.mkdir();
         }
     }
 
-    public void spyPicturesDirectory() {
-        File recordingsDirectory = new File(Environment.getExternalStorageDirectory() + "/" + "SpyPics");
-        if (!recordingsDirectory.exists()) {
-            recordingsDirectory.mkdir();
-        }
-    }
-
-    public ArrayList<String> getNameFromFolder() {
+    public static ArrayList<String> getFileNamesFromDirectory(String directoryName) {
         ArrayList<String> arrayList = new ArrayList<>();
         File filePath = Environment.getExternalStorageDirectory();
-        File fileDirectory = new File(filePath, "SpyVideos");
+        File fileDirectory = new File(filePath, directoryName);
         for (File file : fileDirectory.listFiles()) {
             if (file.isFile()) {
                 String name = file.getName();
@@ -89,37 +82,55 @@ public class Helpers extends ContextWrapper {
         return arrayList;
     }
 
-    public void hideVideoFiles() {
-        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyVideos";
-        File videosDirectory = new File(rootPath);
-        for (File file : videosDirectory.listFiles()) {
+    public static void hideFilesInDirectory(String directoryName) {
+        File directory;
+        switch (directoryName) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                directory = AppGlobals.getVideosDirectory();
+                break;
+            case AppGlobals.DIRECTORY.PICTURES:
+                directory = AppGlobals.getPicturesDirectory();
+                break;
+            default:
+                return;
+        }
+        for (File file : directory.listFiles()) {
             String fileName = file.getName();
             if (!fileName.startsWith(".")) {
-                File hiddenFile = new File(videosDirectory, "." + fileName);
+                File hiddenFile = new File(directory, "." + fileName);
                 file.renameTo(hiddenFile);
             }
         }
     }
 
-    public void unhideFiles() {
-        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyVideos";
-        File videosDirectory = new File(rootPath);
-        for (File file : videosDirectory.listFiles()) {
+    public static void unHideFilesInDirectory(String directoryName) {
+        File directory;
+        switch (directoryName) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                directory = AppGlobals.getVideosDirectory();
+                break;
+            case AppGlobals.DIRECTORY.PICTURES:
+                directory = AppGlobals.getPicturesDirectory();
+                break;
+            default:
+                return;
+        }
+        for (File file : directory.listFiles()) {
             String fileName = file.getName();
             if (fileName.startsWith(".")) {
-                File unhidden = new File(videosDirectory, fileName.substring(1));
+                File unhidden = new File(directory, fileName.substring(1));
                 file.renameTo(unhidden);
             }
         }
     }
 
 
-    public boolean isImageHiderOn() {
+    public static boolean isImageHiderOn() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("image_visibility", false);
     }
 
-    public boolean isVideoHiderOn() {
+    public static boolean isVideoHiderOn() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("video_visibility", false);
     }
