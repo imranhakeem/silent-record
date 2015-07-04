@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.MyAppTheme);
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         getSupportActionBar().setElevation(0);
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             default:
                 return;
         }
-
+        mViewPager.removeAllViews();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.executePendingTransactions();
         fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
@@ -199,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 invalidateOptionsMenu();
-//                newFragment(mPosition);
             }
         };
     }
