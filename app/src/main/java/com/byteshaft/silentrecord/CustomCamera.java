@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class CustomCamera extends ContextWrapper implements CameraStateChangeListener,
         Camera.ShutterCallback, Camera.PictureCallback {
@@ -99,7 +100,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
         mMediaRecorder = CustomMediaRecorder.getInstance();
-        mMediaRecorder.setMaxDuration(Integer.valueOf(mHelpers.readMaxVideoValue()));
+        mMediaRecorder.setMaxDuration((int) TimeUnit.MINUTES.toMillis(Integer.valueOf(mHelpers.readMaxVideoValue())));
         mMediaRecorder.setOutputFile(path);
         mMediaRecorder.start(camera, holder);
         Toast.makeText(getApplicationContext(), "Recording Started", Toast.LENGTH_SHORT).show();
