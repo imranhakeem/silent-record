@@ -19,13 +19,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -38,22 +38,25 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 public class VideoFragment extends ListFragment {
 
     private Helpers mHelpers;
-    private View rootView;
     private Context mContext;
     private ArrayList<String> mVideoFilesNames;
     private ThumbnailCreation mListAdapter;
 
+    public VideoFragment() {
+        super();
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.video_fragment, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.video_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mHelpers = new Helpers(getActivity());
-        mVideoFilesNames = mHelpers.getNameFromFolder();
+        mVideoFilesNames = Helpers.getFileNamesFromDirectory(AppGlobals.DIRECTORY.VIDEOS);
         mListAdapter = new ThumbnailCreation(getActivity().getApplicationContext(),
                 R.layout.row, mVideoFilesNames);
         getListView().setAdapter(mListAdapter);
