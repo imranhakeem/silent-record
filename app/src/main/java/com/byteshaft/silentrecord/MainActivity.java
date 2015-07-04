@@ -24,7 +24,7 @@ import android.widget.ListView;
 
 import com.byteshaft.silentrecord.fragments.AboutFragment;
 import com.byteshaft.silentrecord.fragments.ContactFragment;
-import com.byteshaft.silentrecord.fragments.ImagesActivity;
+import com.byteshaft.silentrecord.fragments.PicturesFragment;
 import com.byteshaft.silentrecord.fragments.ReportFragment;
 import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
@@ -96,12 +96,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         setContentView(R.layout.activity_main);
-        Helpers helpers = new Helpers(getApplicationContext());
-        helpers.spyVideosDirectory();
-        helpers.spyPicturesDirectory();
-        if (helpers.isNotificationWidgetOn()) {
-            NotificationWidget.show();
-        }
+        Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.VIDEOS);
+        Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.PICTURES);
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mResources = getResources();
@@ -128,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 getString(R.string.title_section3),
                 getString(R.string.title_section4),
                 getString(R.string.title_section5),
+                getString(R.string.title_section6),
         };
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mListTitles));
@@ -148,15 +145,18 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 mFragment = new SettingFragment();
                 break;
             case 1:
-                mFragment = new VideoFragment();
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.PICTURES);
                 break;
             case 2:
-                mFragment = new AboutFragment();
+                mFragment = new VideoFragment(AppGlobals.DIRECTORY.VIDEOS);
                 break;
             case 3:
-                mFragment = new ReportFragment();
+                mFragment = new AboutFragment();
                 break;
             case 4:
+                mFragment = new ReportFragment();
+                break;
+            case 5:
                 mFragment = new ContactFragment();
                 break;
             default:
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                     mFragment = new VideosActivity();
                     break;
                 case 1:
-                    mFragment = new ImagesActivity();
+                    mFragment = new PicturesFragment();
                     break;
                 case 2:
                     mFragment = new ScheduleActivity();

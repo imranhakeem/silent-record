@@ -5,6 +5,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
 
+import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
@@ -71,19 +72,17 @@ public class SettingFragment extends PreferenceFragment implements
 
         switch (preference.getKey()) {
             case "video_visibility":
-                if (!mHelpers.isVideoHiderOn()) {
-                    mHelpers.hideVideoFiles();
+                if (!Helpers.isVideoHiderOn()) {
+                    Helpers.hideFilesInDirectory(AppGlobals.DIRECTORY.VIDEOS);
                 } else {
-                    mHelpers.unhideVideoFiles();
+                    Helpers.unHideFilesInDirectory(AppGlobals.DIRECTORY.VIDEOS);
                 }
                 break;
             case "image_visibility":
-                if (!mHelpers.isImageHiderOn()) {
-                    mHelpers.hideImageFiles();
-                    System.out.println("off");
-                    System.out.println("on");
+                if (!Helpers.isImageHiderOn()) {
+                    Helpers.hideFilesInDirectory(AppGlobals.DIRECTORY.PICTURES);
                 } else {
-                mHelpers.unhideImageFiles();
+                    Helpers.unHideFilesInDirectory(AppGlobals.DIRECTORY.PICTURES);
                 }
                 break;
             case "notification_widget":
@@ -91,7 +90,6 @@ public class SettingFragment extends PreferenceFragment implements
                     NotificationWidget.show();
                 } else {
                     NotificationWidget.hide();
-                }
                 break;
         }
         return true;
