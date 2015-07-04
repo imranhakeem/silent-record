@@ -1,10 +1,12 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:showAsAction">always</item>
         <item name="android:activatedBackgroundIndicator">@drawable/activated_background</item>
     </style>
 
+    <style name="MyAppTheme" parent="AppTheme">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
 </resources>

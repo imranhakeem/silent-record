@@ -30,7 +30,6 @@ import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
 import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
-import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 import it.neokree.materialtabs.MaterialTab;
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     private int mNotificationID = 001;
     private NotificationManager mNotifyManager;
     boolean isMainActivityActive = false;
-//    int mPosition = -1;
 
     @Override
     protected void onPause() {
@@ -92,8 +90,10 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.MyAppTheme);
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
+        getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_main);
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.VIDEOS);
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.PICTURES);
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             default:
                 return;
         }
-
+        mViewPager.removeAllViews();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.executePendingTransactions();
         fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
@@ -200,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 invalidateOptionsMenu();
-//                newFragment(mPosition);
             }
         };
     }

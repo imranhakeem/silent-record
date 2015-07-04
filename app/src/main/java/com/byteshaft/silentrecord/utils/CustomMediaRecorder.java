@@ -53,7 +53,7 @@ public class CustomMediaRecorder extends MediaRecorder {
     @Override
     public void stop() throws IllegalStateException {
         super.stop();
-        NotificationWidget.hide();
+
         reset();
     }
 }
