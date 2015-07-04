@@ -212,4 +212,9 @@ public class Helpers extends ContextWrapper {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("video_visibility", false);
     }
+
+    public boolean isNotificationWidgetOn() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("notification_widget", true);
+    }
 }

@@ -36,6 +36,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#ffffff"
+        android:textStyle="bold"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent" />
 

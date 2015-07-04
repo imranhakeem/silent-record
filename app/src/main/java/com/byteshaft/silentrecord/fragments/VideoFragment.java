@@ -81,7 +81,7 @@ public class VideoFragment extends ListFragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         menu.setHeaderTitle(mFilesNames.get(info.position));
-        String[] menuItems = {"Play", "Delete" , "Hide"};
+        String[] menuItems = {getExecuteText(), "Delete" , getVisibilityText(mFilesNames.get(info.position))};
         for (int i = 0; i < menuItems.length; i++) {
             menu.add(Menu.NONE, i, i, menuItems[i]);
         }
@@ -92,10 +92,13 @@ public class VideoFragment extends ListFragment {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
                 item.getMenuInfo();
         int menuItemIndex = item.getItemId();
-        String[] menuItems = {"Play", "Delete" , "Hide"};
+        String[] menuItems = {getExecuteText(), "Delete" , getVisibilityText(mFilesNames.get(info.position))};
         String menuItemName = menuItems[menuItemIndex];
         switch (menuItemName) {
-            case "Play":
+            case "Play" :
+                openContent(getPathForFile(mFilesNames.get(info.position)));
+                break;
+            case "View":
                 openContent(getPathForFile(mFilesNames.get(info.position)));
                 break;
             case "Delete":
@@ -136,7 +139,6 @@ public class VideoFragment extends ListFragment {
     static class ViewHolder {
         public TextView fileName;
         public ImageView thumbnail;
-        public ImageLoader imageLoader;
         public int position;
     }
 
@@ -173,7 +175,7 @@ public class VideoFragment extends ListFragment {
             }
             holder.position = position;
             holder.fileName.setText(mFiles.get(position));
-            System.out.println(getPathForFile(mFiles.get(position)));
+            holder.thumbnail.setImageBitmap(null);
             String path = "file://" + getPathForFile(mFiles.get(position));
             mImageLoader.displayImage(path, holder.thumbnail, mOptions, null);
             return convertView;
@@ -226,5 +228,24 @@ public class VideoFragment extends ListFragment {
         String fileNameOld = file1.getName();
         File file2 = new File(directory, "." + fileNameOld);
         return file1.renameTo(file2);
+    }
+
+    private String getExecuteText() {
+        switch (mContentType) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                return "Play";
+            case AppGlobals.DIRECTORY.PICTURES:
+                return "View";
+            default:
+                return null;
+        }
+    }
+
+    private String getVisibilityText(String fileName) {
+        if (fileName.startsWith(".")) {
+            return "Show in other Apps";
+        } else {
+            return "Hide in other Apps";
+        }
     }
 }

@@ -6,4 +6,8 @@
         <item name="android:activatedBackgroundIndicator">@drawable/activated_background</item>
     </style>
 
+    <style name="SettingsTheme" parent="android:Theme.Holo.Light">
+        <item name="android:background">@color/black_background</item>
+    </style>
+
 </resources>

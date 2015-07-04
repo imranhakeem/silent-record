@@ -3,18 +3,29 @@ package com.byteshaft.silentrecord;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
+
+import com.byteshaft.ezflashlight.FlashlightGlobals;
 
 public class NotificationHandler extends BroadcastReceiver {
+
+    CustomCamera customCamera = CustomCamera.getInstance(AppGlobals.getContext());
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getExtras().getString("do_action");
         if (action != null) {
             if (action.equals("take_picture")) {
-                Toast.makeText(context, "Picture Taken!", Toast.LENGTH_SHORT).show();
+                if (!FlashlightGlobals.isResourceOccupied()) {
+                    customCamera.takePicture();
+                }
             }else if (action.equals("record_video")) {
-                Toast.makeText(context, "Recording Started!", Toast.LENGTH_SHORT).show();
+                if (customCamera.isRecording()) {
+                    customCamera.stopRecording();
+                } else {
+                    if (!FlashlightGlobals.isResourceOccupied() && !CustomCamera.isTakingPicture()) {
+                        customCamera.startRecording();
+                    }
+                }
             }
         }
     }

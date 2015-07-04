@@ -30,9 +30,9 @@ import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
 import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
+import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
-
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 break;
             case 2:
                 mFragment = new SettingFragment();
+                setTheme(R.style.SettingsTheme);
                 break;
             case 3:
                 mFragment = new AboutFragment();
