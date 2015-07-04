@@ -14,8 +14,6 @@ import com.byteshaft.silentrecord.R;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.Locale;
 
 
 public class Helpers extends ContextWrapper {
@@ -89,5 +87,40 @@ public class Helpers extends ContextWrapper {
             }
         }
         return arrayList;
+    }
+
+    public void hideVideoFiles() {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyVideos";
+        File videosDirectory = new File(rootPath);
+        for (File file : videosDirectory.listFiles()) {
+            String fileName = file.getName();
+            if (!fileName.startsWith(".")) {
+                File hiddenFile = new File(videosDirectory, "." + fileName);
+                file.renameTo(hiddenFile);
+            }
+        }
+    }
+
+    public void unhideFiles() {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SpyVideos";
+        File videosDirectory = new File(rootPath);
+        for (File file : videosDirectory.listFiles()) {
+            String fileName = file.getName();
+            if (fileName.startsWith(".")) {
+                File unhidden = new File(videosDirectory, fileName.substring(1));
+                file.renameTo(unhidden);
+            }
+        }
+    }
+
+
+    public boolean isImageHiderOn() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("image_visibility", false);
+    }
+
+    public boolean isVideoHiderOn() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("video_visibility", false);
     }
 }
