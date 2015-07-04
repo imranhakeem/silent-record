@@ -9,8 +9,8 @@
 
         <SwitchPreference
             android:key="video_visibility"
-            android:title="Hide videos"
-            android:defaultValue="true" />
+            android:title="Hide videos" />
+
     </PreferenceCategory>
 
     <ListPreference
@@ -40,7 +40,7 @@
     <SwitchPreference
         android:key="image_visibility"
         android:title="Hide Images"
-        android:defaultValue="true" />
+        android:defaultValue="false" />
 
         <ListPreference
             android:title="Select Image resolution"
@@ -66,5 +66,6 @@
             android:defaultValue="0"
             android:entries="@array/camera_zoom_controls">
         </ListPreference>
+
     </PreferenceCategory>
 </PreferenceScreen>
