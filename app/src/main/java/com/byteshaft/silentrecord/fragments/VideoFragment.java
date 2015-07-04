@@ -42,6 +42,8 @@ public class VideoFragment extends ListFragment {
     private ArrayList<String> mFilesNames;
     private ThumbnailCreation mListAdapter;
     private String mContentType;
+    private final String TEXT_FILE_SHOW = "Show in other Apps";
+    private final String TEXT_FILE_HIDE = "Hide in other Apps";
 
     public VideoFragment() {
         super();
@@ -96,8 +98,6 @@ public class VideoFragment extends ListFragment {
         String menuItemName = menuItems[menuItemIndex];
         switch (menuItemName) {
             case "Play" :
-                openContent(getPathForFile(mFilesNames.get(info.position)));
-                break;
             case "View":
                 openContent(getPathForFile(mFilesNames.get(info.position)));
                 break;
@@ -124,13 +124,18 @@ public class VideoFragment extends ListFragment {
                 builder.create();
                 builder.show();
                 break;
-            case "Hide":
-                if (hideFile(getPathForFile(mFilesNames.get(info.position)))) {
+            case TEXT_FILE_HIDE:
+                if (hideFile(mFilesNames.get(info.position))) {
                     mListAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Could not delete file", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case TEXT_FILE_SHOW:
+                if (unHideFile(mFilesNames.get(info.position))) {
+                    mListAdapter.notifyDataSetChanged();
+                }
+                break;
+
+
         }
         return super.onContextItemSelected(item);
     }
@@ -221,12 +226,42 @@ public class VideoFragment extends ListFragment {
         return file.delete();
     }
 
-    private boolean hideFile(String filePath) {
-        String directory = getExternalLocation();
-        File file1 = new File(filePath);
-        String fileNameOld = file1.getName();
-        File file2 = new File(directory, "." + fileNameOld);
-        return file1.renameTo(file2);
+    private boolean hideFile(String fileName) {
+        File directory = null;
+        switch (mContentType) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                directory = AppGlobals.getVideosDirectory();
+                break;
+            case AppGlobals.DIRECTORY.PICTURES:
+                directory = AppGlobals.getPicturesDirectory();
+                break;
+        }
+        File file1 = new File(directory, fileName);
+        if (!fileName.startsWith(".")) {
+            File file2 = new File(directory, "." + fileName);
+            return file1.renameTo(file2);
+        } else {
+            return false;
+        }
+    }
+
+    private boolean unHideFile(String fileName) {
+        File directory = null;
+        switch (mContentType) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                directory = AppGlobals.getVideosDirectory();
+                break;
+            case AppGlobals.DIRECTORY.PICTURES:
+                directory = AppGlobals.getPicturesDirectory();
+                break;
+        }
+        File file1 = new File(directory, fileName);
+        if (fileName.startsWith(".")) {
+            File file2 = new File(directory, fileName.substring(1));
+            return file1.renameTo(file2);
+        } else {
+            return false;
+        }
     }
 
     private String getExecuteText() {
@@ -242,9 +277,9 @@ public class VideoFragment extends ListFragment {
 
     private String getVisibilityText(String fileName) {
         if (fileName.startsWith(".")) {
-            return "Show in other Apps";
+            return TEXT_FILE_SHOW;
         } else {
-            return "Hide in other Apps";
+            return TEXT_FILE_HIDE;
         }
     }
 }

@@ -99,8 +99,8 @@ public class SettingFragment extends PreferenceFragment implements
                     break;
                 }
         }
-                return true;
-        }
+        return true;
     }
+}
     
 
