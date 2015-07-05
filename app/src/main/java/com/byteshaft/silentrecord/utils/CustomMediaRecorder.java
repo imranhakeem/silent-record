@@ -26,7 +26,7 @@ public class CustomMediaRecorder extends MediaRecorder {
     @Override
     public void start() throws IllegalStateException {
         super.start();
-        NotificationWidget.show();
+        NotificationWidget.show(null);
     }
 
     public void start(Camera camera, SurfaceHolder holder) {
@@ -49,6 +49,8 @@ public class CustomMediaRecorder extends MediaRecorder {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        UiUpdater uiUpdater = new UiUpdater();
+        uiUpdater.updateRecordingTimeInUi();
     }
 
     @Override
