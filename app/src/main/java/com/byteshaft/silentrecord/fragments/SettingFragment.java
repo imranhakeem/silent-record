@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -13,11 +14,20 @@ import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
+import java.util.List;
+
 public class SettingFragment extends PreferenceFragment implements
-        Preference.OnPreferenceChangeListener {
+        Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Helpers mHelpers;
-    SwitchPreference notificationSwitch;
+    private SwitchPreference notificationSwitch;
+    private EditTextPreference editTextPreference;
+    private ListPreference VideoResolution;
+    private ListPreference videoFormat;
+    private ListPreference pictureSceneMode;
+    private ListPreference videoSceneMode;
+    private ListPreference imageResolution;
+    private ListPreference cameraZoomControl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,38 +45,42 @@ public class SettingFragment extends PreferenceFragment implements
         notificationSwitch = (SwitchPreference) findPreference("notification_widget");
         notificationSwitch.setOnPreferenceChangeListener(this);
 
-        ListPreference listPreference = (ListPreference) findPreference("video_resolution");
-        setEntriesAndValues(listPreference, characteristics.getSupportedVideoResolutions());
-        setDefaultEntryIfNotPreviouslySet(listPreference);
-        listPreference.setSummary(mHelpers.getValueFromKey("video_resolution"));
+        VideoResolution = (ListPreference) findPreference("video_resolution");
+        setEntriesAndValues(VideoResolution, characteristics.getSupportedVideoResolutions());
+        setDefaultEntryIfNotPreviouslySet(VideoResolution);
+        VideoResolution.setSummary(mHelpers.getValueFromKey("video_resolution"));
 
-        listPreference = (ListPreference) findPreference("video_format");
-        listPreference.setSummary(mHelpers.getValueFromKey("video_format"));
+        videoFormat = (ListPreference) findPreference("video_format");
+        videoFormat.setSummary(mHelpers.getValueFromKey("video_format"));
 
-        EditTextPreference editTextPreference = (EditTextPreference) findPreference("max_video");
-        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video"));
+        editTextPreference = (EditTextPreference) findPreference("max_video");
+        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video")+" minutes");
 
-        listPreference = (ListPreference) findPreference("video_format");
-        listPreference.setSummary(mHelpers.getValueFromKey("video_format"));
+        pictureSceneMode = (ListPreference) findPreference("picture_scene_mode");
+        setEntriesAndValues(pictureSceneMode, characteristics.getSupportedSceneModes());
+        setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
 
-        listPreference = (ListPreference) findPreference("picture_scene_mode");
-        setEntriesAndValues(listPreference, characteristics.getSupportedSceneModes());
-        setDefaultEntryIfNotPreviouslySet(listPreference);
+        videoSceneMode = (ListPreference) findPreference("video_scene_mode");
+        setEntriesAndValues(videoSceneMode, characteristics.getSupportedSceneModes());
+        setDefaultEntryIfNotPreviouslySet(videoSceneMode);
+        videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
 
-        listPreference = (ListPreference) findPreference("video_scene_mode");
-        setEntriesAndValues(listPreference, characteristics.getSupportedSceneModes());
-        setDefaultEntryIfNotPreviouslySet(listPreference);
-        listPreference.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
+        imageResolution = (ListPreference) findPreference("image_resolution");
+        setEntriesAndValues(imageResolution, characteristics.getSupportedPictureSizes());
+        setDefaultEntryIfNotPreviouslySet(imageResolution);
+        imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
 
-        listPreference = (ListPreference) findPreference("image_resolution");
-        setEntriesAndValues(listPreference, characteristics.getSupportedPictureSizes());
-        setDefaultEntryIfNotPreviouslySet(listPreference);
-        listPreference.setSummary(mHelpers.getValueFromKey("image_resolution"));
+        cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
+        cameraZoomControl.setEntryValues(characteristics.getSupportedZoomLevels());
+        setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
+        cameraZoomControl.setSummary(mHelpers.getValueFromKey("camera_zoom_control"));
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
 
-        listPreference = (ListPreference) findPreference("camera_zoom_control");
-        listPreference.setEntryValues(characteristics.getSupportedZoomLevels());
-        setDefaultEntryIfNotPreviouslySet(listPreference);
-        listPreference.setSummary(mHelpers.getValueFromKey("camera_zoom_control"));
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -113,6 +127,17 @@ public class SettingFragment extends PreferenceFragment implements
                 }
         }
         return true;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video")+" minutes");
+        VideoResolution.setSummary(mHelpers.getValueFromKey("video_resolution"));
+        videoFormat.setSummary(mHelpers.getValueFromKey("video_format"));
+        pictureSceneMode.setSummary(mHelpers.getValueFromKey("picture_scene_mode"));
+        videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
+        imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
+        cameraZoomControl.setSummary(mHelpers.getValueFromKey("camera_zoom_control"));
     }
 }
 

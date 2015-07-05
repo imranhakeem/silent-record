@@ -20,14 +20,12 @@
 
     <ListPreference
         android:title="Select video resolution"
-        android:summary="video resolution"
         android:key="video_resolution"
         android:entries="@array/video_resolution"
         android:entryValues="@array/video_resolution_values"/>
 
     <ListPreference
         android:title="Select video format"
-        android:summary="video format"
         android:key="video_format"
         android:entries="@array/video_format"
         android:entryValues="@array/format_values" />
@@ -41,7 +39,6 @@
 
     <ListPreference
         android:title="Select scene mode"
-        android:summary="scene modes"
         android:key="video_scene_mode"
         android:entries="@array/video_scene_modes"
         android:entryValues="@array/video_scene_values"/>
@@ -56,14 +53,12 @@
 
         <ListPreference
             android:title="Select Image resolution"
-            android:summary="Image resolution"
             android:key="image_resolution"
             android:entries="@array/image_resolution"
             android:entryValues="@array/image_resolution_values"/>
 
         <ListPreference
             android:title="Select scene mode"
-            android:summary="scene modes"
             android:key="picture_scene_mode"
             android:entries="@array/picture_scene_modes"
             android:entryValues="@array/picture_scene_values"/>
@@ -73,7 +68,6 @@
         android:title="Camera Zoom Control">
         <ListPreference
             android:title="Camera Zoom Controls"
-            android:summary="Camera Zoom"
             android:key="camera_zoom_control"
             android:defaultValue="0"
             android:entries="@array/camera_zoom_controls">
