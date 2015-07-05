@@ -34,7 +34,6 @@ public class WidgetProvider extends AppWidgetProvider {
             remoteViews.setOnClickPendingIntent(R.id.video_button_widget, pendingIntent2);
 
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
-            Toast.makeText(context, "Widget Enabled", Toast.LENGTH_SHORT).show();
         }
     }
 

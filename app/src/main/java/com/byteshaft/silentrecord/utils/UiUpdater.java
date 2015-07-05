@@ -82,7 +82,7 @@ public class UiUpdater {
     private void resetUi() {
         resetApp();
         resetWidget();
-        resetNotification();
+//        resetNotification();
     }
 
     private void resetApp() {
