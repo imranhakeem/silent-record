@@ -1,13 +1,10 @@
 package com.byteshaft.silentrecord.fragments;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
@@ -18,7 +15,6 @@ import com.byteshaft.silentrecord.R;
 public class VideosActivity extends Fragment implements View.OnClickListener {
 
     ImageButton mButton;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +38,5 @@ public class VideosActivity extends Fragment implements View.OnClickListener {
                 }
                 break;
         }
-
     }
 }

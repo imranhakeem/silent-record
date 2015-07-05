@@ -148,10 +148,6 @@ public class Helpers extends ContextWrapper {
         Log.i(AppGlobals.getLogTag(getClass()), "setting alarm of :" + calendar.getTime());
     }
 
-    public void spyVideosDirectory() {
-
-    }
-        File recordingsDirectory = new File(Environment.getExternalStorageDirectory() + "/" + "SpyVideos");
     public static void createDirectoryIfNotExists(String directoryName) {
         File recordingsDirectory = new File(Environment.getExternalStorageDirectory(), directoryName);
         if (!recordingsDirectory.exists()) {
