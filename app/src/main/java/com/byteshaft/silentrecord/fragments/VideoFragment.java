@@ -5,11 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -23,18 +19,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.Helpers;
+import com.byteshaft.silentrecord.utils.VideoFragmentHelpers;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 public class VideoFragment extends ListFragment {
 
@@ -42,8 +35,7 @@ public class VideoFragment extends ListFragment {
     private ArrayList<String> mFilesNames;
     private ThumbnailCreation mListAdapter;
     private String mContentType;
-    private final String TEXT_FILE_SHOW = "Show in other Apps";
-    private final String TEXT_FILE_HIDE = "Hide in other Apps";
+    private VideoFragmentHelpers mHelpers;
 
     public VideoFragment() {
         super();
@@ -53,6 +45,7 @@ public class VideoFragment extends ListFragment {
     public VideoFragment(String contentType) {
         this();
         mContentType = contentType;
+        mHelpers = new VideoFragmentHelpers(mContentType);
     }
 
     @Override
@@ -70,8 +63,8 @@ public class VideoFragment extends ListFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String path = getPathForFile(mFilesNames.get(i));
-                openContent(path);
+                String path = mHelpers.getPathForFile(mFilesNames.get(i));
+                mHelpers.openContent(getActivity(), path);
             }
         });
         getListView().setDivider(null);
@@ -83,7 +76,7 @@ public class VideoFragment extends ListFragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         menu.setHeaderTitle(mFilesNames.get(info.position));
-        String[] menuItems = {getExecuteText(), "Delete" , getVisibilityText(mFilesNames.get(info.position))};
+        String[] menuItems = {mHelpers.getExecuteText(), "Delete" , mHelpers.getVisibilityText(mFilesNames.get(info.position))};
         for (int i = 0; i < menuItems.length; i++) {
             menu.add(Menu.NONE, i, i, menuItems[i]);
         }
@@ -94,12 +87,12 @@ public class VideoFragment extends ListFragment {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
                 item.getMenuInfo();
         int menuItemIndex = item.getItemId();
-        String[] menuItems = {getExecuteText(), "Delete" , getVisibilityText(mFilesNames.get(info.position))};
+        String[] menuItems = {mHelpers.getExecuteText(), "Delete" , mHelpers.getVisibilityText(mFilesNames.get(info.position))};
         String menuItemName = menuItems[menuItemIndex];
         switch (menuItemName) {
             case "Play" :
             case "View":
-                openContent(getPathForFile(mFilesNames.get(info.position)));
+                mHelpers.openContent(getActivity(), mHelpers.getPathForFile(mFilesNames.get(info.position)));
                 break;
             case "Delete":
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -109,7 +102,7 @@ public class VideoFragment extends ListFragment {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (deleteFile(getPathForFile(mFilesNames.get(info.position)))) {
+                        if (mHelpers.deleteFile(mHelpers.getPathForFile(mFilesNames.get(info.position)))) {
                             mListAdapter.remove(mListAdapter.getItem(info.position));
                             mListAdapter.notifyDataSetChanged();
                             Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
@@ -125,13 +118,13 @@ public class VideoFragment extends ListFragment {
                 builder.create();
                 builder.show();
                 break;
-            case TEXT_FILE_HIDE:
-                if (hideFile(mFilesNames.get(info.position))) {
+            case AppConstants.TEXT_FILE_HIDE:
+                if (mHelpers.hideFile(mFilesNames.get(info.position))) {
                     mListAdapter.notifyDataSetChanged();
                 }
                 break;
-            case TEXT_FILE_SHOW:
-                if (unHideFile(mFilesNames.get(info.position))) {
+            case AppConstants.TEXT_FILE_SHOW:
+                if (mHelpers.unHideFile(mFilesNames.get(info.position))) {
                     mListAdapter.notifyDataSetChanged();
                 }
                 break;
@@ -181,106 +174,9 @@ public class VideoFragment extends ListFragment {
             holder.position = position;
             holder.fileName.setText(mFiles.get(position));
             holder.thumbnail.setImageBitmap(null);
-            String path = "file://" + getPathForFile(mFiles.get(position));
+            String path = "file://" + mHelpers.getPathForFile(mFiles.get(position));
             mImageLoader.displayImage(path, holder.thumbnail, mOptions, null);
             return convertView;
-        }
-    }
-
-    private String getPathForFile(String fileName) {
-        String directory = null;
-        switch (mContentType) {
-            case AppGlobals.DIRECTORY.VIDEOS:
-                directory = AppGlobals.DIRECTORY.VIDEOS;
-                break;
-            case AppGlobals.DIRECTORY.PICTURES:
-                directory = AppGlobals.DIRECTORY.PICTURES;
-                break;
-        }
-        return getExternalLocation()
-                + File.separator
-                + directory
-                + File.separator
-                + fileName;
-    }
-
-    private String getExternalLocation() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath();
-    }
-
-    private void openContent(String filePath) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri data = Uri.parse("file://" + filePath);
-        switch (mContentType) {
-            case AppGlobals.DIRECTORY.VIDEOS:
-                intent.setDataAndType(data, "video/*");
-                break;
-            case AppGlobals.DIRECTORY.PICTURES:
-                intent.setDataAndType(data, "image/*");
-                break;
-        }
-        startActivity(intent);
-    }
-
-    private boolean deleteFile(String filePath) {
-        File file = new File(filePath);
-        return file.delete();
-    }
-
-    private boolean hideFile(String fileName) {
-        File directory = null;
-        switch (mContentType) {
-            case AppGlobals.DIRECTORY.VIDEOS:
-                directory = AppGlobals.getVideosDirectory();
-                break;
-            case AppGlobals.DIRECTORY.PICTURES:
-                directory = AppGlobals.getPicturesDirectory();
-                break;
-        }
-        File file1 = new File(directory, fileName);
-        if (!fileName.startsWith(".")) {
-            File file2 = new File(directory, "." + fileName);
-            return file1.renameTo(file2);
-        } else {
-            return false;
-        }
-    }
-
-    private boolean unHideFile(String fileName) {
-        File directory = null;
-        switch (mContentType) {
-            case AppGlobals.DIRECTORY.VIDEOS:
-                directory = AppGlobals.getVideosDirectory();
-                break;
-            case AppGlobals.DIRECTORY.PICTURES:
-                directory = AppGlobals.getPicturesDirectory();
-                break;
-        }
-        File file1 = new File(directory, fileName);
-        if (fileName.startsWith(".")) {
-            File file2 = new File(directory, fileName.substring(1));
-            return file1.renameTo(file2);
-        } else {
-            return false;
-        }
-    }
-
-    private String getExecuteText() {
-        switch (mContentType) {
-            case AppGlobals.DIRECTORY.VIDEOS:
-                return "Play";
-            case AppGlobals.DIRECTORY.PICTURES:
-                return "View";
-            default:
-                return null;
-        }
-    }
-
-    private String getVisibilityText(String fileName) {
-        if (fileName.startsWith(".")) {
-            return TEXT_FILE_SHOW;
-        } else {
-            return TEXT_FILE_HIDE;
         }
     }
 }
