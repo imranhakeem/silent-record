@@ -80,8 +80,15 @@ public class UiUpdater {
     }
 
     private void resetUi() {
+        resetApp();
         resetWidget();
         resetNotification();
+    }
+
+    private void resetApp() {
+        if (VideosActivity.isRunning()) {
+            VideosActivity.getInstance().mLabelRecordTime.setText("00:00");
+        }
     }
 
     private void resetWidget() {
