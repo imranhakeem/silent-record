@@ -76,7 +76,11 @@ public class VideoFragment extends ListFragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         menu.setHeaderTitle(mFilesNames.get(info.position));
-        String[] menuItems = {mHelpers.getExecuteText(), "Delete" , mHelpers.getVisibilityText(mFilesNames.get(info.position))};
+        String[] menuItems = {
+                mHelpers.getExecuteText(),
+                "Delete",
+                mHelpers.getVisibilityText(mFilesNames.get(info.position))
+        };
         for (int i = 0; i < menuItems.length; i++) {
             menu.add(Menu.NONE, i, i, menuItems[i]);
         }
@@ -87,7 +91,11 @@ public class VideoFragment extends ListFragment {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
                 item.getMenuInfo();
         int menuItemIndex = item.getItemId();
-        String[] menuItems = {mHelpers.getExecuteText(), "Delete" , mHelpers.getVisibilityText(mFilesNames.get(info.position))};
+        String[] menuItems = {
+                mHelpers.getExecuteText(),
+                "Delete",
+                mHelpers.getVisibilityText(mFilesNames.get(info.position))
+        };
         String menuItemName = menuItems[menuItemIndex];
         switch (menuItemName) {
             case "Play" :
@@ -107,8 +115,6 @@ public class VideoFragment extends ListFragment {
                     mListAdapter.notifyDataSetChanged();
                 }
                 break;
-
-
         }
         return super.onContextItemSelected(item);
     }
