@@ -103,7 +103,7 @@ public class SettingFragment extends PreferenceFragment implements
                 break;
             case "notification_widget":
                 if (!mHelpers.isNotificationWidgetOn()) {
-                    NotificationWidget.show();
+                    NotificationWidget.show(null);
                 } else {
                     NotificationWidget.hide();
                     break;
