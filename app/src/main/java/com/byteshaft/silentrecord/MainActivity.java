@@ -47,9 +47,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     private MaterialTabHost mMaterialTabHost;
     private Resources mResources;
     private Fragment mFragment;
-    private NotificationCompat.Builder mBuilder;
-    private int mNotificationID = 001;
-    private NotificationManager mNotifyManager;
     boolean isMainActivityActive = false;
 
     @Override

@@ -24,9 +24,9 @@ public class NotificationWidget {
 
     public static void show(String formattedTime) {
         RemoteViews notifyView = new RemoteViews(sContext.getPackageName(), R.layout.notification);
-        PendingIntent pendingIntentPicture = getPendingIntentForNotification("take_picture");
+        PendingIntent pendingIntentPicture = getPendingIntentForNotification("take_picture", 0);
         notifyView.setOnClickPendingIntent(R.id.photo_button_widget, pendingIntentPicture);
-        PendingIntent pendingIntentVideo = getPendingIntentForNotification("record_video");
+        PendingIntent pendingIntentVideo = getPendingIntentForNotification("record_video", 1);
         notifyView.setOnClickPendingIntent(R.id.video_button_widget, pendingIntentVideo);
         if (formattedTime != null) {
             notifyView.setTextViewText(R.id.textview_notification, formattedTime);
@@ -44,12 +44,12 @@ public class NotificationWidget {
         sIsShown = false;
     }
 
-    private static PendingIntent getPendingIntentForNotification(String command) {
+    private static PendingIntent getPendingIntentForNotification(String command, int index) {
         Intent intent = new Intent(AppGlobals.getContext(), NotificationHandler.class);
         intent.setAction("perform_notification_button");
         intent.putExtra("do_action", command);
         return PendingIntent.getBroadcast(
-                sContext, 0, intent, 0);
+                sContext, index, intent, 0);
     }
 
     private static NotificationCompat.Builder getNotificationCharacteristics(RemoteViews contentView) {
