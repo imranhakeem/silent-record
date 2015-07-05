@@ -30,15 +30,17 @@ public class CustomMediaRecorder extends MediaRecorder {
     }
 
     public void start(Camera camera, SurfaceHolder holder) {
+        int videoWidth = Values.getVideoDimensions()[0];
+        int videoHeight = Values.getVideoDimensions()[1];
         setCamera(camera);
         setAudioSource(MediaRecorder.AudioSource.MIC);
         setVideoSource(MediaRecorder.VideoSource.CAMERA);
         setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
         setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        setVideoEncodingBitRate(getBitRateForResolution(videoWidth, videoHeight));
         setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
         setOrientationHint(90);
-        setVideoSize(
-                Values.getVideoDimensions()[0], Values.getVideoDimensions()[1]);
+        setVideoSize(videoWidth, videoHeight);
         setPreviewDisplay(holder.getSurface());
         try {
             prepare();
@@ -52,7 +54,11 @@ public class CustomMediaRecorder extends MediaRecorder {
     @Override
     public void stop() throws IllegalStateException {
         super.stop();
-
         reset();
+    }
+
+    private int getBitRateForResolution(int width, int height) {
+        // Not perfect but gets use there.
+        return (width * height) * 8;
     }
 }
