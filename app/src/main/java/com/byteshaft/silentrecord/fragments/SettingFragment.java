@@ -42,7 +42,7 @@ public class SettingFragment extends PreferenceFragment implements
         videoSwitch.setOnPreferenceChangeListener(this);
         SwitchPreference imageSwitch = (SwitchPreference) findPreference("image_visibility");
         imageSwitch.setOnPreferenceChangeListener(this);
-        notificationSwitch = (SwitchPreference) findPreference("notification_widget");
+        SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
         notificationSwitch.setOnPreferenceChangeListener(this);
 
         VideoResolution = (ListPreference) findPreference("video_resolution");
@@ -69,7 +69,7 @@ public class SettingFragment extends PreferenceFragment implements
         setEntriesAndValues(imageResolution, characteristics.getSupportedPictureSizes());
         setDefaultEntryIfNotPreviouslySet(imageResolution);
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
-
+        
         cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
         cameraZoomControl.setEntryValues(characteristics.getSupportedZoomLevels());
         setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
@@ -120,7 +120,7 @@ public class SettingFragment extends PreferenceFragment implements
                 break;
             case "notification_widget":
                 if (!mHelpers.isNotificationWidgetOn()) {
-                    NotificationWidget.show();
+                    NotificationWidget.show(null);
                 } else {
                     NotificationWidget.hide();
                     break;

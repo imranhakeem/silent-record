@@ -1,14 +1,12 @@
 package com.byteshaft.silentrecord.fragments;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.CustomCamera;
@@ -17,15 +15,41 @@ import com.byteshaft.silentrecord.R;
 
 public class VideosActivity extends Fragment implements View.OnClickListener {
 
-    ImageButton mButton;
+    private static VideosActivity sInstance;
+    private ImageButton mButton;
+    public TextView mLabelRecordTime;
 
+    public static VideosActivity getInstance() {
+        return sInstance;
+    }
+
+    public static boolean isRunning() {
+        return sInstance != null;
+    }
+
+    private static void setInstance(VideosActivity videosActivity) {
+        sInstance = videosActivity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.videos,container,false);
+        setInstance(this);
+        View view = inflater.inflate(R.layout.videos, container, false);
         mButton = (ImageButton) view.findViewById(R.id.buttonRecording);
+        mLabelRecordTime = (TextView) view.findViewById(R.id.video_record_time);
         mButton.setOnClickListener(this);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        setInstance(null);
     }
 
     @Override
@@ -42,6 +66,5 @@ public class VideosActivity extends Fragment implements View.OnClickListener {
                 }
                 break;
         }
-
     }
 }

@@ -22,13 +22,15 @@
         android:title="Select video resolution"
         android:key="video_resolution"
         android:entries="@array/video_resolution"
-        android:entryValues="@array/video_resolution_values"/>
+        android:entryValues="@array/video_resolution_values"
+        android:negativeButtonText="OK"/>
 
     <ListPreference
         android:title="Select video format"
         android:key="video_format"
         android:entries="@array/video_format"
-        android:entryValues="@array/format_values" />
+        android:entryValues="@array/format_values"
+        android:negativeButtonText="OK"/>
 
     <EditTextPreference
         android:title="Select Max Video Duration"
@@ -41,7 +43,8 @@
         android:title="Select scene mode"
         android:key="video_scene_mode"
         android:entries="@array/video_scene_modes"
-        android:entryValues="@array/video_scene_values"/>
+        android:entryValues="@array/video_scene_values"
+        android:negativeButtonText="OK"/>
 
     <PreferenceCategory
         android:title="Image">
@@ -55,13 +58,15 @@
             android:title="Select Image resolution"
             android:key="image_resolution"
             android:entries="@array/image_resolution"
-            android:entryValues="@array/image_resolution_values"/>
+            android:entryValues="@array/image_resolution_values"
+            android:negativeButtonText="OK"/>
 
         <ListPreference
             android:title="Select scene mode"
             android:key="picture_scene_mode"
             android:entries="@array/picture_scene_modes"
-            android:entryValues="@array/picture_scene_values"/>
+            android:entryValues="@array/picture_scene_values"
+            android:negativeButtonText="OK"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -70,7 +75,8 @@
             android:title="Camera Zoom Controls"
             android:key="camera_zoom_control"
             android:defaultValue="0"
-            android:entries="@array/camera_zoom_controls">
+            android:entries="@array/camera_zoom_controls"
+            android:negativeButtonText="OK">
         </ListPreference>
     </PreferenceCategory>
 </PreferenceScreen>

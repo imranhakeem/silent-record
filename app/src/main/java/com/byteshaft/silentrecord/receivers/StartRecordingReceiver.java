@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.AppGlobals;
@@ -28,16 +29,24 @@ public class StartRecordingReceiver extends BroadcastReceiver {
             Helpers.setPicAlarm(false);
             Helpers.setDate(false);
             Helpers.setTime(false);
-            ScheduleActivity.mPicButton.setBackgroundResource(R.drawable.pic);
+            ScheduleActivity.mPicButton.setBackgroundResource(R.drawable.pic_alarm_notset);
+            ScheduleActivity.mBtnDatePicker.setText("Tap to set a Schedule");
+            ScheduleActivity.mBtnDatePicker.setClickable(true);
+            ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
+            ScheduleActivity.mVideoBtn.setVisibility(View.VISIBLE);
         } else if (operationType.equals("com.byteShaft.VideoAlarm")) {
-            Log.i(AppGlobals.getLogTag(getClass()),"Capturing video ...");
+            Log.i(AppGlobals.getLogTag(getClass()), "Capturing video ...");
             if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
                 camera.startRecording();
             }
             Helpers.setVideoAlarm(false);
             Helpers.setDate(false);
             Helpers.setTime(false);
-            ScheduleActivity.mVideoBtn.setBackgroundResource(R.drawable.alarm_not_set);
+            ScheduleActivity.mVideoBtn.setBackgroundResource(R.drawable.video_alarm_notset);
+            ScheduleActivity.mBtnDatePicker.setText("Tap to set a Schedule");
+            ScheduleActivity.mBtnDatePicker.setClickable(true);
+            ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
+            ScheduleActivity.mPicButton.setVisibility(View.VISIBLE);
         }
 
     }
