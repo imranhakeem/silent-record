@@ -35,7 +35,6 @@ public class SettingFragment extends PreferenceFragment implements
         addPreferencesFromResource(R.xml.prefs);
         CameraCharacteristics characteristics = new CameraCharacteristics(
                 getActivity().getApplicationContext());
-
         mHelpers = new Helpers(getActivity());
 
         SwitchPreference videoSwitch = (SwitchPreference) findPreference("video_visibility");
@@ -69,18 +68,12 @@ public class SettingFragment extends PreferenceFragment implements
         setEntriesAndValues(imageResolution, characteristics.getSupportedPictureSizes());
         setDefaultEntryIfNotPreviouslySet(imageResolution);
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
-        
+
         cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
         cameraZoomControl.setEntryValues(characteristics.getSupportedZoomLevels());
         setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
         cameraZoomControl.setSummary(mHelpers.getValueFromKey("camera_zoom_control"));
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     @Override
