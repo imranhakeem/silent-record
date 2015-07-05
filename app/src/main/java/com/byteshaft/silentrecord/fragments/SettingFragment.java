@@ -17,7 +17,6 @@ public class SettingFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
     private Helpers mHelpers;
-    SwitchPreference notificationSwitch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class SettingFragment extends PreferenceFragment implements
         videoSwitch.setOnPreferenceChangeListener(this);
         SwitchPreference imageSwitch = (SwitchPreference) findPreference("image_visibility");
         imageSwitch.setOnPreferenceChangeListener(this);
-        notificationSwitch = (SwitchPreference) findPreference("notification_widget");
+        SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
         notificationSwitch.setOnPreferenceChangeListener(this);
 
         ListPreference listPreference = (ListPreference) findPreference("video_resolution");
@@ -41,13 +40,11 @@ public class SettingFragment extends PreferenceFragment implements
         listPreference.setSummary(mHelpers.getValueFromKey("video_resolution"));
 
         listPreference = (ListPreference) findPreference("video_format");
+        setDefaultEntryIfNotPreviouslySet(listPreference);
         listPreference.setSummary(mHelpers.getValueFromKey("video_format"));
 
         EditTextPreference editTextPreference = (EditTextPreference) findPreference("max_video");
         editTextPreference.setSummary(mHelpers.getValueFromKey("max_video"));
-
-        listPreference = (ListPreference) findPreference("video_format");
-        listPreference.setSummary(mHelpers.getValueFromKey("video_format"));
 
         listPreference = (ListPreference) findPreference("picture_scene_mode");
         setEntriesAndValues(listPreference, characteristics.getSupportedSceneModes());
@@ -106,7 +103,7 @@ public class SettingFragment extends PreferenceFragment implements
                 break;
             case "notification_widget":
                 if (!mHelpers.isNotificationWidgetOn()) {
-                    NotificationWidget.show();
+                    NotificationWidget.show(null);
                 } else {
                     NotificationWidget.hide();
                     break;

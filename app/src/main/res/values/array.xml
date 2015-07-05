@@ -14,8 +14,8 @@
     </string-array>
 
     <string-array name="video_format">
-        <item>mp4</item>
-        <item>3gp</item>
+        <item>MPEG-4</item>
+        <item>3GPP</item>
     </string-array>
 
     <string-array name="format_values">
