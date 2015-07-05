@@ -57,6 +57,7 @@ public class CustomMediaRecorder extends MediaRecorder {
     public void stop() throws IllegalStateException {
         super.stop();
         reset();
+        NotificationWidget.hide();
     }
 
     private int getBitRateForResolution(int width, int height) {
