@@ -83,7 +83,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
         } else {
             mPicButton.setBackgroundResource(R.drawable.pic_alarm_notset);
             mVideoBtn.setBackgroundResource(R.drawable.video_alarm_notset);
-            mBtnDatePicker.setText("Set a Schedule");
+            mBtnDatePicker.setText("Tap to set a Schedule");
             mBtnDatePicker.setClickable(true);
             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
             mPicButton.setVisibility(View.VISIBLE);
@@ -104,7 +104,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                 } else if (Helpers.getPicAlarmStatus()) {
                     mVideoBtn.setVisibility(View.VISIBLE);
                     mPicButton.setBackgroundResource(R.drawable.pic_alarm_notset);
-                    mBtnDatePicker.setText("Set a Schedule");
+                    mBtnDatePicker.setText("Tap to set a Schedule");
                     mBtnDatePicker.setClickable(true);
                     mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
                     mHelpers.removePreviousAlarm();
@@ -124,11 +124,11 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                 break;
             case R.id.button_video_schedule:
                 if (!Helpers.getVideoAlarmStatus() &&!Helpers.getTime() && !Helpers.getDate()) {
-                    Toast.makeText(getActivity(),"Please set a schedule first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Please set a Schedule first", Toast.LENGTH_SHORT).show();
                 } else if (Helpers.getVideoAlarmStatus()) {
                     mPicButton.setVisibility(View.VISIBLE);
                     mVideoBtn.setBackgroundResource(R.drawable.video_alarm_notset);
-                    mBtnDatePicker.setText("Set a Schedule");
+                    mBtnDatePicker.setText("Tap to set a Schedule");
                     mBtnDatePicker.setClickable(true);
                     mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
                     mHelpers.removePreviousAlarm();
