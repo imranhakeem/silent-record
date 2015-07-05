@@ -50,7 +50,7 @@ public class SettingFragment extends PreferenceFragment implements
         VideoResolution.setSummary(mHelpers.getValueFromKey("video_resolution"));
 
         videoFormat = (ListPreference) findPreference("video_format");
-        videoFormat.setSummary(mHelpers.getValueFromKey("video_format"));
+        setVideoFormatSummary();
 
         editTextPreference = (EditTextPreference) findPreference("max_video");
         editTextPreference.setSummary(mHelpers.getValueFromKey("max_video")+" minutes");
@@ -72,8 +72,39 @@ public class SettingFragment extends PreferenceFragment implements
         cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
         cameraZoomControl.setEntryValues(characteristics.getSupportedZoomLevels());
         setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
-        cameraZoomControl.setSummary(mHelpers.getValueFromKey("camera_zoom_control"));
+        setSummaryForZoom();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    private void setVideoFormatSummary() {
+        String summaryValue = mHelpers.getValueFromKey("video_format");
+        switch (Integer.valueOf(summaryValue)) {
+            case 1:
+                videoFormat.setSummary("mp4");
+                break;
+            case 2:
+                videoFormat.setSummary("3gp");
+                break;
+        }
+    }
+
+    private void setSummaryForZoom() {
+        String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
+        System.out.println(zoomValue);
+        switch (Integer.valueOf(zoomValue)) {
+            case 0:
+                cameraZoomControl.setSummary("default");
+                break;
+            case 20:
+                cameraZoomControl.setSummary("2x");
+                break;
+            case  40:
+                cameraZoomControl.setSummary("3x");
+                break;
+            case 60:
+                cameraZoomControl.setSummary("4x");
+                break;
+        }
     }
 
     @Override
@@ -126,11 +157,10 @@ public class SettingFragment extends PreferenceFragment implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         editTextPreference.setSummary(mHelpers.getValueFromKey("max_video")+" minutes");
         VideoResolution.setSummary(mHelpers.getValueFromKey("video_resolution"));
-        videoFormat.setSummary(mHelpers.getValueFromKey("video_format"));
+        setVideoFormatSummary();
         pictureSceneMode.setSummary(mHelpers.getValueFromKey("picture_scene_mode"));
         videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
-        cameraZoomControl.setSummary(mHelpers.getValueFromKey("camera_zoom_control"));
+        setSummaryForZoom();
     }
 }
-
