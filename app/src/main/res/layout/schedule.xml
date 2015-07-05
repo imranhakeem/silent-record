@@ -7,10 +7,10 @@
 
     <Button
         android:id="@+id/btnSetDate"
-        android:layout_width="210dp"
+        android:layout_width="195dp"
         android:textSize="14dp"
         android:textColor="#D50000"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"/>
 
