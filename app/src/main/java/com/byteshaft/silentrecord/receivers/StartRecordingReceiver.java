@@ -20,7 +20,6 @@ public class StartRecordingReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         CustomCamera camera  = CustomCamera.getInstance(context.getApplicationContext());
         String operationType = intent.getAction();
-        System.out.println(operationType);
         if (operationType.equals("com.byteShaft.Alarm")) {
             Log.i(AppGlobals.getLogTag(getClass()),"Capturing image ...");
             if (!FlashlightGlobals.isResourceOccupied()) {
