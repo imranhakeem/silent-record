@@ -90,7 +90,6 @@ public class SettingFragment extends PreferenceFragment implements
 
     private void setSummaryForZoom() {
         String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
-        System.out.println(zoomValue);
         switch (Integer.valueOf(zoomValue)) {
             case 0:
                 cameraZoomControl.setSummary("default");
