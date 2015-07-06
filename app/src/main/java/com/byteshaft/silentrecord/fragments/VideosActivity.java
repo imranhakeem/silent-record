@@ -16,7 +16,7 @@ import com.byteshaft.silentrecord.R;
 public class VideosActivity extends Fragment implements View.OnClickListener {
 
     private static VideosActivity sInstance;
-    private ImageButton mButton;
+    public ImageButton mVideoButtonVideoActivity;
     public TextView mLabelRecordTime;
 
     public static VideosActivity getInstance() {
@@ -35,9 +35,9 @@ public class VideosActivity extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setInstance(this);
         View view = inflater.inflate(R.layout.videos, container, false);
-        mButton = (ImageButton) view.findViewById(R.id.buttonRecording);
+        mVideoButtonVideoActivity = (ImageButton) view.findViewById(R.id.buttonRecording);
         mLabelRecordTime = (TextView) view.findViewById(R.id.video_record_time);
-        mButton.setOnClickListener(this);
+        mVideoButtonVideoActivity.setOnClickListener(this);
         return view;
     }
 
@@ -59,10 +59,10 @@ public class VideosActivity extends Fragment implements View.OnClickListener {
             case R.id.buttonRecording:
                 if (CustomCamera.isRecording()) {
                     camera.stopRecording();
-                    mButton.setImageResource(R.drawable.widget_effect_two);
+                    mVideoButtonVideoActivity.setImageResource(R.drawable.widget_effect_two);
                 } else if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
                     camera.startRecording();
-                    mButton.setImageResource(R.drawable.camcoder_rec_two);
+                    mVideoButtonVideoActivity.setImageResource(R.drawable.camcoder_rec_two);
                 }
                 break;
         }
