@@ -5,6 +5,7 @@ import android.media.MediaRecorder;
 import android.view.SurfaceHolder;
 
 import com.byteshaft.silentrecord.notification.NotificationWidget;
+import com.byteshaft.silentrecord.notification.RecordingNotification;
 
 import java.io.IOException;
 
@@ -26,7 +27,7 @@ public class CustomMediaRecorder extends MediaRecorder {
     @Override
     public void start() throws IllegalStateException {
         super.start();
-        NotificationWidget.show(null);
+        RecordingNotification.show();
     }
 
     public void start(Camera camera, SurfaceHolder holder) {
@@ -57,7 +58,8 @@ public class CustomMediaRecorder extends MediaRecorder {
     public void stop() throws IllegalStateException {
         super.stop();
         reset();
-        NotificationWidget.hide();
+        RecordingNotification.hide();
+//        NotificationWidget.hide();
     }
 
     private int getBitRateForResolution(int width, int height) {

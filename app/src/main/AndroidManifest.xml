@@ -44,6 +44,11 @@
                 <action android:name="com.byteShaft.VideoAlarm"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".receivers.NotificationReceiver">
+            <intent-filter>
+                <action android:name="com.byteshaft.NOTIFICATION_STOP"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

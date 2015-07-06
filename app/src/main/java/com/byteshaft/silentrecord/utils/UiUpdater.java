@@ -64,7 +64,7 @@ public class UiUpdater {
                 String time = getFormattedTime(ONE_SECOND * counter);
                 updateRecordingTimeInApp(time);
                 updateRecordingTimeInWidget(time);
-                updateRecordingTimeInNotification(time);
+//                updateRecordingTimeInNotification(time);
                 counter++;
             }
             updateRecordingTimeInUi();
