@@ -9,6 +9,7 @@ import android.widget.RemoteViews;
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.widget.WidgetProvider;
@@ -37,6 +38,12 @@ public class UiUpdater {
     private void updateRecordingTimeInApp(String formattedTime) {
         if (VideosActivity.isRunning() && CustomCamera.isRecording()) {
             VideosActivity.getInstance().mLabelRecordTime.setText(formattedTime);
+            VideosActivity.getInstance().mLabelRecordTime.setVisibility(View.VISIBLE);
+            if (counter % 2 == 0) {
+                VideosActivity.getInstance().mVideoButtonVideoActivity.setImageResource(R.drawable.camcoder_rec_two);
+            } else {
+                VideosActivity.getInstance().mVideoButtonVideoActivity.setImageResource(R.drawable.camcoder_rec);
+            }
         }
     }
 
@@ -87,7 +94,9 @@ public class UiUpdater {
 
     private void resetApp() {
         if (VideosActivity.isRunning()) {
+            VideosActivity.getInstance().mLabelRecordTime.setVisibility(View.GONE);
             VideosActivity.getInstance().mLabelRecordTime.setText("00:00");
+            VideosActivity.getInstance().mVideoButtonVideoActivity.setImageResource(R.drawable.camcoder);
         }
     }
 
