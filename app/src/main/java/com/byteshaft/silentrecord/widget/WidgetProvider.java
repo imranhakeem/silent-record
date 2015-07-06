@@ -40,14 +40,10 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-//        Toast.makeText(context, "Widget Enabled", Toast.LENGTH_SHORT).show();
-        // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-//        Toast.makeText(context, "Widget Disabled", Toast.LENGTH_SHORT).show();
-        // Enter relevant functionality for when the last widget is disabled
     }
 }
 

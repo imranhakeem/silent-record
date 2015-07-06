@@ -41,8 +41,8 @@ public class SettingFragment extends PreferenceFragment implements
         videoSwitch.setOnPreferenceChangeListener(this);
         SwitchPreference imageSwitch = (SwitchPreference) findPreference("image_visibility");
         imageSwitch.setOnPreferenceChangeListener(this);
-//        SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
-//        notificationSwitch.setOnPreferenceChangeListener(this);
+        SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
+        notificationSwitch.setOnPreferenceChangeListener(this);
 
         VideoResolution = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(VideoResolution, characteristics.getSupportedVideoResolutions());
