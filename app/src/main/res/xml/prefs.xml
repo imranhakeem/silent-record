@@ -28,6 +28,7 @@
     <ListPreference
         android:title="Select video format"
         android:key="video_format"
+        android:defaultValue="1"
         android:entries="@array/video_format"
         android:entryValues="@array/format_values"
         android:negativeButtonText="OK"/>
