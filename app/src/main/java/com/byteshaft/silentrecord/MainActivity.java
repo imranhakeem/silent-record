@@ -1,6 +1,5 @@
 package com.byteshaft.silentrecord;
 
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,6 +30,7 @@ import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
+
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     private Resources mResources;
     private Fragment mFragment;
     boolean isMainActivityActive = false;
+    public static boolean correctPIN;
 
     @Override
     protected void onPause() {
@@ -59,6 +59,13 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     protected void onResume() {
         super.onResume();
         isMainActivityActive = true;
+        if (Helpers.isPasswordEnabled() && !correctPIN) {
+            openPinActivity();
+        }
+        if (!correctPIN && Helpers.isPasswordEnabled()) {
+            finish();
+            return;
+        }
         Helpers helpers = new Helpers(getApplicationContext());
         if (helpers.isAppRunningForTheFirstTime()) {
             Camera camera = helpers.openCamera();
@@ -71,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             }
         }
 
+
+        correctPIN = false;
     }
 
     @Override
@@ -272,5 +281,10 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             default:
                 return null;
         }
+    }
+
+    private void openPinActivity() {
+        Intent intent = new Intent(MainActivity.this, PasswordActivity.class);
+        startActivity(intent);
     }
 }
