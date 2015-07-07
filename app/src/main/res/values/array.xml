@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="camera_face">
+    </string-array>
+
+    <string-array name="camera_face_values">
+    </string-array>
+
     <!--video resolution-->
 
     <string-array name="video_resolution">

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.byteshaft.silentrecord.fragments.AboutFragment;
 import com.byteshaft.silentrecord.fragments.ContactFragment;
@@ -61,6 +62,11 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     @Override
     protected void onResume() {
         super.onResume();
+        Helpers helpers = new Helpers(getApplicationContext());
+        if (helpers.isAppRunningForTheFirstTime()) {
+            new CameraCharacteristics(this);
+            helpers.setIsAppRunningForTheFirstTime(false);
+        }
         isMainActivityActive = true;
         if (Helpers.isPasswordEnabled() && !correctPIN) {
             openPinActivity();
@@ -69,19 +75,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             finish();
             return;
         }
-        Helpers helpers = new Helpers(getApplicationContext());
-        if (helpers.isAppRunningForTheFirstTime()) {
-            Camera camera = helpers.openCamera();
-            if (camera != null) {
-                new CameraCharacteristics(getApplicationContext(), camera);
-                helpers.setIsAppRunningForTheFirstTime(false);
-                camera.release();
-            } else {
-                helpers.showCameraResourceBusyDialog(this);
-            }
-        }
-
-
         correctPIN = false;
     }
 

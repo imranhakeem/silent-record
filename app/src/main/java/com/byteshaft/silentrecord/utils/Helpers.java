@@ -45,7 +45,7 @@ public class Helpers extends ContextWrapper {
         return preferences.getString("max_video", "5");
     }
 
-    public void showCameraResourceBusyDialog(final Activity activity) {
+    public static void showCameraResourceBusyDialog(final Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Camera busy");
         builder.setMessage("The App needs to read camera capabilities on first run, " +
@@ -72,9 +72,9 @@ public class Helpers extends ContextWrapper {
         preferences.edit().putBoolean("first_run", firstTime).apply();
     }
 
-    public Camera openCamera() {
+    public static Camera openCamera(int index) {
         try {
-            return Camera.open();
+            return Camera.open(index);
         } catch (RuntimeException e) {
             return null;
         }
@@ -248,5 +248,10 @@ public class Helpers extends ContextWrapper {
     public static boolean isPasswordEnabled() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("password_key", false);
+    }
+
+    public static String getSelectedCamera() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getString("default_camera", AppConstants.CAMERA_REAR);
     }
 }
