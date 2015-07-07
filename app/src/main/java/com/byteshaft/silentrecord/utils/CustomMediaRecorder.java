@@ -4,6 +4,7 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.view.SurfaceHolder;
 
+import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.notification.RecordingNotification;
 
@@ -30,7 +31,7 @@ public class CustomMediaRecorder extends MediaRecorder {
         RecordingNotification.show();
     }
 
-    public void start(Camera camera, SurfaceHolder holder) {
+    public void start(Camera camera, SurfaceHolder holder, int time) {
         int videoWidth = Values.getVideoDimensions()[0];
         int videoHeight = Values.getVideoDimensions()[1];
         setCamera(camera);
@@ -52,6 +53,14 @@ public class CustomMediaRecorder extends MediaRecorder {
         }
         UiUpdater uiUpdater = new UiUpdater();
         uiUpdater.updateRecordingTimeInUi();
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (CustomCamera.isRecording()) {
+                    stop();
+                }
+            }
+        }, time);
     }
 
     @Override
