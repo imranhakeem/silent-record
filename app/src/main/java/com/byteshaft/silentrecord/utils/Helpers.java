@@ -10,14 +10,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.os.Environment;
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 public class Helpers extends ContextWrapper {
@@ -124,28 +130,37 @@ public class Helpers extends ContextWrapper {
         }
     }
 
-    public void setAlarm(int date, int month,
-                                   int year, int hour, int minutes, String operationType) {
-        mAlarmManager = getAlarmManager();
-        Intent intent = null;
-        if (operationType.equals("pic")) {
-           intent =new Intent("com.byteShaft.Alarm");
-        } else if (operationType.equals("video")) {
-            intent = new Intent("com.byteShaft.VideoAlarm");
-        }
-        System.out.println(operationType);
-        intent.putExtra("operationType",operationType);
-        mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DATE, date);  //1-31
-        calendar.set(Calendar.MONTH, month);  //first month is 0!!! January is zero!!!
-        calendar.set(Calendar.YEAR, year);//year...
+    private Calendar getCalenderInstance() {
+        return Calendar.getInstance();
+    }
 
-        calendar.set(Calendar.HOUR_OF_DAY, hour);  //HOUR
-        calendar.set(Calendar.MINUTE, minutes);       //MIN
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, mPIntent);
-        Log.i(AppGlobals.getLogTag(getClass()), "setting alarm of :" + calendar.getTime());
+    private String getAmPm() {
+        return getTimeFormat().format(getCalenderInstance().getTime());
+    }
+
+    private SimpleDateFormat getTimeFormat() {
+        return new SimpleDateFormat("kk:mm");
+    }
+
+    public void setAlarm(int hour, int minutes, String operationType) {
+        String time = hour + ":" + minutes;
+        long difference = 0;
+        try {
+            Date now = getTimeFormat().parse(getAmPm());
+            System.out.println(time);
+            Date date = getTimeFormat().parse(time);
+            difference = date.getTime() - now.getTime();
+            System.out.println(difference);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        mAlarmManager = getAlarmManager();
+        Log.i(AppGlobals.getLogTag(getClass()),
+                String.format("Setting alarm for: %d", TimeUnit.MILLISECONDS.toMinutes(difference)));
+        Intent intent = new Intent("com.byteShaft.Alarm");
+        intent.putExtra("operationType", operationType);
+        mPIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() +difference , mPIntent);
     }
 
     public static void createDirectoryIfNotExists(String directoryName) {

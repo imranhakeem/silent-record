@@ -19,8 +19,8 @@ public class StartRecordingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         CustomCamera camera  = CustomCamera.getInstance(context.getApplicationContext());
-        String operationType = intent.getAction();
-        if (operationType.equals("com.byteShaft.Alarm")) {
+        String operationType = intent.getStringExtra("operationType");
+        if (operationType.equals("pic")) {
             Log.i(AppGlobals.getLogTag(getClass()),"Capturing image ...");
             if (!FlashlightGlobals.isResourceOccupied()) {
                 camera.takePicture();
@@ -33,7 +33,7 @@ public class StartRecordingReceiver extends BroadcastReceiver {
             ScheduleActivity.mBtnDatePicker.setClickable(true);
             ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
             ScheduleActivity.mVideoButton.setVisibility(View.VISIBLE);
-        } else if (operationType.equals("com.byteShaft.VideoAlarm")) {
+        } else if (operationType.equals("video")) {
             Log.i(AppGlobals.getLogTag(getClass()), "Capturing video ...");
             if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
                 camera.startRecording();

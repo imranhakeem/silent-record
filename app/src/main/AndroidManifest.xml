@@ -41,7 +41,6 @@
         <receiver android:name=".receivers.StartRecordingReceiver">
             <intent-filter>
                 <action android:name="com.byteShaft.Alarm"/>
-                <action android:name="com.byteShaft.VideoAlarm"/>
             </intent-filter>
         </receiver>
         <receiver android:name=".receivers.NotificationReceiver">
