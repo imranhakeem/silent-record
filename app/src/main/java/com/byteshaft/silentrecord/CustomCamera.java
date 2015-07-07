@@ -3,12 +3,14 @@ package com.byteshaft.silentrecord;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Environment;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
+import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.utils.CustomMediaRecorder;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.byteshaft.silentrecord.utils.Silencer;
@@ -91,6 +93,9 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mCameraRequest = CameraRequest.START_RECORDING;
         sIsRecording = true;
         mFlashlight.setupCameraPreview();
+        if (CustomCamera.isRecording()) {
+            LollipopNotification.hideNotification();
+        }
     }
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
@@ -112,6 +117,9 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mFlashlight.releaseAllResources();
         sIsRecording = false;
         Toast.makeText(getApplicationContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
+        if (Integer.decode(Build.VERSION.SDK) >=20) {
+            LollipopNotification.showNotification();
+        }
     }
 
     @Override

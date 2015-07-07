@@ -29,12 +29,12 @@ public class RecordingNotification {
                 AppGlobals.getContext(), 0, intent, 0);
         builder.setContentIntent(pendingIntent);
         NotificationManager manager = getNotificationManager();
-        manager.notify(AppConstants.NOTIFICATION_STOP, builder.build());
+        manager.notify(AppConstants.LOLLIPOP_NOTIFICATION_START, builder.build());
     }
 
     public static void hide() {
         NotificationManager manager = getNotificationManager();
-        manager.cancel(AppConstants.NOTIFICATION_STOP);
+        manager.cancel(AppConstants.LOLLIPOP_NOTIFICATION_START);
     }
 
     private static NotificationManager getNotificationManager() {
