@@ -110,16 +110,6 @@ public class Helpers extends ContextWrapper {
         return sharedPreferences.getBoolean("time_set", false);
     }
 
-    public static void setDate(boolean value) {
-        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
-        sharedPreferences.edit().putBoolean("date_time", value).apply();
-    }
-
-    public static boolean getDate() {
-        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
-        return sharedPreferences.getBoolean("date_time", false);
-    }
-
     private  AlarmManager getAlarmManager() {
         return (AlarmManager) getSystemService(Context.ALARM_SERVICE);
     }
