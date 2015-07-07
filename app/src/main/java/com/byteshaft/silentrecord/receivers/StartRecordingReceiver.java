@@ -26,7 +26,6 @@ public class StartRecordingReceiver extends BroadcastReceiver {
                 camera.takePicture();
             }
             Helpers.setPicAlarm(false);
-            Helpers.setDate(false);
             Helpers.setTime(false);
             ScheduleActivity.mPictureButton.setBackgroundResource(R.drawable.pic_alarm_notset);
             ScheduleActivity.mBtnDatePicker.setText("Tap to set a Schedule");
@@ -39,7 +38,6 @@ public class StartRecordingReceiver extends BroadcastReceiver {
                 camera.startRecording();
             }
             Helpers.setVideoAlarm(false);
-            Helpers.setDate(false);
             Helpers.setTime(false);
             ScheduleActivity.mVideoButton.setBackgroundResource(R.drawable.video_alarm_notset);
             ScheduleActivity.mBtnDatePicker.setText("Tap to set a Schedule");
