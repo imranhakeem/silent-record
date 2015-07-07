@@ -49,6 +49,11 @@
                 <action android:name="com.byteshaft.NOTIFICATION_STOP"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".receivers.LollipopNotificationReceiver">
+            <intent-filter>
+                <action android:name="com.byteshaft.LOLLIPOP_NOTIFICATION_START"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,7 +31,9 @@ import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
 import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
+import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
+import com.byteshaft.silentrecord.utils.CustomMediaRecorder;
 import com.byteshaft.silentrecord.utils.Helpers;
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -92,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_main);
+        if (Integer.decode(Build.VERSION.SDK) >=20) {
+            LollipopNotification.showNotification();
+        }
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.VIDEOS);
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.PICTURES);
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
