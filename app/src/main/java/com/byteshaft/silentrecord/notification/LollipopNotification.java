@@ -22,6 +22,8 @@ public class LollipopNotification {
         mBuilder.setContentTitle("Silent Record");
         mBuilder.setContentText("Tap to start recording");
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        mBuilder.setAutoCancel(false);
+        mBuilder.setOngoing(true);
         Intent intent = new Intent(context, LollipopNotificationReceiver.class);
         intent.setAction("com.byteshaft.LOLLIPOP_NOTIFICATION_START");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(

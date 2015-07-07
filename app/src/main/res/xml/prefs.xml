@@ -13,12 +13,22 @@
     <!--</PreferenceCategory>-->
 
     <PreferenceCategory
+        android:title="Widget">
+
+        <SwitchPreference
+            android:key="notifidget"
+            android:title="Widget Notification"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="Security">
 
         <SwitchPreference
 
             android:key="password_key"
-            android:title="password"
+            android:title="Password"
             android:defaultValue="false" />
 
         <EditTextPreference

@@ -8,7 +8,9 @@ import android.preference.Preference;
 import android.preference.SwitchPreference;
 
 import com.byteshaft.silentrecord.AppGlobals;
+import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
@@ -19,6 +21,7 @@ public class SettingFragment extends PreferenceFragment implements
 
     private Helpers mHelpers;
     private SwitchPreference notificationSwitch;
+    public static SwitchPreference widgetSwitch;
     private EditTextPreference editTextPreference;
     private ListPreference VideoResolution;
     private ListPreference videoFormat;
@@ -36,6 +39,9 @@ public class SettingFragment extends PreferenceFragment implements
                 getActivity().getApplicationContext());
         mHelpers = new Helpers(getActivity());
         pinEditText = (EditTextPreference) findPreference("pin_code");
+
+        widgetSwitch = (SwitchPreference) findPreference("notifidget");
+        widgetSwitch.setOnPreferenceChangeListener(this);
 
         SwitchPreference videoSwitch = (SwitchPreference) findPreference("video_visibility");
         videoSwitch.setOnPreferenceChangeListener(this);
@@ -127,6 +133,13 @@ public class SettingFragment extends PreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
         switch (preference.getKey()) {
+
+            case "notifidget":
+                if (!Helpers.isWidgetSwitchOn() && !CustomCamera.isRecording()) {
+                    LollipopNotification.showNotification();
+                } else {
+                    LollipopNotification.hideNotification();
+                }
             case "password_key":
                 if (!Helpers.isPasswordEnabled()) {
                     // enable code goes here

@@ -104,9 +104,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_main);
-        if (Integer.decode(Build.VERSION.SDK) >=20) {
-            LollipopNotification.showNotification();
-        }
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.VIDEOS);
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.PICTURES);
         mMaterialTabHost = (MaterialTabHost) findViewById(R.id.tab_host);
