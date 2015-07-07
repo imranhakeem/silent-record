@@ -14,8 +14,6 @@ import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
-import java.util.List;
-
 public class SettingFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -28,6 +26,7 @@ public class SettingFragment extends PreferenceFragment implements
     private ListPreference videoSceneMode;
     private ListPreference imageResolution;
     private ListPreference cameraZoomControl;
+    EditTextPreference pinEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,13 +35,14 @@ public class SettingFragment extends PreferenceFragment implements
         CameraCharacteristics characteristics = new CameraCharacteristics(
                 getActivity().getApplicationContext());
         mHelpers = new Helpers(getActivity());
+        pinEditText = (EditTextPreference) findPreference("pin_code");
 
         SwitchPreference videoSwitch = (SwitchPreference) findPreference("video_visibility");
         videoSwitch.setOnPreferenceChangeListener(this);
         SwitchPreference imageSwitch = (SwitchPreference) findPreference("image_visibility");
         imageSwitch.setOnPreferenceChangeListener(this);
         SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
-        notificationSwitch.setOnPreferenceChangeListener(this);
+//        notificationSwitch.setOnPreferenceChangeListener(this);
 
         VideoResolution = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(VideoResolution, characteristics.getSupportedVideoResolutions());
@@ -127,6 +127,13 @@ public class SettingFragment extends PreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
         switch (preference.getKey()) {
+            case "password_key":
+                if (!Helpers.isPasswordEnabled()) {
+                    // enable code goes here
+                } else {
+                    // disable code goes here
+                }
+                break;
             case "video_visibility":
                 if (!Helpers.isVideoHiderOn()) {
                     Helpers.hideFilesInDirectory(AppGlobals.DIRECTORY.VIDEOS);
