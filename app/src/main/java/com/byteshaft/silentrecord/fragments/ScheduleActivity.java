@@ -31,6 +31,9 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     private Helpers mHelpers;
     public static Button mPictureButton;
     public static Button mVideoButton;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
     private int mHours;
     private int mMinutes;
     private SharedPreferences datePreference;
@@ -99,10 +102,11 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSetDate:
-                timePickerDialog.show(getFragmentManager(), TIME_PICKER_TAG);
+                datePickerDialog.setYearRange(2015, 2037);
+                datePickerDialog.show(getFragmentManager(), DATE_PICKER_TAG);
                 break;
             case R.id.button_photo_schedule:
-                if (!Helpers.getPicAlarmStatus() &&!Helpers.getTime()) {
+                if (!Helpers.getPicAlarmStatus() && !Helpers.getTime() && !Helpers.getDate()) {
                     Toast.makeText(getActivity(),"Please set a Schedule first", Toast.LENGTH_SHORT).show();
                 } else if (Helpers.getPicAlarmStatus()) {
                     mVideoButton.setVisibility(View.VISIBLE);
@@ -112,20 +116,21 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                     mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
                     mHelpers.removePreviousAlarm();
                     Helpers.setPicAlarm(false);
+                    Helpers.setDate(false);
                     Helpers.setTime(false);
                     Toast.makeText(getActivity(),"Schedule is removed", Toast.LENGTH_SHORT).show();
-                } else if (Helpers.getTime()) {
+                } else if (Helpers.getTime() && Helpers.getDate()) {
                     mVideoButton.setVisibility(View.INVISIBLE);
                     mPictureButton.setBackgroundResource(R.drawable.pic_alarm_set);
                     mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes);
                     mBtnDatePicker.setClickable(false);
                     mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
                     Helpers.setPicAlarm(true);
-                    mHelpers.setAlarm(mHours,mMinutes, "pic");
+                    mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "pic");
                 }
                 break;
             case R.id.button_video_schedule:
-                if (!Helpers.getVideoAlarmStatus() &&!Helpers.getTime()) {
+                if (!Helpers.getVideoAlarmStatus() &&!Helpers.getTime() && !Helpers.getDate()) {
                     Toast.makeText(getActivity(),"Please set a Schedule first", Toast.LENGTH_SHORT).show();
                 } else if (Helpers.getVideoAlarmStatus()) {
                     mPictureButton.setVisibility(View.VISIBLE);
@@ -142,7 +147,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                     mPictureButton.setVisibility(View.INVISIBLE);
                     mVideoButton.setBackgroundResource(R.drawable.video_alarm_set);
                     Helpers.setVideoAlarm(true);
-                    mHelpers.setAlarm(mHours, mMinutes, "video");
+                    mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "video");
                     mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes);
                     mBtnDatePicker.setClickable(false);
                     mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
@@ -153,6 +158,15 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+        Toast.makeText(getActivity(),"Date: "+ day + "/"+ (month + 1) +"/" + year, Toast.LENGTH_SHORT).show();
+                datePreference.edit().putInt("day", day).apply();
+                datePreference.edit().putInt("month", month).apply();
+                datePreference.edit().putInt("year", year).apply();
+                mYear = year;
+                mMonth = month;
+                mDay = day;
+                Helpers.setDate(true);
+        timePickerDialog.show(getFragmentManager(), TIME_PICKER_TAG);
     }
 
     @Override
