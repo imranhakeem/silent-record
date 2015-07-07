@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".AppGlobals"
@@ -23,31 +23,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".NotificationHandler">
+
+        <receiver android:name=".NotificationHandler" >
             <intent-filter>
-                <action android:name="perform_notification_button"/>
+                <action android:name="perform_notification_button" />
             </intent-filter>
         </receiver>
-
-        <receiver
-            android:name=".widget.WidgetProvider">
+        <receiver android:name=".widget.WidgetProvider" >
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_info" />
         </receiver>
-        <receiver android:name=".widget.WidgetReceiver"/>
-        <receiver android:name=".receivers.StartRecordingReceiver">
+        <receiver android:name=".widget.WidgetReceiver" />
+        <receiver android:name=".receivers.StartRecordingReceiver" >
             <intent-filter>
-                <action android:name="com.byteShaft.Alarm"/>
+                <action android:name="com.byteShaft.Alarm" />
+                <action android:name="com.byteShaft.VideoAlarm" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.NotificationReceiver">
+        <receiver android:name=".receivers.NotificationReceiver" >
             <intent-filter>
-                <action android:name="com.byteshaft.NOTIFICATION_STOP"/>
+                <action android:name="com.byteshaft.NOTIFICATION_STOP" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".receivers.LollipopNotificationReceiver">
+            <intent-filter>
+                <action android:name="com.byteshaft.LOLLIPOP_NOTIFICATION_START"/>
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name=".PasswordActivity"
+            android:label="@string/title_activity_password" >
+        </activity>
     </application>
 
 </manifest>
