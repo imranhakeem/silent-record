@@ -17,8 +17,11 @@ import android.os.Environment;
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.io.File;
 import java.util.ArrayList;
@@ -164,10 +167,11 @@ public class Helpers extends ContextWrapper {
         ArrayList<String> arrayList = new ArrayList<>();
         File filePath = Environment.getExternalStorageDirectory();
         File fileDirectory = new File(filePath, directoryName);
-        for (File file : fileDirectory.listFiles()) {
+        File[] allFiles = fileDirectory.listFiles();
+        Arrays.sort(allFiles, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+        for (File file : allFiles) {
             if (file.isFile()) {
-                String name = file.getName();
-                arrayList.add(name);
+                arrayList.add(file.getName());
             }
         }
         return arrayList;
