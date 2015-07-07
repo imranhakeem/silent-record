@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
 
@@ -105,9 +106,9 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
         mMediaRecorder = CustomMediaRecorder.getInstance();
-        mMediaRecorder.setMaxDuration((int) TimeUnit.MINUTES.toMillis(Integer.valueOf(mHelpers.readMaxVideoValue())));
         mMediaRecorder.setOutputFile(path);
-        mMediaRecorder.start(camera, holder);
+        int time = (int) TimeUnit.MINUTES.toMillis(Integer.valueOf(mHelpers.readMaxVideoValue()));
+        mMediaRecorder.start(camera, holder, time);
         Toast.makeText(getApplicationContext(), "Recording Started", Toast.LENGTH_SHORT).show();
     }
 
