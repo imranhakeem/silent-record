@@ -13,6 +13,18 @@
     <!--</PreferenceCategory>-->
 
     <PreferenceCategory
+        android:title="Camera Face">
+
+        <ListPreference
+            android:title="Select camera face"
+            android:key="default_camera"
+            android:entries="@array/camera_face"
+            android:entryValues="@array/camera_face_values"
+            android:negativeButtonText="OK"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="Security">
 
         <SwitchPreference
