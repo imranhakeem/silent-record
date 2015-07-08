@@ -13,7 +13,12 @@
     <!--</PreferenceCategory>-->
 
     <PreferenceCategory
-        android:title="Camera Face">
+        android:title="Widget">
+
+        <SwitchPreference
+            android:key="notifidget"
+            android:title="Widget Notification"
+            android:defaultValue="false"/>
 
         <ListPreference
             android:title="Select camera face"
@@ -30,7 +35,7 @@
         <SwitchPreference
 
             android:key="password_key"
-            android:title="password"
+            android:title="Password"
             android:defaultValue="false" />
 
         <EditTextPreference
