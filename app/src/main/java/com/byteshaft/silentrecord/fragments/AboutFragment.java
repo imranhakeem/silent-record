@@ -23,12 +23,12 @@ public class AboutFragment extends Fragment {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setAction(Intent.ACTION_VIEW);
-//                intent.addCategory(Intent.CATEGORY_BROWSABLE);
-//                intent.setData(Uri.parse("http://facebook.com"));
-//                startActivity(intent);
-                openFacebookIfAppIsInstalledOtherWiseOpenInBrowser();
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse("http://facebook.com"));
+                startActivity(intent);
+//                openFacebookIfAppIsInstalledOtherWiseOpenInBrowser();
             }
         });
 
