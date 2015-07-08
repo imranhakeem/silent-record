@@ -6,23 +6,25 @@ import android.content.Intent;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.AppGlobals;
-import com.byteshaft.silentrecord.CustomCamera;
+import com.byteshaft.silentrecord.services.PictureService;
+import com.byteshaft.silentrecord.services.RecordService;
 
 public class WidgetReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        CustomCamera customCamera = CustomCamera.getInstance(AppGlobals.getContext());
+        Intent pictureService = AppGlobals.getPictureServiceIntent();
+        Intent serviceIntent = AppGlobals.getRecordServiceIntent();
         String widget = intent.getStringExtra("key");
 
         if (widget.equals("1") && !FlashlightGlobals.isResourceOccupied()) {
-            customCamera.takePicture();
+            AppGlobals.getContext().startService(pictureService);
         } else if (widget.equals("2")) {
-            if (CustomCamera.isRecording()) {
-                customCamera.stopRecording();
+            if (RecordService.isRecording()) {
+                AppGlobals.getContext().stopService(serviceIntent);
             } else {
-                if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
-                    customCamera.startRecording();
+                if (!PictureService.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
+                    AppGlobals.getContext().startService(serviceIntent);
                 }
             }
         }

@@ -7,11 +7,10 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.byteshaft.silentrecord.AppGlobals;
-import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.R;
-import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
+import com.byteshaft.silentrecord.services.RecordService;
 import com.byteshaft.silentrecord.widget.WidgetProvider;
 
 import java.util.Formatter;
@@ -27,7 +26,7 @@ public class UiUpdater {
 
     public void updateRecordingTimeInUi() {
         Handler handler = getHandler();
-        if (CustomCamera.isRecording()) {
+        if (RecordService.isRecording()) {
             handler.postDelayed(uiUpdateRunnable, ONE_SECOND);
         } else {
             handler.removeCallbacks(uiUpdateRunnable);
@@ -36,7 +35,7 @@ public class UiUpdater {
     }
 
     private void updateRecordingTimeInApp(String formattedTime) {
-        if (VideosActivity.isRunning() && CustomCamera.isRecording()) {
+        if (VideosActivity.isRunning() && RecordService.isRecording()) {
             VideosActivity.getInstance().mLabelRecordTime.setText(formattedTime);
             VideosActivity.getInstance().mLabelRecordTime.setVisibility(View.VISIBLE);
             if (counter % 2 == 0) {
@@ -67,7 +66,7 @@ public class UiUpdater {
     private Runnable uiUpdateRunnable = new Runnable() {
         @Override
         public void run() {
-            if (CustomCamera.isRecording()) {
+            if (RecordService.isRecording()) {
                 String time = getFormattedTime(ONE_SECOND * counter);
                 updateRecordingTimeInApp(time);
                 updateRecordingTimeInWidget(time);

@@ -6,19 +6,16 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
-import android.widget.Toast;
 
 import com.byteshaft.silentrecord.AppGlobals;
-import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
+import com.byteshaft.silentrecord.services.RecordService;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
-
-import java.io.File;
 
 public class SettingFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -186,7 +183,7 @@ public class SettingFragment extends PreferenceFragment implements
         switch (preference.getKey()) {
 
             case "notifidget":
-                if (!Helpers.isWidgetSwitchOn() && !CustomCamera.isRecording()) {
+                if (!Helpers.isWidgetSwitchOn() && !RecordService.isRecording()) {
                     LollipopNotification.showNotification();
                 } else {
                     LollipopNotification.hideNotification();
