@@ -37,7 +37,8 @@ public class ReportFragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (subjectEditText.getText().toString().trim().length() == 0 || descriptionEditText.getText().toString().trim().length() == 0) {
+                if (subjectEditText.getText().toString().trim().length() == 0 ||
+                        descriptionEditText.getText().toString().trim().length() == 0) {
                     Toast.makeText(AppGlobals.getContext(), "One or more fields are empty", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(AppGlobals.getContext(), "Issue Reported", Toast.LENGTH_SHORT).show();
