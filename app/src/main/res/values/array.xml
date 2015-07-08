@@ -49,12 +49,6 @@
     <string-array name="picture_scene_values">
     </string-array>
 
-    <string-array name="camera_zoom_controls">
-        <item>default</item>
-        <item>2x</item>
-        <item>3x</item>
-        <item>4x</item>
-    </string-array>
     <string-array name="camera_zoom_values">
     </string-array>
 

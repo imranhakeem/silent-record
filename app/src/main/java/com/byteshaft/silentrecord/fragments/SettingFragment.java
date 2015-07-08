@@ -104,6 +104,7 @@ public class SettingFragment extends PreferenceFragment implements
         cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
         String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
         String[] supportedZoomLevels = CameraCharacteristics.getSupportedZoomLevels(selectedCamera);
+        cameraZoomControl.setEntries(supportedZoomLevels);
         cameraZoomControl.setEntryValues(supportedZoomLevels);
         if (supportedZoomLevels == null) {
             cameraZoomControl.setEnabled(false);

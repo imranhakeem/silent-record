@@ -112,7 +112,6 @@
             android:title="Camera Zoom Controls"
             android:key="camera_zoom_control"
             android:defaultValue="0"
-            android:entries="@array/camera_zoom_controls"
             android:negativeButtonText="OK">
         </ListPreference>
     </PreferenceCategory>
