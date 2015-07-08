@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +19,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.byteshaft.silentrecord.fragments.AboutFragment;
 import com.byteshaft.silentrecord.fragments.ContactFragment;
@@ -32,7 +30,6 @@ import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
 import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
-import com.byteshaft.silentrecord.utils.CustomMediaRecorder;
 import com.byteshaft.silentrecord.utils.Helpers;
 
 import it.neokree.materialtabs.MaterialTab;

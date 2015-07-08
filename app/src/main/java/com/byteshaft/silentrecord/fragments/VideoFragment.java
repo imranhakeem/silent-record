@@ -56,10 +56,6 @@ public class VideoFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFilesNames = Helpers.getFileNamesFromDirectory(mContentType);
-        mListAdapter = new ThumbnailCreation(getActivity().getApplicationContext(),
-                R.layout.row, mFilesNames);
-        getListView().setAdapter(mListAdapter);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -167,8 +163,8 @@ public class VideoFragment extends ListFragment {
 
     private void showFileDeleteDialog(final AdapterView.AdapterContextMenuInfo info) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Are You Sure");
-        builder.setMessage("Delete");
+        builder.setTitle("Confirm Delete");
+        builder.setMessage("Do you want to delete this video ?");
         builder.setCancelable(false);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -176,7 +172,7 @@ public class VideoFragment extends ListFragment {
                 if (mHelpers.deleteFile(mHelpers.getPathForFile(mFilesNames.get(info.position)))) {
                     mListAdapter.remove(mListAdapter.getItem(info.position));
                     mListAdapter.notifyDataSetChanged();
-                    Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "file deleted", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -188,5 +184,14 @@ public class VideoFragment extends ListFragment {
         });
         builder.create();
         builder.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFilesNames = Helpers.getFileNamesFromDirectory(mContentType);
+        mListAdapter = new ThumbnailCreation(getActivity().getApplicationContext(),
+                R.layout.row, mFilesNames);
+        getListView().setAdapter(mListAdapter);
     }
 }
