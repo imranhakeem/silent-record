@@ -6,9 +6,12 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
+import android.widget.Toast;
 
 import com.byteshaft.silentrecord.AppGlobals;
+import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
@@ -21,6 +24,8 @@ public class SettingFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Helpers mHelpers;
+    private SwitchPreference notificationSwitch;
+    public static SwitchPreference widgetSwitch;
 //    private SwitchPreference notificationSwitch;
     private EditTextPreference editTextPreference;
     private ListPreference VideoResolution;
@@ -46,6 +51,9 @@ public class SettingFragment extends PreferenceFragment implements
         String selectedCamera = mHelpers.getValueFromKey("default_camera");
         pinEditText = (EditTextPreference) findPreference("pin_code");
 
+        widgetSwitch = (SwitchPreference) findPreference("notifidget");
+        widgetSwitch.setOnPreferenceChangeListener(this);
+
         SwitchPreference videoSwitch = (SwitchPreference) findPreference("video_visibility");
         videoSwitch.setOnPreferenceChangeListener(this);
         SwitchPreference imageSwitch = (SwitchPreference) findPreference("image_visibility");
@@ -65,22 +73,9 @@ public class SettingFragment extends PreferenceFragment implements
         setVideoFormatSummary();
 
         editTextPreference = (EditTextPreference) findPreference("max_video");
-        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video")+" minutes");
+        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video") + " minutes");
 
-        pictureSceneMode = (ListPreference) findPreference("picture_scene_mode");
-        setEntriesAndValues(
-                pictureSceneMode,
-                CameraCharacteristics.getSupportedSceneModes(selectedCamera)
-        );
-        setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
-
-        videoSceneMode = (ListPreference) findPreference("video_scene_mode");
-        setEntriesAndValues(
-                videoSceneMode,
-                CameraCharacteristics.getSupportedSceneModes(selectedCamera)
-        );
-        setDefaultEntryIfNotPreviouslySet(videoSceneMode);
-        videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
+        handleSceneModes(selectedCamera);
 
         imageResolution = (ListPreference) findPreference("image_resolution");
         setEntriesAndValues(
@@ -90,11 +85,7 @@ public class SettingFragment extends PreferenceFragment implements
         setDefaultEntryIfNotPreviouslySet(imageResolution);
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
 
-        cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
-        cameraZoomControl.setEntryValues(
-                CameraCharacteristics.getSupportedZoomLevels(selectedCamera));
-        setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
-        setSummaryForZoom();
+        handlesZoomLevels(selectedCamera);
     }
 
     private void setVideoFormatSummary() {
@@ -109,8 +100,31 @@ public class SettingFragment extends PreferenceFragment implements
         }
     }
 
-    private void setSummaryForZoom() {
+    private void handlesZoomLevels(String selectedCamera) {
+        cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
         String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
+        String[] supportedZoomLevels = CameraCharacteristics.getSupportedZoomLevels(selectedCamera);
+        cameraZoomControl.setEntryValues(supportedZoomLevels);
+        if (supportedZoomLevels == null) {
+            cameraZoomControl.setEnabled(false);
+            return;
+        } else {
+            cameraZoomControl.setEnabled(true);
+        }
+        if (zoomValue.equals(" ")) {
+            cameraZoomControl.setValueIndex(0);
+            return;
+        }
+        setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
+        handleZoomSummaries();
+    }
+
+    private void handleZoomSummaries() {
+        String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
+        if (zoomValue.equals(" ")) {
+            zoomValue = "0";
+        }
+        System.out.println(Integer.valueOf(zoomValue));
         switch (Integer.valueOf(zoomValue)) {
             case 0:
                 cameraZoomControl.setSummary("default");
@@ -125,6 +139,29 @@ public class SettingFragment extends PreferenceFragment implements
                 cameraZoomControl.setSummary("4x");
                 break;
         }
+    }
+
+    private void handleSceneModes(String selectedCamera) {
+        pictureSceneMode = (ListPreference) findPreference("picture_scene_mode");
+        videoSceneMode = (ListPreference) findPreference("video_scene_mode");
+
+        String[] supportedModes = CameraCharacteristics.getSupportedSceneModes(selectedCamera);
+        if (supportedModes == null) {
+            pictureSceneMode.setEnabled(false);
+            videoSceneMode.setEnabled(false);
+            return;
+        } else {
+            pictureSceneMode.setEnabled(true);
+            videoSceneMode.setEnabled(true);
+        }
+
+        setEntriesAndValues(pictureSceneMode, supportedModes);
+        setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
+        pictureSceneMode.setSummary(mHelpers.getValueFromKey("picture_scene_mode"));
+
+        setEntriesAndValues(videoSceneMode, supportedModes);
+        setDefaultEntryIfNotPreviouslySet(videoSceneMode);
+        videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
     }
 
     @Override
@@ -148,6 +185,13 @@ public class SettingFragment extends PreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
         switch (preference.getKey()) {
+
+            case "notifidget":
+                if (!Helpers.isWidgetSwitchOn() && !CustomCamera.isRecording()) {
+                    LollipopNotification.showNotification();
+                } else {
+                    LollipopNotification.hideNotification();
+                }
             case "password_key":
                 if (!Helpers.isPasswordEnabled()) {
                     // enable code goes here
@@ -188,7 +232,7 @@ public class SettingFragment extends PreferenceFragment implements
         pictureSceneMode.setSummary(mHelpers.getValueFromKey("picture_scene_mode"));
         videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
-        setSummaryForZoom();
+        handleZoomSummaries();
         if (s.equals("default_camera")) {
             resetAllValues();
             loadAndSetUpSettingsFragment();
@@ -200,7 +244,7 @@ public class SettingFragment extends PreferenceFragment implements
         imageResolution.setValue(null);
         pictureSceneMode.setValue(null);
         videoSceneMode.setValue(null);
-//        cameraZoomControl.setValue(null);
+        cameraZoomControl.setValue(null);
     }
 
     private void setUpCameraSelection() {
