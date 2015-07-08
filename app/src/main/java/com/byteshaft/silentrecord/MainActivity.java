@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,7 +27,6 @@ import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
 import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
-import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 
@@ -65,14 +63,11 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             helpers.setIsAppRunningForTheFirstTime(false);
         }
         isMainActivityActive = true;
-        if (Helpers.isPasswordEnabled() && !correctPIN) {
+        String pin = Helpers.getValueFromKey("pin_code");
+        if (Helpers.isPasswordEnabled() && !pin.equals(" ") && !AppGlobals.isUnlocked()) {
             openPinActivity();
-        }
-        if (!correctPIN && Helpers.isPasswordEnabled()) {
             finish();
-            return;
         }
-        correctPIN = false;
     }
 
     @Override
@@ -82,9 +77,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         if (!isMainActivityActive) {
             startActivity(intent);
             overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-        } else {
-            onStop();
         }
+        PasswordActivity.wasShown = false;
     }
 
     @Override
@@ -132,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        AppGlobals.setIsUnlocked(false);
         AppGlobals.sActivityForeground = false;
     }
 
@@ -170,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.executePendingTransactions();
         fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
-        fragmentManager.popBackStack();
     }
 
     @Override

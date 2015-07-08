@@ -20,6 +20,7 @@ public class PasswordActivity extends Activity implements View.OnClickListener {
     private EditText pinInput;
     private Button submitButton;
     private SettingFragment settingFragment;
+    public static boolean wasShown;
     SharedPreferences mPreference;
     Helpers mHelpers;
 
@@ -35,18 +36,23 @@ public class PasswordActivity extends Activity implements View.OnClickListener {
         pinInput = (EditText) findViewById(R.id.edit_pin);
         submitButton = (Button) findViewById(R.id.submit_button);
         submitButton.setOnClickListener(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        wasShown = true;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit_button:
-                String pin = mHelpers.getValueFromKey("pin_code");
+                String pin = Helpers.getValueFromKey("pin_code");
                 String input = pinInput.getText().toString();
                 if (TextUtils.equals(input, pin)) {
+                    AppGlobals.setIsUnlocked(true);
                     openMainActivity();
-                    MainActivity.correctPIN = true;
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Incorrect PIN", Toast.LENGTH_SHORT).show();
@@ -62,6 +68,5 @@ public class PasswordActivity extends Activity implements View.OnClickListener {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
     }
 }
