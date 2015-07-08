@@ -12,7 +12,6 @@ import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
-import com.byteshaft.silentrecord.utils.CustomSettings;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
