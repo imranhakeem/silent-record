@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.util.Log;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
@@ -150,31 +151,20 @@ public class Helpers extends ContextWrapper {
     }
 
     public void setAlarm(int year, int month, int day, int hour, int minutes, String operationType) {
-        String time = day+"/"+(month+1)+"/"+year+" "+ hour + ":" + minutes;
-        long difference = 0;
-        try {
-            Date now = getTimeFormat().parse(getAmPm());
-            Date date = getTimeFormat().parse(time);
-            difference = date.getTime() - now.getTime();
-            mAlarmManager = getAlarmManager();
-            Log.i(AppGlobals.getLogTag(getClass()),
-                    String.format("Setting alarm for: %d", TimeUnit.MILLISECONDS.toMinutes(difference)));
-            Intent intent = new Intent("com.byteShaft.Alarm");
-            intent.putExtra("operationType", operationType);
-            Calendar objCalendar = Calendar.getInstance();
-            objCalendar.set(Calendar.YEAR, year);
-            objCalendar.set(Calendar.MONTH, month);
-            objCalendar.set(Calendar.DAY_OF_MONTH, day);
-            objCalendar.set(Calendar.HOUR_OF_DAY, hour);
-            objCalendar.set(Calendar.MINUTE, minutes);
-            mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            mAlarmManager.set(AlarmManager.RTC_WAKEUP, objCalendar.getTimeInMillis() , mPIntent);
-            previousAlarmStatus(true);
-            saveLastCameraEvent(operationType);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+                mAlarmManager = getAlarmManager();
+                Intent intent = new Intent("com.byteShaft.Alarm");
+                intent.putExtra("operationType", operationType);
+                Calendar objCalendar = Calendar.getInstance();
+                objCalendar.set(Calendar.YEAR, year);
+                objCalendar.set(Calendar.MONTH, month);
+                objCalendar.set(Calendar.DAY_OF_MONTH, day);
+                objCalendar.set(Calendar.HOUR_OF_DAY, hour);
+                objCalendar.set(Calendar.MINUTE, minutes);
+                Log.i(AppGlobals.getLogTag(getClass())+"Setting alarm for:", objCalendar.getTime().toString());
+                mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                mAlarmManager.set(AlarmManager.RTC_WAKEUP, objCalendar.getTimeInMillis(), mPIntent);
+                previousAlarmStatus(true);
+                saveLastCameraEvent(operationType);
     }
 
     public static String getLatsCameraEvent(){
