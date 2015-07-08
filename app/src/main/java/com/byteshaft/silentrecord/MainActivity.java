@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.byteshaft.silentrecord.fragments.AboutFragment;
-import com.byteshaft.silentrecord.fragments.ContactFragment;
 import com.byteshaft.silentrecord.fragments.ImagesActivity;
 import com.byteshaft.silentrecord.fragments.ReportFragment;
 import com.byteshaft.silentrecord.fragments.ScheduleActivity;
@@ -153,9 +152,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 break;
             case 4:
                 mFragment = new ReportFragment();
-                break;
-            case 5:
-                mFragment = new ContactFragment();
                 break;
             default:
                 return;
