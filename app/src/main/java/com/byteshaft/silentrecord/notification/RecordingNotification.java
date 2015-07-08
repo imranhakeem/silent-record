@@ -1,8 +1,5 @@
 package com.byteshaft.silentrecord.notification;
 
-
-
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -11,16 +8,13 @@ import android.support.v4.app.NotificationCompat;
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.receivers.NotificationReceiver;
-import com.byteshaft.silentrecord.utils.AppConstants;
 
 public class RecordingNotification {
 
-    private static NotificationManager sNotificationManager;
-
-    public static void show() {
+    public static NotificationCompat.Builder getNotification() {
         Context context = AppGlobals.getContext();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle("Silent Record");
+        builder.setContentTitle("Recording Video");
         builder.setContentText("Tap to stop recording");
         builder.setSmallIcon(R.mipmap.ic_launcher);
         Intent intent = new Intent(context, NotificationReceiver.class);
@@ -28,20 +22,6 @@ public class RecordingNotification {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 AppGlobals.getContext(), 0, intent, 0);
         builder.setContentIntent(pendingIntent);
-        NotificationManager manager = getNotificationManager();
-        manager.notify(AppConstants.LOLLIPOP_NOTIFICATION_START, builder.build());
-    }
-
-    public static void hide() {
-        NotificationManager manager = getNotificationManager();
-        manager.cancel(AppConstants.LOLLIPOP_NOTIFICATION_START);
-    }
-
-    private static NotificationManager getNotificationManager() {
-        if (sNotificationManager == null) {
-            Context context = AppGlobals.getContext();
-            sNotificationManager =  (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        }
-        return sNotificationManager;
+        return builder;
     }
 }
