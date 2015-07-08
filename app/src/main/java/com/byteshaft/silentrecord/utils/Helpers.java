@@ -167,7 +167,7 @@ public class Helpers extends ContextWrapper {
                 saveLastCameraEvent(operationType);
     }
 
-    public static String getLatsCameraEvent(){
+    public static String getLastCameraEvent(){
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getString("camera_event", null);
     }
