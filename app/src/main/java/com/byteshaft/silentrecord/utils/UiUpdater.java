@@ -2,6 +2,8 @@ package com.byteshaft.silentrecord.utils;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -9,7 +11,7 @@ import android.widget.RemoteViews;
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
-import com.byteshaft.silentrecord.notification.NotificationWidget;
+import com.byteshaft.silentrecord.services.NotificationService;
 import com.byteshaft.silentrecord.services.RecordService;
 import com.byteshaft.silentrecord.widget.WidgetProvider;
 
@@ -60,7 +62,9 @@ public class UiUpdater {
     }
 
     private void updateRecordingTimeInNotification(String formattedTime) {
-        NotificationWidget.show(formattedTime);
+        if (RecordService.isRecording()) {
+            RecordService.getInstance().updateNotification(formattedTime);
+        }
     }
 
     private Runnable uiUpdateRunnable = new Runnable() {
@@ -70,7 +74,9 @@ public class UiUpdater {
                 String time = getFormattedTime(ONE_SECOND * counter);
                 updateRecordingTimeInApp(time);
                 updateRecordingTimeInWidget(time);
-//                updateRecordingTimeInNotification(time);
+                if (Helpers.isWidgetSwitchOn()) {
+                    updateRecordingTimeInNotification(time);
+                }
                 counter++;
             }
             updateRecordingTimeInUi();
@@ -88,7 +94,7 @@ public class UiUpdater {
     private void resetUi() {
         resetApp();
         resetWidget();
-//        resetNotification();
+        resetNotification();
     }
 
     private void resetApp() {
@@ -108,7 +114,11 @@ public class UiUpdater {
     }
 
     private void resetNotification() {
-        NotificationWidget.show(null);
+        if (Helpers.isWidgetSwitchOn()) {
+            Context context = AppGlobals.getContext();
+            Intent service = new Intent(context, NotificationService.class);
+            context.startService(service);
+        }
     }
 
     private String getFormattedTime(int timeMs) {

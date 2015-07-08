@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
 import com.byteshaft.silentrecord.notification.LollipopNotification;
+import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.notification.RecordingNotification;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
@@ -29,6 +30,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
     private CustomMediaRecorder mMediaRecorder;
     private Flashlight mFlashlight;
     private static boolean sIsRecording;
+    private static RecordService sInstance;
 
     private void setIsRecording(boolean recording) {
         sIsRecording = recording;
@@ -38,8 +40,21 @@ public class RecordService extends Service implements CameraStateChangeListener 
         return sIsRecording;
     }
 
+    private void setInstance(RecordService service) {
+        sInstance = service;
+    }
+
+    public static RecordService getInstance() {
+        return sInstance;
+    }
+
+    public static boolean isRunning() {
+        return sInstance != null;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        setInstance(this);
         setIsRecording(true);
         int camera = CameraCharacteristics.getCameraIndex(Helpers.getSelectedCamera());
         mMediaRecorder = new CustomMediaRecorder();
@@ -56,6 +71,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
         }
         setIsRecording(false);
         System.out.println("Service stopped");
+        setInstance(null);
         super.onDestroy();
     }
 
@@ -86,6 +102,16 @@ public class RecordService extends Service implements CameraStateChangeListener 
         int time = (int) TimeUnit.MINUTES.toMillis(Integer.valueOf(Helpers.readMaxVideoValue()));
         mMediaRecorder.start(camera, holder, time);
         Toast.makeText(getApplicationContext(), "Recording Started", Toast.LENGTH_SHORT).show();
+        if (Helpers.isWidgetSwitchOn()) {
+            Intent service = new Intent(getApplicationContext(), NotificationService.class);
+            stopService(service);
+            updateNotification(null);
+        } else {
+            startForeground(
+                    AppConstants.NOTIFICATION_ID,
+                    RecordingNotification.getNotification().build());
+        }
+//        updateNotification(null);
     }
 
     private String getTimeStamp() {
@@ -110,9 +136,15 @@ public class RecordService extends Service implements CameraStateChangeListener 
         mMediaRecorder.stop();
         mFlashlight.releaseAllResources();
         Toast.makeText(getApplicationContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
-        if (Helpers.isWidgetSwitchOn()) {
-            LollipopNotification.showNotification();
-        }
+//        if (Helpers.isWidgetSwitchOn()) {
+//            LollipopNotification.showNotification();
+//        }
+    }
+
+    public void updateNotification(String time) {
+        startForeground(
+                AppConstants.NOTIFICATION_ID,
+                NotificationWidget.get(time));
     }
 
     @Override
@@ -123,9 +155,6 @@ public class RecordService extends Service implements CameraStateChangeListener 
     @Override
     public void onCameraViewSetup(Camera camera, SurfaceHolder surfaceHolder) {
         startRecording(camera, surfaceHolder);
-        startForeground(
-                AppConstants.NOTIFICATION_ID,
-                RecordingNotification.getNotification().build());
     }
 
     @Override
