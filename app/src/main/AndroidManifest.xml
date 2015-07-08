@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".AppGlobals"
@@ -53,6 +54,14 @@
         <receiver android:name=".receivers.LollipopNotificationReceiver">
             <intent-filter>
                 <action android:name="com.byteshaft.LOLLIPOP_NOTIFICATION_START"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receivers.BootStateReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED">
+
+                </action>
             </intent-filter>
         </receiver>
         <activity

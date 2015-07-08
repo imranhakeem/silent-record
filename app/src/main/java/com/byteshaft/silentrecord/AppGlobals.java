@@ -10,6 +10,7 @@ import java.io.File;
 
 public class AppGlobals extends Application {
 
+    public static boolean sActivityForeground = false;
     private static SharedPreferences sPreferences;
     private static Context sContext;
     static String LOG_TAG = "silent_recorder";
