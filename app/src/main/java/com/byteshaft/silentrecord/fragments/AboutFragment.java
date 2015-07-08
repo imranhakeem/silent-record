@@ -18,6 +18,18 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.about_fragment, container, false);
 
+        ImageView imageView0 = (ImageView) rootView.findViewById(R.id.websiteImageView);
+        imageView0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse("http://google.com"));
+                startActivity(intent);
+            }
+        });
+
         ImageView imageView1 = (ImageView) rootView.findViewById(R.id.facebookImageView);
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,44 +4,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff">
+
     <TextView
-        android:id="@+id/tv_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Developed by XYZ Technologies"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
         android:textStyle="bold"
         android:typeface="monospace"
         android:textColor="#000"
         android:textSize="15dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
     <ImageView
-        android:layout_below="@id/tv_info"
-        android:layout_marginTop="30dp"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/websiteImageView"
+        android:src="@drawable/website"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:layout_below="@id/websiteImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:id="@+id/twitterImageView"
         android:src="@drawable/twitter"
         android:layout_centerHorizontal="true"/>
     <ImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:id="@+id/facebookImageView"
         android:src="@drawable/facebook"
         android:layout_below="@+id/twitterImageView"
         android:layout_centerHorizontal="true" />
     <ImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:id="@+id/linkedInImageView"
         android:src="@drawable/linkedin"
         android:layout_below="@+id/facebookImageView"
         android:layout_centerHorizontal="true"/>
     <ImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:id="@+id/emailImageView"
         android:src="@drawable/email"
         android:layout_below="@+id/linkedInImageView"
         android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
 </RelativeLayout>
