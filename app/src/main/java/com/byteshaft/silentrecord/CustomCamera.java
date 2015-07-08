@@ -120,7 +120,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
         mFlashlight.releaseAllResources();
         sIsRecording = false;
         Toast.makeText(getApplicationContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
-        if (Integer.decode(Build.VERSION.SDK) >=20) {
+        if (Helpers.isWidgetSwitchOn()) {
             LollipopNotification.showNotification();
         }
     }

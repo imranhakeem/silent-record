@@ -8,11 +8,12 @@ import android.preference.Preference;
 import android.preference.SwitchPreference;
 
 import com.byteshaft.silentrecord.AppGlobals;
+import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
-import com.byteshaft.silentrecord.utils.CustomSettings;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
@@ -22,6 +23,8 @@ public class SettingFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Helpers mHelpers;
+    private SwitchPreference notificationSwitch;
+    public static SwitchPreference widgetSwitch;
 //    private SwitchPreference notificationSwitch;
     private EditTextPreference editTextPreference;
     private ListPreference VideoResolution;
@@ -46,6 +49,9 @@ public class SettingFragment extends PreferenceFragment implements
     private void loadAndSetUpSettingsFragment() {
         String selectedCamera = mHelpers.getValueFromKey("default_camera");
         pinEditText = (EditTextPreference) findPreference("pin_code");
+
+        widgetSwitch = (SwitchPreference) findPreference("notifidget");
+        widgetSwitch.setOnPreferenceChangeListener(this);
 
         SwitchPreference videoSwitch = (SwitchPreference) findPreference("video_visibility");
         videoSwitch.setOnPreferenceChangeListener(this);
@@ -149,6 +155,13 @@ public class SettingFragment extends PreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
         switch (preference.getKey()) {
+
+            case "notifidget":
+                if (!Helpers.isWidgetSwitchOn() && !CustomCamera.isRecording()) {
+                    LollipopNotification.showNotification();
+                } else {
+                    LollipopNotification.hideNotification();
+                }
             case "password_key":
                 if (!Helpers.isPasswordEnabled()) {
                     // enable code goes here
