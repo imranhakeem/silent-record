@@ -1,16 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:weightSum="1"
+    android:gravity="center"
     android:background="#fff">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Contact Us Fragment"
-        android:id="@+id/textView2"
-        android:textColor="#000"
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/twitterImageView"
+        android:src="@drawable/twitter"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1.19" />
-</LinearLayout>
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/facebookImageView"
+        android:layout_alignStart="@+id/facebookImageView" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/facebookImageView"
+        android:src="@drawable/facebook"
+        android:layout_below="@+id/twitterImageView"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/linkedInImageView"
+        android:src="@drawable/linkedin"
+        android:layout_below="@+id/facebookImageView"
+        android:layout_alignLeft="@+id/facebookImageView"
+        android:layout_alignStart="@+id/facebookImageView" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/emailImageView"
+        android:src="@drawable/email"
+        android:layout_below="@+id/linkedInImageView"
+        android:layout_alignRight="@+id/linkedInImageView"
+        android:layout_alignEnd="@+id/linkedInImageView"
+        android:layout_marginTop="29dp" />
+</RelativeLayout>

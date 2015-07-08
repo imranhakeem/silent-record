@@ -1,6 +1,5 @@
 package com.byteshaft.silentrecord.fragments;
 
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ public class AboutFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("http://facebook.com"));
+                intent.setData(Uri.parse("http://facebook.com/byteshaft"));
                 startActivity(intent);
 //                openFacebookIfAppIsInstalledOtherWiseOpenInBrowser();
             }
@@ -39,7 +38,7 @@ public class AboutFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("http://twitter.com"));
+                intent.setData(Uri.parse("http://twitter.com/byteshaft"));
                 startActivity(intent);
             }
         });
