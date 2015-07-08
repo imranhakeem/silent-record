@@ -18,6 +18,7 @@ public class AppGlobals extends Application {
     private static SharedPreferences sPreferences;
     private static Context sContext;
     static String LOG_TAG = "silent_recorder";
+    private static boolean sIsUnlocked;
 
     public static class DIRECTORY {
         public static final String PICTURES = "SpyPics";
@@ -59,5 +60,13 @@ public class AppGlobals extends Application {
     public static File getPicturesDirectory() {
         File sdcard = Environment.getExternalStorageDirectory();
         return new File(sdcard, DIRECTORY.PICTURES);
+    }
+
+    public static boolean isUnlocked() {
+        return sIsUnlocked;
+    }
+
+    public static void setIsUnlocked(boolean isUnlocked) {
+        sIsUnlocked = isUnlocked;
     }
 }
