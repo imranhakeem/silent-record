@@ -79,11 +79,7 @@ public class SettingFragment extends PreferenceFragment implements
         setDefaultEntryIfNotPreviouslySet(imageResolution);
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
 
-        cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
-        cameraZoomControl.setEntryValues(
-                CameraCharacteristics.getSupportedZoomLevels(selectedCamera));
-        setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
-        setSummaryForZoom();
+        handlesZoomLevels(selectedCamera);
     }
 
     private void setVideoFormatSummary() {
@@ -98,8 +94,31 @@ public class SettingFragment extends PreferenceFragment implements
         }
     }
 
-    private void setSummaryForZoom() {
+    private void handlesZoomLevels(String selectedCamera) {
+        cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
         String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
+        String[] supportedZoomLevels = CameraCharacteristics.getSupportedZoomLevels(selectedCamera);
+        cameraZoomControl.setEntryValues(supportedZoomLevels);
+        if (supportedZoomLevels == null) {
+            cameraZoomControl.setEnabled(false);
+            return;
+        } else {
+            cameraZoomControl.setEnabled(true);
+        }
+        if (zoomValue.equals(" ")) {
+            cameraZoomControl.setValueIndex(0);
+            return;
+        }
+        setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
+        handleZoomSummaries();
+    }
+
+    private void handleZoomSummaries() {
+        String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
+        if (zoomValue.equals(" ")) {
+            zoomValue = "0";
+        }
+        System.out.println(Integer.valueOf(zoomValue));
         switch (Integer.valueOf(zoomValue)) {
             case 0:
                 cameraZoomControl.setSummary("default");
@@ -200,7 +219,7 @@ public class SettingFragment extends PreferenceFragment implements
         pictureSceneMode.setSummary(mHelpers.getValueFromKey("picture_scene_mode"));
         videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
-        setSummaryForZoom();
+        handleZoomSummaries();
         if (s.equals("default_camera")) {
             resetAllValues();
             loadAndSetUpSettingsFragment();
@@ -212,7 +231,7 @@ public class SettingFragment extends PreferenceFragment implements
         imageResolution.setValue(null);
         pictureSceneMode.setValue(null);
         videoSceneMode.setValue(null);
-//        cameraZoomControl.setValue(null);
+        cameraZoomControl.setValue(null);
     }
 
     private void setUpCameraSelection() {
