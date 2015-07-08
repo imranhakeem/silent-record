@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_main);
+        AppGlobals.sActivityForeground = true;
         if (Integer.decode(Build.VERSION.SDK) >=20) {
             LollipopNotification.showNotification();
         }
@@ -140,6 +141,12 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mListTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppGlobals.sActivityForeground = false;
     }
 
     private void selectItem(int position) {

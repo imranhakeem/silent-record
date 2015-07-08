@@ -155,11 +155,8 @@ public class Helpers extends ContextWrapper {
         long difference = 0;
         try {
             Date now = getTimeFormat().parse(getAmPm());
-            System.out.println(now);
             Date date = getTimeFormat().parse(time);
-            System.out.println(date);
             difference = date.getTime() - now.getTime();
-            System.out.println(difference);
             mAlarmManager = getAlarmManager();
             Log.i(AppGlobals.getLogTag(getClass()),
                     String.format("Setting alarm for: %d", TimeUnit.MILLISECONDS.toMinutes(difference)));
@@ -171,8 +168,6 @@ public class Helpers extends ContextWrapper {
             objCalendar.set(Calendar.DAY_OF_MONTH, day);
             objCalendar.set(Calendar.HOUR_OF_DAY, hour);
             objCalendar.set(Calendar.MINUTE, minutes);
-            System.out.println(objCalendar.getTime());
-            lastAlarmDescription(objCalendar.getTime().toString());
             mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             mAlarmManager.set(AlarmManager.RTC_WAKEUP, objCalendar.getTimeInMillis() , mPIntent);
             previousAlarmStatus(true);
@@ -201,16 +196,6 @@ public class Helpers extends ContextWrapper {
     public static void previousAlarmStatus(boolean value) {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         sharedPreferences.edit().putBoolean("alarm_status", value).apply();
-    }
-
-    public static void lastAlarmDescription(String value) {
-        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
-        sharedPreferences.edit().putString("last_alarm_description", value).apply();
-    }
-
-    public static  String getLastAlarmDescription() {
-        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
-        return sharedPreferences.getString("last_alarm_description", null);
     }
 
     public static void createDirectoryIfNotExists(String directoryName) {

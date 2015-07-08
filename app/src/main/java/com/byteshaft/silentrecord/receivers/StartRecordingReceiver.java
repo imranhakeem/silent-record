@@ -18,7 +18,7 @@ public class StartRecordingReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        CustomCamera camera  = CustomCamera.getInstance(context.getApplicationContext());
+        CustomCamera camera = CustomCamera.getInstance(context.getApplicationContext());
         String operationType = intent.getStringExtra("operationType");
         if (operationType.equals("pic")) {
             Log.i(AppGlobals.getLogTag(getClass()), "Capturing image ...");
@@ -27,34 +27,34 @@ public class StartRecordingReceiver extends BroadcastReceiver {
                 Helpers.setPicAlarm(false);
                 Helpers.setTime(false);
                 Helpers.setDate(false);
-                ScheduleActivity.mPictureButton.setBackgroundResource(R.drawable.pic_alarm_notset);
-                ScheduleActivity.mBtnDatePicker.setText("Tap to set a Schedule");
-                ScheduleActivity.mBtnDatePicker.setClickable(true);
-                ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
-                ScheduleActivity.mVideoButton.setVisibility(View.VISIBLE);
-                Helpers.previousAlarmStatus(false);
-                Helpers.lastAlarmDescription(null);
-                Helpers.previousAlarmStatus(false);
-            }
+                if (AppGlobals.sActivityForeground) {
+                    ScheduleActivity.mPictureButton.setBackgroundResource(R.drawable.pic_alarm_notset);
+                    ScheduleActivity.mBtnDatePicker.setText("Tap to set a Schedule");
+                    ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
+                    ScheduleActivity.mVideoButton.setVisibility(View.VISIBLE);
+                    ScheduleActivity.mBtnDatePicker.setClickable(true);
+                }
+                    Helpers.previousAlarmStatus(false);
+                }
+            } else if (operationType.equals("video")) {
+                Log.i(AppGlobals.getLogTag(getClass()), "Capturing video ...");
+                if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
+                    camera.startRecording();
+                    Helpers.setVideoAlarm(false);
+                    Helpers.setTime(false);
+                    Helpers.setDate(false);
+                    Helpers.previousAlarmStatus(false);
+                    if (AppGlobals.sActivityForeground) {
+                        ScheduleActivity.mVideoButton.setBackgroundResource(R.drawable.video_alarm_notset);
+                        ScheduleActivity.mBtnDatePicker.setText("Tap to set a Schedule");
+                        ScheduleActivity.mBtnDatePicker.setClickable(true);
+                        ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
+                        ScheduleActivity.mPictureButton.setVisibility(View.VISIBLE);
+                    }
 
-        } else if (operationType.equals("video")) {
-            Log.i(AppGlobals.getLogTag(getClass()), "Capturing video ...");
-            if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
-                camera.startRecording();
-                Helpers.setVideoAlarm(false);
-                Helpers.setTime(false);
-                Helpers.setDate(false);
-                ScheduleActivity.mVideoButton.setBackgroundResource(R.drawable.video_alarm_notset);
-                ScheduleActivity.mBtnDatePicker.setText("Tap to set a Schedule");
-                ScheduleActivity.mBtnDatePicker.setClickable(true);
-                ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
-                ScheduleActivity.mPictureButton.setVisibility(View.VISIBLE);
-                Helpers.previousAlarmStatus(false);
-                Helpers.lastAlarmDescription(null);
-                Helpers.previousAlarmStatus(false);
+                }
+
             }
 
         }
-
     }
-}
