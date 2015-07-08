@@ -25,7 +25,6 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
     @Override
     public void start() throws IllegalStateException {
         super.start();
-        RecordingNotification.show();
     }
 
     public void start(Camera camera, SurfaceHolder holder, int time) {
@@ -67,7 +66,6 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
             getHandler().removeCallbacks(mRecordingStopper);
         }
         reset();
-        RecordingNotification.hide();
     }
 
     private int getBitRateForResolution(int width, int height) {

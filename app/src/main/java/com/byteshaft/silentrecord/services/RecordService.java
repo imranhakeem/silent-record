@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
 import com.byteshaft.silentrecord.notification.LollipopNotification;
+import com.byteshaft.silentrecord.notification.RecordingNotification;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.CustomMediaRecorder;
@@ -122,6 +123,9 @@ public class RecordService extends Service implements CameraStateChangeListener 
     @Override
     public void onCameraViewSetup(Camera camera, SurfaceHolder surfaceHolder) {
         startRecording(camera, surfaceHolder);
+        startForeground(
+                AppConstants.NOTIFICATION_ID,
+                RecordingNotification.getNotification().build());
     }
 
     @Override
