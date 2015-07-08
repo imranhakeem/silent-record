@@ -132,6 +132,7 @@ public class SettingFragment extends PreferenceFragment implements
 
         setEntriesAndValues(pictureSceneMode, supportedModes);
         setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
+        pictureSceneMode.setSummary(mHelpers.getValueFromKey("picture_scene_mode"));
 
         setEntriesAndValues(videoSceneMode, supportedModes);
         setDefaultEntryIfNotPreviouslySet(videoSceneMode);
