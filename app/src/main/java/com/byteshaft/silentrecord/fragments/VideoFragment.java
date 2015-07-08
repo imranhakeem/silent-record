@@ -103,11 +103,13 @@ public class VideoFragment extends ListFragment {
                 break;
             case AppConstants.TEXT_FILE_HIDE:
                 if (mHelpers.hideFile(mFilesNames.get(info.position))) {
+                    mFilesNames.set(info.position, "." + mFilesNames.get(info.position));
                     mListAdapter.notifyDataSetChanged();
                 }
                 break;
             case AppConstants.TEXT_FILE_SHOW:
                 if (mHelpers.unHideFile(mFilesNames.get(info.position))) {
+                    mFilesNames.set(info.position, mFilesNames.get(info.position).substring(1));
                     mListAdapter.notifyDataSetChanged();
                 }
                 break;
