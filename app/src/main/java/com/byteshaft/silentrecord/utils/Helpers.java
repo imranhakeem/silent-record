@@ -68,12 +68,12 @@ public class Helpers extends ContextWrapper {
         builder.show();
     }
 
-    public boolean isAppRunningForTheFirstTime() {
+    public static boolean isAppRunningForTheFirstTime() {
         SharedPreferences preferences = AppGlobals.getPreferenceManager();
         return preferences.getBoolean("first_run", true);
     }
 
-    public void setIsAppRunningForTheFirstTime(boolean firstTime) {
+    public static void setIsAppRunningForTheFirstTime(boolean firstTime) {
         SharedPreferences preferences = AppGlobals.getPreferenceManager();
         preferences.edit().putBoolean("first_run", firstTime).apply();
     }

@@ -57,10 +57,9 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     @Override
     protected void onResume() {
         super.onResume();
-        Helpers helpers = new Helpers(getApplicationContext());
-        if (helpers.isAppRunningForTheFirstTime()) {
+        if (Helpers.isAppRunningForTheFirstTime()) {
             new CameraCharacteristics(this);
-            helpers.setIsAppRunningForTheFirstTime(false);
+            Helpers.setIsAppRunningForTheFirstTime(false);
         }
         isMainActivityActive = true;
         String pin = Helpers.getValueFromKey("pin_code");
