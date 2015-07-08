@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
 import com.byteshaft.silentrecord.notification.LollipopNotification;
+import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.CustomMediaRecorder;
 import com.byteshaft.silentrecord.utils.Helpers;
@@ -73,20 +74,24 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     private void takePicture(Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
-        parameters.setRotation(90);
+        setOrientation(parameters);
         parameters.setZoom(Integer.valueOf(mHelpers.readZoomSettings()));
         parameters.setPictureSize(
                 Values.getPictureDimension()[0], Values.getPictureDimension()[1]);
         parameters.setSceneMode(Values.getPictureSceneMode());
         camera.setParameters(parameters);
-        camera.setDisplayOrientation(90);
         camera.startPreview();
         camera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
-            public void onAutoFocus(boolean b, Camera camera) {
-                Silencer.silentSystemStream(2000);
-                camera.takePicture(CustomCamera.this, null, null, CustomCamera.this);
-                Toast.makeText(getApplicationContext(), "Photo Captured", Toast.LENGTH_SHORT).show();
+            public void onAutoFocus(boolean b, final Camera camera) {
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Silencer.silentSystemStream(2000);
+                        camera.takePicture(CustomCamera.this, null, null, CustomCamera.this);
+                        Toast.makeText(getApplicationContext(), "Photo Captured", Toast.LENGTH_SHORT).show();
+                    }
+                }, 500);
             }
         });
     }
@@ -103,6 +108,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
         Camera.Parameters parameters = camera.getParameters();
+        setOrientation(parameters);
         parameters.setSceneMode(Values.getVideoSceneMode());
         parameters.setZoom(Integer.valueOf(mHelpers.readZoomSettings()));
         camera.setParameters(parameters);
@@ -184,5 +190,14 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
                 new SimpleDateFormat("yyyyMMddhhmmss");
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    private void setOrientation(Camera.Parameters parameters) {
+        String selectedCamera = mHelpers.getValueFromKey("default_camera");
+        if (selectedCamera.equals(AppConstants.CAMERA_FRONT)) {
+            parameters.setRotation(270);
+        } else if (selectedCamera.equals(AppConstants.CAMERA_REAR)) {
+            parameters.setRotation(90);
+        }
     }
 }
