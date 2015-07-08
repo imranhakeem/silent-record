@@ -10,16 +10,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
-import android.os.SystemClock;
 import android.util.Log;
 import android.os.Environment;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
-
-import java.text.DateFormat;
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.io.File;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class Helpers extends ContextWrapper {
         return preferences.getString("max_video", "5");
     }
 
-    public void showCameraResourceBusyDialog(final Activity activity) {
+    public static void showCameraResourceBusyDialog(final Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Camera busy");
         builder.setMessage("The App needs to read camera capabilities on first run, " +
@@ -79,9 +78,9 @@ public class Helpers extends ContextWrapper {
         preferences.edit().putBoolean("first_run", firstTime).apply();
     }
 
-    public Camera openCamera() {
+    public static Camera openCamera(int index) {
         try {
-            return Camera.open();
+            return Camera.open(index);
         } catch (RuntimeException e) {
             return null;
         }
@@ -209,10 +208,11 @@ public class Helpers extends ContextWrapper {
         ArrayList<String> arrayList = new ArrayList<>();
         File filePath = Environment.getExternalStorageDirectory();
         File fileDirectory = new File(filePath, directoryName);
-        for (File file : fileDirectory.listFiles()) {
+        File[] allFiles = fileDirectory.listFiles();
+        Arrays.sort(allFiles, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+        for (File file : allFiles) {
             if (file.isFile()) {
-                String name = file.getName();
-                arrayList.add(name);
+                arrayList.add(file.getName());
             }
         }
         return arrayList;
@@ -283,5 +283,10 @@ public class Helpers extends ContextWrapper {
     public static boolean isPasswordEnabled() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("password_key", false);
+    }
+
+    public static String getSelectedCamera() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getString("default_camera", AppConstants.CAMERA_REAR);
     }
 }

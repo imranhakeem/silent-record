@@ -10,15 +10,19 @@ import android.preference.SwitchPreference;
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
+import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
+import com.byteshaft.silentrecord.utils.CustomSettings;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.github.machinarius.preferencefragment.PreferenceFragment;
+
+import java.io.File;
 
 public class SettingFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Helpers mHelpers;
-    private SwitchPreference notificationSwitch;
+//    private SwitchPreference notificationSwitch;
     private EditTextPreference editTextPreference;
     private ListPreference VideoResolution;
     private ListPreference videoFormat;
@@ -26,26 +30,35 @@ public class SettingFragment extends PreferenceFragment implements
     private ListPreference videoSceneMode;
     private ListPreference imageResolution;
     private ListPreference cameraZoomControl;
+    private ListPreference mCameraFaces;
     EditTextPreference pinEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.prefs);
-        CameraCharacteristics characteristics = new CameraCharacteristics(
-                getActivity().getApplicationContext());
         mHelpers = new Helpers(getActivity());
+        setUpCameraSelection();
+        loadAndSetUpSettingsFragment();
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    private void loadAndSetUpSettingsFragment() {
+        String selectedCamera = mHelpers.getValueFromKey("default_camera");
         pinEditText = (EditTextPreference) findPreference("pin_code");
 
         SwitchPreference videoSwitch = (SwitchPreference) findPreference("video_visibility");
         videoSwitch.setOnPreferenceChangeListener(this);
         SwitchPreference imageSwitch = (SwitchPreference) findPreference("image_visibility");
         imageSwitch.setOnPreferenceChangeListener(this);
-        SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
+//        SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
 //        notificationSwitch.setOnPreferenceChangeListener(this);
 
         VideoResolution = (ListPreference) findPreference("video_resolution");
-        setEntriesAndValues(VideoResolution, characteristics.getSupportedVideoResolutions());
+        setEntriesAndValues(
+                VideoResolution,
+                CameraCharacteristics.getSupportedVideoResolutions(selectedCamera)
+        );
         setDefaultEntryIfNotPreviouslySet(VideoResolution);
         VideoResolution.setSummary(mHelpers.getValueFromKey("video_resolution"));
 
@@ -56,24 +69,33 @@ public class SettingFragment extends PreferenceFragment implements
         editTextPreference.setSummary(mHelpers.getValueFromKey("max_video")+" minutes");
 
         pictureSceneMode = (ListPreference) findPreference("picture_scene_mode");
-        setEntriesAndValues(pictureSceneMode, characteristics.getSupportedSceneModes());
+        setEntriesAndValues(
+                pictureSceneMode,
+                CameraCharacteristics.getSupportedSceneModes(selectedCamera)
+        );
         setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
 
         videoSceneMode = (ListPreference) findPreference("video_scene_mode");
-        setEntriesAndValues(videoSceneMode, characteristics.getSupportedSceneModes());
+        setEntriesAndValues(
+                videoSceneMode,
+                CameraCharacteristics.getSupportedSceneModes(selectedCamera)
+        );
         setDefaultEntryIfNotPreviouslySet(videoSceneMode);
         videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
 
         imageResolution = (ListPreference) findPreference("image_resolution");
-        setEntriesAndValues(imageResolution, characteristics.getSupportedPictureSizes());
+        setEntriesAndValues(
+                imageResolution,
+                CameraCharacteristics.getSupportedPictureSizes(selectedCamera)
+        );
         setDefaultEntryIfNotPreviouslySet(imageResolution);
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
 
         cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
-        cameraZoomControl.setEntryValues(characteristics.getSupportedZoomLevels());
+        cameraZoomControl.setEntryValues(
+                CameraCharacteristics.getSupportedZoomLevels(selectedCamera));
         setDefaultEntryIfNotPreviouslySet(cameraZoomControl);
         setSummaryForZoom();
-        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     private void setVideoFormatSummary() {
@@ -168,5 +190,44 @@ public class SettingFragment extends PreferenceFragment implements
         videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
         imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
         setSummaryForZoom();
+        if (s.equals("default_camera")) {
+            resetAllValues();
+            loadAndSetUpSettingsFragment();
+        }
+    }
+
+    private void resetAllValues() {
+        VideoResolution.setValue(null);
+        imageResolution.setValue(null);
+        pictureSceneMode.setValue(null);
+        videoSceneMode.setValue(null);
+//        cameraZoomControl.setValue(null);
+    }
+
+    private void setUpCameraSelection() {
+        mCameraFaces = (ListPreference) findPreference("default_camera");
+        mCameraFaces.setOnPreferenceChangeListener(this);
+        if (CameraCharacteristics.getNumberOfCameras() == 1) {
+            if (CameraCharacteristics.hasFrontCamera()) {
+                setEntriesAndValues(
+                        mCameraFaces,
+                        new String[]{AppConstants.CAMERA_FRONT}
+                );
+                mCameraFaces.setValueIndex(0);
+            } else if (CameraCharacteristics.hasRearCamera()) {
+                setEntriesAndValues(
+                        mCameraFaces,
+                        new String[]{AppConstants.CAMERA_REAR}
+                );
+                mCameraFaces.setValueIndex(0);
+            }
+            mCameraFaces.setEnabled(false);
+        } else if (CameraCharacteristics.getNumberOfCameras() == 2) {
+            setEntriesAndValues(
+                    mCameraFaces,
+                    new String[]{AppConstants.CAMERA_REAR, AppConstants.CAMERA_FRONT}
+            );
+            setDefaultEntryIfNotPreviouslySet(mCameraFaces);
+        }
     }
 }
