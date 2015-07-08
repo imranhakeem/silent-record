@@ -29,11 +29,20 @@ public class BootStateReceiver extends BroadcastReceiver {
                         Helpers.getCurrentAlarmDetails("minutes");
                 Date date = Helpers.getTimeFormat().parse(previousDate);
                 Date now = Helpers.getTimeFormat().parse(mHelpers.getAmPm());
+                System.out.println(date.after(now));
                 if (date.after(now)) {
                     mHelpers.setAlarm(Helpers.getCurrentAlarmDetails("year"),
                             Helpers.getCurrentAlarmDetails("month"), Helpers.getCurrentAlarmDetails("day"),
                             Helpers.getCurrentAlarmDetails("hours"),
-                            Helpers.getCurrentAlarmDetails("minutes"),Helpers.getLatsCameraEvent());
+                            Helpers.getCurrentAlarmDetails("minutes"),Helpers.getLastCameraEvent());
+                } else {
+                    if (Helpers.getLastCameraEvent().equals("pic")) {
+                        Helpers.setPicAlarm(false);
+                    } else if (Helpers.getLastCameraEvent().equals("video")){
+                        Helpers.setVideoAlarm(false);
+                    }
+                    Helpers.setTime(false);
+                    Helpers.setDate(false);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
