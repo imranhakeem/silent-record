@@ -58,7 +58,6 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
         Handler handler = getHandler();
         handler.postDelayed(mRecordingStopper, time);
         mHandlerSet = true;
-
     }
 
     @Override
