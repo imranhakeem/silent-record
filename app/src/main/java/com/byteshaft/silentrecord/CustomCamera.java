@@ -104,6 +104,7 @@ public class CustomCamera extends ContextWrapper implements CameraStateChangeLis
     private void startRecording(Camera camera, SurfaceHolder holder) {
         Camera.Parameters parameters = camera.getParameters();
         parameters.setSceneMode(Values.getVideoSceneMode());
+        parameters.setZoom(Integer.valueOf(mHelpers.readZoomSettings()));
         camera.setParameters(parameters);
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
