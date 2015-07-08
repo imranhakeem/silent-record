@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -11,6 +12,7 @@ import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
+import com.byteshaft.silentrecord.services.NotificationService;
 import com.byteshaft.silentrecord.services.RecordService;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
@@ -183,9 +185,11 @@ public class SettingFragment extends PreferenceFragment implements
 
             case "notifidget":
                 if (!Helpers.isWidgetSwitchOn() && !RecordService.isRecording()) {
-                    LollipopNotification.showNotification();
+                    Intent service = new Intent(getActivity(), NotificationService.class);
+                    getActivity().startService(service);
                 } else {
-                    LollipopNotification.hideNotification();
+                    Intent service = new Intent(getActivity(), NotificationService.class);
+                    getActivity().stopService(service);
                 }
             case "password_key":
                 if (!Helpers.isPasswordEnabled()) {

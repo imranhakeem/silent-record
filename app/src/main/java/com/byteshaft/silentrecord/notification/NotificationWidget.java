@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord.notification;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -17,12 +18,20 @@ public class NotificationWidget {
     private static NotificationManager mNotifyManager;
     private static boolean sIsShown;
     private static Context sContext = AppGlobals.getContext();
+    private static NotificationCompat.Builder sBuilder;
 
     public static boolean isShown() {
         return sIsShown;
     }
 
     public static void show(String formattedTime) {
+        Notification notification = get(formattedTime);
+        mNotifyManager = (NotificationManager) sContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotifyManager.notify(AppConstants.NOTIFICATION_ID, notification);
+        sIsShown = true;
+    }
+
+    public static Notification get(String formattedTime) {
         RemoteViews notifyView = new RemoteViews(sContext.getPackageName(), R.layout.notification);
         PendingIntent pendingIntentPicture = getPendingIntentForNotification("take_picture", 0);
         notifyView.setOnClickPendingIntent(R.id.photo_button_widget, pendingIntentPicture);
@@ -33,14 +42,14 @@ public class NotificationWidget {
         } else {
             notifyView.setTextViewText(R.id.textview_notification, "00:00");
         }
-        NotificationCompat.Builder builder = getNotificationCharacteristics(notifyView);
-        mNotifyManager = (NotificationManager) sContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotifyManager.notify(AppConstants.NOTIFICATION_ID, builder.build());
-        sIsShown = true;
+
+        return getNotificationCharacteristics(notifyView).build();
     }
 
     public static void hide() {
-        mNotifyManager.cancel(AppConstants.NOTIFICATION_ID);
+        if (isShown()) {
+            mNotifyManager.cancel(AppConstants.NOTIFICATION_ID);
+        }
         sIsShown = false;
     }
 
@@ -53,11 +62,13 @@ public class NotificationWidget {
     }
 
     private static NotificationCompat.Builder getNotificationCharacteristics(RemoteViews contentView) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(sContext);
-        builder.setSmallIcon(R.drawable.notification_template_icon_bg);
-        builder.setContent(contentView);
-        builder.setAutoCancel(false);
-        builder.setOngoing(true);
-        return builder;
+        if (sBuilder == null) {
+            sBuilder = new NotificationCompat.Builder(sContext);
+        }
+        sBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        sBuilder.setContent(contentView);
+        sBuilder.setAutoCancel(false);
+        sBuilder.setOngoing(true);
+        return sBuilder;
     }
 }

@@ -16,7 +16,6 @@ public class NotificationHandler extends BroadcastReceiver {
         Intent recordService = AppGlobals.getRecordServiceIntent();
         Intent pictureService = AppGlobals.getPictureServiceIntent();
         String action = intent.getExtras().getString("do_action");
-        Toast.makeText(context, action, Toast.LENGTH_SHORT).show();
         if (action != null) {
             if (action.equals("take_picture")) {
                 if (!FlashlightGlobals.isResourceOccupied()) {

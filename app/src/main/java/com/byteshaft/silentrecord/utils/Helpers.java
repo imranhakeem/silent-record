@@ -286,4 +286,9 @@ public class Helpers extends ContextWrapper {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getString("default_camera", AppConstants.CAMERA_REAR);
     }
+
+    public static boolean isNotifcationWidgetEnabled() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("notifidget", false);
+    }
 }
