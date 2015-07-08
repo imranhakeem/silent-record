@@ -129,9 +129,9 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                         Date now = Helpers.getTimeFormat().parse(mHelpers.getAmPm());
                         Date date = Helpers.getTimeFormat().parse(time);
                         if (date.after(now)) {
-                            mPictureButton.setVisibility(View.INVISIBLE);
-                            mVideoButton.setBackgroundResource(R.drawable.video_alarm_set);
-                            Helpers.setVideoAlarm(true);
+                            mVideoButton.setVisibility(View.INVISIBLE);
+                            mPictureButton.setBackgroundResource(R.drawable.pic_alarm_set);
+                            Helpers.setPicAlarm(true);
                             mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "pic");
                             mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes);
                             mBtnDatePicker.setClickable(false);
