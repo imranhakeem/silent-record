@@ -6,6 +6,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
+import android.widget.Toast;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
@@ -66,22 +67,9 @@ public class SettingFragment extends PreferenceFragment implements
         setVideoFormatSummary();
 
         editTextPreference = (EditTextPreference) findPreference("max_video");
-        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video")+" minutes");
+        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video") + " minutes");
 
-        pictureSceneMode = (ListPreference) findPreference("picture_scene_mode");
-        setEntriesAndValues(
-                pictureSceneMode,
-                CameraCharacteristics.getSupportedSceneModes(selectedCamera)
-        );
-        setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
-
-        videoSceneMode = (ListPreference) findPreference("video_scene_mode");
-        setEntriesAndValues(
-                videoSceneMode,
-                CameraCharacteristics.getSupportedSceneModes(selectedCamera)
-        );
-        setDefaultEntryIfNotPreviouslySet(videoSceneMode);
-        videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
+        handleSceneModes(selectedCamera);
 
         imageResolution = (ListPreference) findPreference("image_resolution");
         setEntriesAndValues(
@@ -126,6 +114,28 @@ public class SettingFragment extends PreferenceFragment implements
                 cameraZoomControl.setSummary("4x");
                 break;
         }
+    }
+
+    private void handleSceneModes(String selectedCamera) {
+        pictureSceneMode = (ListPreference) findPreference("picture_scene_mode");
+        videoSceneMode = (ListPreference) findPreference("video_scene_mode");
+
+        String[] supportedModes = CameraCharacteristics.getSupportedSceneModes(selectedCamera);
+        if (supportedModes == null) {
+            pictureSceneMode.setEnabled(false);
+            videoSceneMode.setEnabled(false);
+            return;
+        } else {
+            pictureSceneMode.setEnabled(true);
+            videoSceneMode.setEnabled(true);
+        }
+
+        setEntriesAndValues(pictureSceneMode, supportedModes);
+        setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
+
+        setEntriesAndValues(videoSceneMode, supportedModes);
+        setDefaultEntryIfNotPreviouslySet(videoSceneMode);
+        videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
     }
 
     @Override

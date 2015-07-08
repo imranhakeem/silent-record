@@ -109,13 +109,16 @@ public class CameraCharacteristics {
     }
 
     private void writeSupportedSceneModes(String cameraFacing, Camera.Parameters parameters) {
+        String key = String.format("scene_modes_%s", cameraFacing);
         List<String> sceneModes = parameters.getSupportedSceneModes();
+        if (sceneModes == null) {
+            return;
+        }
         StringBuilder builder = new StringBuilder();
         for (String mode : sceneModes) {
             builder.append(mode);
             builder.append(",");
         }
-        String key = String.format("scene_modes_%s", cameraFacing);
         String out = builder.toString();
         mPreferences.edit().putString(key, out).apply();
     }
