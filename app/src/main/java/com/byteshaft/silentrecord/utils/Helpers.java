@@ -280,7 +280,7 @@ public class Helpers extends ContextWrapper {
         return sharedPreferences.getBoolean("notification_widget", true);
     }
 
-    public String getValueFromKey(String value) {
+    public static String getValueFromKey(String value) {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getString(value, " ");
     }

@@ -43,7 +43,12 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
         setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
         setVideoEncodingBitRate(getBitRateForResolution(videoWidth, videoHeight));
-        setOrientationHint(90);
+        String selectedCamera = Helpers.getValueFromKey("default_camera");
+        if (selectedCamera.equals(AppConstants.CAMERA_FRONT)) {
+            setOrientationHint(270);
+        } else if (selectedCamera.equals(AppConstants.CAMERA_REAR)) {
+            setOrientationHint(90);
+        }
         setVideoSize(videoWidth, videoHeight);
         setPreviewDisplay(holder.getSurface());
         try {
