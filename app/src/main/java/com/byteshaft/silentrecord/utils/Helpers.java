@@ -209,10 +209,12 @@ public class Helpers extends ContextWrapper {
         File filePath = Environment.getExternalStorageDirectory();
         File fileDirectory = new File(filePath, directoryName);
         File[] allFiles = fileDirectory.listFiles();
-        Arrays.sort(allFiles, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-        for (File file : allFiles) {
-            if (file.isFile()) {
-                arrayList.add(file.getName());
+        if (allFiles != null) {
+            Arrays.sort(allFiles, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+            for (File file : allFiles) {
+                if (file.isFile()) {
+                    arrayList.add(file.getName());
+                }
             }
         }
         return arrayList;

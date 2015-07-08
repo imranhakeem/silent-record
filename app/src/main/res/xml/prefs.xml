@@ -7,7 +7,7 @@
     <PreferenceCategory
         android:title="Camera">
     <ListPreference
-        android:title="Camera type"
+        android:title="Camera Type"
         android:key="default_camera"
         android:entries="@array/camera_face"
         android:entryValues="@array/camera_face_values"
@@ -33,12 +33,12 @@
         android:title="Security">
         <SwitchPreference
             android:key="password_key"
-            android:title="Application Lock"
+            android:title="App Lock"
             android:defaultValue="false"/>
 
         <EditTextPreference
             android:key="pin_code"
-            android:title="Set PIN code"
+            android:title="Set PIN Code"
             android:summary=""
             android:maxLength="4"
             android:inputType="numberPassword"/>
@@ -52,51 +52,51 @@
     </PreferenceCategory>
 
     <ListPreference
-        android:title="Video resolution"
+        android:title="Video Resolutions"
         android:key="video_resolution"
         android:entries="@array/video_resolution"
         android:entryValues="@array/video_resolution_values"
         android:negativeButtonText="OK"/>
 
-    <ListPreference
-        android:title="Video format"
-        android:key="video_format"
-        android:defaultValue="1"
-        android:entries="@array/video_format"
-        android:entryValues="@array/format_values"
-        android:negativeButtonText="OK"/>
+    <!--<ListPreference-->
+        <!--android:title="Video format"-->
+        <!--android:key="video_format"-->
+        <!--android:defaultValue="1"-->
+        <!--android:entries="@array/video_format"-->
+        <!--android:entryValues="@array/format_values"-->
+        <!--android:negativeButtonText="OK"/>-->
 
     <EditTextPreference
-        android:title="Max video duration"
+        android:title="Max Video Duration"
         android:hint="Time in Minutes"
         android:maxLength="2"
         android:defaultValue="5"
         android:key="max_video"/>
 
     <ListPreference
-        android:title="Scene mode"
+        android:title="Scene Modes"
         android:key="video_scene_mode"
         android:entries="@array/video_scene_modes"
         android:entryValues="@array/video_scene_values"
         android:negativeButtonText="OK"/>
 
     <PreferenceCategory
-        android:title="Image">
+        android:title="Picture">
 
     <SwitchPreference
         android:key="image_visibility"
-        android:title="Hide images"
+        android:title="Hide Pictures"
         android:defaultValue="false" />
 
         <ListPreference
-            android:title="Image resolution"
+            android:title="Picture Resolutions"
             android:key="image_resolution"
             android:entries="@array/image_resolution"
             android:entryValues="@array/image_resolution_values"
             android:negativeButtonText="OK"/>
 
         <ListPreference
-            android:title="Scene mode"
+            android:title="Scene Modes"
             android:key="picture_scene_mode"
             android:entries="@array/picture_scene_modes"
             android:entryValues="@array/picture_scene_values"

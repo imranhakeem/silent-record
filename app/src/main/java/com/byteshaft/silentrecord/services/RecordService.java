@@ -80,7 +80,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
         parameters.setZoom(Integer.valueOf(Helpers.readZoomSettings()));
         camera.setParameters(parameters);
         camera.unlock();
-        String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".3gp";
+        String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".mp4";
         mMediaRecorder = new CustomMediaRecorder();
         mMediaRecorder.setOutputFile(path);
         int time = (int) TimeUnit.MINUTES.toMillis(Integer.valueOf(Helpers.readMaxVideoValue()));

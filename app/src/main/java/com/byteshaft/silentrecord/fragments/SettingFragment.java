@@ -64,13 +64,13 @@ public class SettingFragment extends PreferenceFragment implements
                 CameraCharacteristics.getSupportedVideoResolutions(selectedCamera)
         );
         setDefaultEntryIfNotPreviouslySet(VideoResolution);
-        VideoResolution.setSummary(mHelpers.getValueFromKey("video_resolution"));
+        VideoResolution.setSummary(Helpers.getValueFromKey("video_resolution"));
 
-        videoFormat = (ListPreference) findPreference("video_format");
-        setVideoFormatSummary();
+//        videoFormat = (ListPreference) findPreference("video_format");
+//        setVideoFormatSummary();
 
         editTextPreference = (EditTextPreference) findPreference("max_video");
-        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video") + " minutes");
+        editTextPreference.setSummary(Helpers.getValueFromKey("max_video") + " minutes");
 
         handleSceneModes(selectedCamera);
 
@@ -80,26 +80,26 @@ public class SettingFragment extends PreferenceFragment implements
                 CameraCharacteristics.getSupportedPictureSizes(selectedCamera)
         );
         setDefaultEntryIfNotPreviouslySet(imageResolution);
-        imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
+        imageResolution.setSummary(Helpers.getValueFromKey("image_resolution"));
 
         handlesZoomLevels(selectedCamera);
     }
 
-    private void setVideoFormatSummary() {
-        String summaryValue = mHelpers.getValueFromKey("video_format");
-        switch (Integer.valueOf(summaryValue)) {
-            case 1:
-                videoFormat.setSummary("mp4");
-                break;
-            case 2:
-                videoFormat.setSummary("3gp");
-                break;
-        }
-    }
+//    private void setVideoFormatSummary() {
+//        String summaryValue = mHelpers.getValueFromKey("video_format");
+//        switch (Integer.valueOf(summaryValue)) {
+//            case 1:
+//                videoFormat.setSummary("mp4");
+//                break;
+//            case 2:
+//                videoFormat.setSummary("3gp");
+//                break;
+//        }
+//    }
 
     private void handlesZoomLevels(String selectedCamera) {
         cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
-        String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
+        String zoomValue = Helpers.getValueFromKey("camera_zoom_control");
         String[] supportedZoomLevels = CameraCharacteristics.getSupportedZoomLevels(selectedCamera);
         cameraZoomControl.setEntryValues(supportedZoomLevels);
         if (supportedZoomLevels == null) {
@@ -117,7 +117,7 @@ public class SettingFragment extends PreferenceFragment implements
     }
 
     private void handleZoomSummaries() {
-        String zoomValue = mHelpers.getValueFromKey("camera_zoom_control");
+        String zoomValue = Helpers.getValueFromKey("camera_zoom_control");
         if (zoomValue.equals(" ")) {
             zoomValue = "0";
         }
@@ -154,11 +154,11 @@ public class SettingFragment extends PreferenceFragment implements
 
         setEntriesAndValues(pictureSceneMode, supportedModes);
         setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
-        pictureSceneMode.setSummary(mHelpers.getValueFromKey("picture_scene_mode"));
+        pictureSceneMode.setSummary(Helpers.getValueFromKey("picture_scene_mode"));
 
         setEntriesAndValues(videoSceneMode, supportedModes);
         setDefaultEntryIfNotPreviouslySet(videoSceneMode);
-        videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
+        videoSceneMode.setSummary(Helpers.getValueFromKey("video_scene_mode"));
     }
 
     @Override
@@ -223,12 +223,12 @@ public class SettingFragment extends PreferenceFragment implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        editTextPreference.setSummary(mHelpers.getValueFromKey("max_video")+" minutes");
-        VideoResolution.setSummary(mHelpers.getValueFromKey("video_resolution"));
-        setVideoFormatSummary();
-        pictureSceneMode.setSummary(mHelpers.getValueFromKey("picture_scene_mode"));
-        videoSceneMode.setSummary(mHelpers.getValueFromKey("video_scene_mode"));
-        imageResolution.setSummary(mHelpers.getValueFromKey("image_resolution"));
+        editTextPreference.setSummary(Helpers.getValueFromKey("max_video")+" minutes");
+        VideoResolution.setSummary(Helpers.getValueFromKey("video_resolution"));
+//        setVideoFormatSummary();
+        pictureSceneMode.setSummary(Helpers.getValueFromKey("picture_scene_mode"));
+        videoSceneMode.setSummary(Helpers.getValueFromKey("video_scene_mode"));
+        imageResolution.setSummary(Helpers.getValueFromKey("image_resolution"));
         handleZoomSummaries();
         if (s.equals("default_camera")) {
             resetAllValues();
