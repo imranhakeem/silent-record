@@ -2,9 +2,13 @@ package com.byteshaft.silentrecord;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+
+import com.byteshaft.silentrecord.services.PictureService;
+import com.byteshaft.silentrecord.services.RecordService;
 
 import java.io.File;
 
@@ -34,9 +38,19 @@ public class AppGlobals extends Application {
     public static Context getContext() {
         return sContext;
     }
+
     public static String getLogTag(Class aClass) {
         return LOG_TAG + "/" + aClass.getSimpleName();
     }
+
+    public static Intent getRecordServiceIntent() {
+        return new Intent(sContext, RecordService.class);
+    }
+
+    public static Intent getPictureServiceIntent() {
+        return new Intent(sContext, PictureService.class);
+    }
+
     public static File getVideosDirectory() {
         File sdcard = Environment.getExternalStorageDirectory();
         return new File(sdcard, DIRECTORY.VIDEOS);

@@ -36,7 +36,7 @@ public class Helpers extends ContextWrapper {
 
     }
 
-    public String readZoomSettings() {
+    public static String readZoomSettings() {
         SharedPreferences preferences = AppGlobals.getPreferenceManager();
         return preferences.getString("camera_zoom_control", "0");
     }
@@ -46,7 +46,7 @@ public class Helpers extends ContextWrapper {
         return sharedPreferences.getInt(key, 0);
     }
 
-    public String readMaxVideoValue() {
+    public static String readMaxVideoValue() {
         SharedPreferences preferences = AppGlobals.getPreferenceManager();
         return preferences.getString("max_video", "5");
     }

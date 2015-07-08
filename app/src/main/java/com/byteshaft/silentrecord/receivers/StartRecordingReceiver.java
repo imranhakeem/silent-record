@@ -8,9 +8,10 @@ import android.view.View;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.AppGlobals;
-import com.byteshaft.silentrecord.CustomCamera;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.fragments.ScheduleActivity;
+import com.byteshaft.silentrecord.services.PictureService;
+import com.byteshaft.silentrecord.services.RecordService;
 import com.byteshaft.silentrecord.utils.Helpers;
 
 
@@ -18,12 +19,13 @@ public class StartRecordingReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        CustomCamera camera = CustomCamera.getInstance(context.getApplicationContext());
+        Intent pictureService = AppGlobals.getPictureServiceIntent();
+        Intent service = new Intent(context, RecordService.class);
         String operationType = intent.getStringExtra("operationType");
         if (operationType.equals("pic")) {
             Log.i(AppGlobals.getLogTag(getClass()), "Capturing image ...");
             if (!FlashlightGlobals.isResourceOccupied()) {
-                camera.takePicture();
+                AppGlobals.getContext().startService(pictureService);
                 Helpers.setPicAlarm(false);
                 Helpers.setTime(false);
                 Helpers.setDate(false);
@@ -38,8 +40,8 @@ public class StartRecordingReceiver extends BroadcastReceiver {
                 }
             } else if (operationType.equals("video")) {
                 Log.i(AppGlobals.getLogTag(getClass()), "Capturing video ...");
-                if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
-                    camera.startRecording();
+                if (!PictureService.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
+                    AppGlobals.getContext().startService(service);
                     Helpers.setVideoAlarm(false);
                     Helpers.setTime(false);
                     Helpers.setDate(false);

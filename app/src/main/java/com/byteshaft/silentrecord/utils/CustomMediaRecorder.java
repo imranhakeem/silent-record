@@ -1,10 +1,12 @@
 package com.byteshaft.silentrecord.utils;
 
+import android.content.Intent;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.view.SurfaceHolder;
 
+import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.notification.RecordingNotification;
 
 import java.io.IOException;
@@ -15,16 +17,9 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
     private Handler mHandler;
     private boolean mHandlerSet;
 
-    private CustomMediaRecorder() {
+    public CustomMediaRecorder() {
         super();
         setOnErrorListener(this);
-    }
-
-    public static CustomMediaRecorder getInstance() {
-        if (sInstance == null) {
-            sInstance = new CustomMediaRecorder();
-        }
-        return sInstance;
     }
 
     @Override
@@ -73,7 +68,6 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
         }
         reset();
         RecordingNotification.hide();
-//        NotificationWidget.hide();
     }
 
     private int getBitRateForResolution(int width, int height) {
@@ -100,7 +94,8 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
         @Override
         public void run() {
             mHandlerSet = false;
-            stop();
+            Intent recordIntent = AppGlobals.getRecordServiceIntent();
+            AppGlobals.getContext().stopService(recordIntent);
         }
     };
 }

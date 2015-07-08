@@ -68,6 +68,8 @@
             android:name=".PasswordActivity"
             android:label="@string/title_activity_password" >
         </activity>
+        <service android:name=".services.RecordService" android:enabled="true"/>
+        <service android:name=".services.PictureService" android:enabled="true"/>
     </application>
 
 </manifest>

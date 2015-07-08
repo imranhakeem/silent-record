@@ -1,5 +1,7 @@
 package com.byteshaft.silentrecord.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,8 +11,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
-import com.byteshaft.silentrecord.CustomCamera;
+import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.services.PictureService;
+import com.byteshaft.silentrecord.services.RecordService;
 
 
 public class VideosActivity extends Fragment implements View.OnClickListener {
@@ -49,19 +53,19 @@ public class VideosActivity extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        setInstance(null);
     }
 
     @Override
     public void onClick(View view) {
-        CustomCamera camera  = CustomCamera.getInstance(getActivity().getApplicationContext());
+        Context context = getActivity().getApplicationContext();
+        Intent serviceIntent = AppGlobals.getRecordServiceIntent();
         switch (view.getId()) {
             case R.id.buttonRecording:
-                if (CustomCamera.isRecording()) {
-                    camera.stopRecording();
+                if (RecordService.isRecording()) {
+                    context.stopService(serviceIntent);
                     mVideoButtonVideoActivity.setImageResource(R.drawable.widget_effect_two);
-                } else if (!CustomCamera.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
-                    camera.startRecording();
+                } else if (!PictureService.isTakingPicture() && !FlashlightGlobals.isResourceOccupied()) {
+                    context.startService(serviceIntent);
                     mVideoButtonVideoActivity.setImageResource(R.drawable.camcoder_rec_two);
                 }
                 break;
