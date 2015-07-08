@@ -10,15 +10,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
-import android.os.SystemClock;
 import android.util.Log;
 import android.os.Environment;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
-
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.io.File;
 import java.util.ArrayList;
@@ -33,11 +33,17 @@ public class Helpers extends ContextWrapper {
 
     public Helpers(Context base) {
         super(base);
+
     }
 
     public String readZoomSettings() {
         SharedPreferences preferences = AppGlobals.getPreferenceManager();
         return preferences.getString("camera_zoom_control", "0");
+    }
+
+    public static int getCurrentAlarmDetails(String key) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getInt(key, 0);
     }
 
     public String readMaxVideoValue() {
@@ -90,6 +96,17 @@ public class Helpers extends ContextWrapper {
         return sharedPreferences.getBoolean("picAlarm", false);
     }
 
+    public static void setDate(boolean value) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("date_time", value).apply();
+    }
+
+    public static boolean getDate() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("date_time", false);
+    }
+
+
     public static  void setVideoAlarm(boolean videoAlarm) {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         sharedPreferences.edit().putBoolean("videoAlarm", videoAlarm).apply();
@@ -124,33 +141,60 @@ public class Helpers extends ContextWrapper {
         return Calendar.getInstance();
     }
 
-    private String getAmPm() {
+    public String getAmPm() {
         return getTimeFormat().format(getCalenderInstance().getTime());
     }
 
-    private SimpleDateFormat getTimeFormat() {
-        return new SimpleDateFormat("kk:mm");
+    public static SimpleDateFormat getTimeFormat() {
+        return new SimpleDateFormat("dd/MM/yyyy kk:mm");
     }
 
-    public void setAlarm(int hour, int minutes, String operationType) {
-        String time = hour + ":" + minutes;
+    public void setAlarm(int year, int month, int day, int hour, int minutes, String operationType) {
+        String time = day+"/"+(month+1)+"/"+year+" "+ hour + ":" + minutes;
         long difference = 0;
         try {
             Date now = getTimeFormat().parse(getAmPm());
-            System.out.println(time);
             Date date = getTimeFormat().parse(time);
             difference = date.getTime() - now.getTime();
-            System.out.println(difference);
+            mAlarmManager = getAlarmManager();
+            Log.i(AppGlobals.getLogTag(getClass()),
+                    String.format("Setting alarm for: %d", TimeUnit.MILLISECONDS.toMinutes(difference)));
+            Intent intent = new Intent("com.byteShaft.Alarm");
+            intent.putExtra("operationType", operationType);
+            Calendar objCalendar = Calendar.getInstance();
+            objCalendar.set(Calendar.YEAR, year);
+            objCalendar.set(Calendar.MONTH, month);
+            objCalendar.set(Calendar.DAY_OF_MONTH, day);
+            objCalendar.set(Calendar.HOUR_OF_DAY, hour);
+            objCalendar.set(Calendar.MINUTE, minutes);
+            mPIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mAlarmManager.set(AlarmManager.RTC_WAKEUP, objCalendar.getTimeInMillis() , mPIntent);
+            previousAlarmStatus(true);
+            saveLastCameraEvent(operationType);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        mAlarmManager = getAlarmManager();
-        Log.i(AppGlobals.getLogTag(getClass()),
-                String.format("Setting alarm for: %d", TimeUnit.MILLISECONDS.toMinutes(difference)));
-        Intent intent = new Intent("com.byteShaft.Alarm");
-        intent.putExtra("operationType", operationType);
-        mPIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() +difference , mPIntent);
+
+    }
+
+    public static String getLatsCameraEvent(){
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getString("camera_event", null);
+    }
+
+    private void saveLastCameraEvent(String event) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putString("camera_event", event).apply();
+    }
+
+    public static boolean getPreviousAlarmStatus() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("alarm_status", false);
+    }
+
+    public static void previousAlarmStatus(boolean value) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("alarm_status", value).apply();
     }
 
     public static void createDirectoryIfNotExists(String directoryName) {
@@ -164,10 +208,11 @@ public class Helpers extends ContextWrapper {
         ArrayList<String> arrayList = new ArrayList<>();
         File filePath = Environment.getExternalStorageDirectory();
         File fileDirectory = new File(filePath, directoryName);
-        for (File file : fileDirectory.listFiles()) {
+        File[] allFiles = fileDirectory.listFiles();
+        Arrays.sort(allFiles, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+        for (File file : allFiles) {
             if (file.isFile()) {
-                String name = file.getName();
-                arrayList.add(name);
+                arrayList.add(file.getName());
             }
         }
         return arrayList;
