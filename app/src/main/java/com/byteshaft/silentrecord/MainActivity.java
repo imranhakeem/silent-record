@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         }
         isMainActivityActive = true;
         String pin = Helpers.getValueFromKey("pin_code");
-        if (Helpers.isPasswordEnabled() && !pin.equals(" ") && !AppGlobals.isUnlocked()) {
+        if (Helpers.isPasswordEnabled() && !pin.equals(" ") && !AppGlobals.isUnlocked() && !pin.isEmpty()) {
             openPinActivity();
             finish();
         }
