@@ -26,13 +26,14 @@ public class SettingFragment extends PreferenceFragment implements
 //    private SwitchPreference notificationSwitch;
     private EditTextPreference editTextPreference;
     private ListPreference VideoResolution;
-    private ListPreference videoFormat;
     private ListPreference pictureSceneMode;
     private ListPreference videoSceneMode;
     private ListPreference imageResolution;
     private ListPreference cameraZoomControl;
     private ListPreference mCameraFaces;
-    EditTextPreference pinEditText;
+    private EditTextPreference pinEditText;
+    private String[] supportedZoomLevels;
+    private ListPreference defaultCamera;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,10 @@ public class SettingFragment extends PreferenceFragment implements
 //        SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
 //        notificationSwitch.setOnPreferenceChangeListener(this);
 
+        defaultCamera = (ListPreference) findPreference("default_camera");
+        defaultCamera.setSummary(mHelpers.getValueFromKey("default_camera"));
+
+
         VideoResolution = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(
                 VideoResolution,
@@ -81,7 +86,6 @@ public class SettingFragment extends PreferenceFragment implements
         );
         setDefaultEntryIfNotPreviouslySet(imageResolution);
         imageResolution.setSummary(Helpers.getValueFromKey("image_resolution"));
-
         handlesZoomLevels(selectedCamera);
     }
 
@@ -100,7 +104,7 @@ public class SettingFragment extends PreferenceFragment implements
     private void handlesZoomLevels(String selectedCamera) {
         cameraZoomControl = (ListPreference) findPreference("camera_zoom_control");
         String zoomValue = Helpers.getValueFromKey("camera_zoom_control");
-        String[] supportedZoomLevels = CameraCharacteristics.getSupportedZoomLevels(selectedCamera);
+        supportedZoomLevels = CameraCharacteristics.getSupportedZoomLevels(selectedCamera);
         cameraZoomControl.setEntryValues(supportedZoomLevels);
         if (supportedZoomLevels == null) {
             cameraZoomControl.setEnabled(false);
@@ -121,20 +125,14 @@ public class SettingFragment extends PreferenceFragment implements
         if (zoomValue.equals(" ")) {
             zoomValue = "0";
         }
-        System.out.println(Integer.valueOf(zoomValue));
-        switch (Integer.valueOf(zoomValue)) {
-            case 0:
-                cameraZoomControl.setSummary("default");
-                break;
-            case 20:
-                cameraZoomControl.setSummary("2x");
-                break;
-            case  40:
-                cameraZoomControl.setSummary("3x");
-                break;
-            case 60:
-                cameraZoomControl.setSummary("4x");
-                break;
+        if (supportedZoomLevels[0].equals(zoomValue)) {
+            cameraZoomControl.setSummary("default");
+        } else if (supportedZoomLevels[1].equals(zoomValue)) {
+            cameraZoomControl.setSummary("2x");
+        } else if (supportedZoomLevels[2].equals(zoomValue)) {
+            cameraZoomControl.setSummary("3x");
+        } else if (supportedZoomLevels[3].equals(zoomValue)) {
+            cameraZoomControl.setSummary("4x");
         }
     }
 
@@ -222,17 +220,28 @@ public class SettingFragment extends PreferenceFragment implements
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        editTextPreference.setSummary(Helpers.getValueFromKey("max_video")+" minutes");
-        VideoResolution.setSummary(Helpers.getValueFromKey("video_resolution"));
-//        setVideoFormatSummary();
-        pictureSceneMode.setSummary(Helpers.getValueFromKey("picture_scene_mode"));
-        videoSceneMode.setSummary(Helpers.getValueFromKey("video_scene_mode"));
-        imageResolution.setSummary(Helpers.getValueFromKey("image_resolution"));
-        handleZoomSummaries();
-        if (s.equals("default_camera")) {
-            resetAllValues();
-            loadAndSetUpSettingsFragment();
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        switch (key) {
+            case "max_video":
+                editTextPreference.setSummary(mHelpers.getValueFromKey(key)+" minutes");
+                break;
+            case "video_resolution":
+                VideoResolution.setSummary(mHelpers.getValueFromKey(key));
+                break;
+            case "picture_scene_mode":
+                pictureSceneMode.setSummary(mHelpers.getValueFromKey(key));
+                break;
+            case "video_scene_mode":
+                videoSceneMode.setSummary(mHelpers.getValueFromKey(key));
+                break;
+            case "image_resolution":
+                imageResolution.setSummary(mHelpers.getValueFromKey(key));
+                break;
+            case "default_camera":
+                defaultCamera.setSummary(mHelpers.getValueFromKey(key));
+                resetAllValues();
+                loadAndSetUpSettingsFragment();
+                break;
         }
     }
 

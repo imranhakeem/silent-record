@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                 getString(R.string.title_section3),
                 getString(R.string.title_section4),
                 getString(R.string.title_section5),
-                getString(R.string.title_section6),
         };
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mListTitles));

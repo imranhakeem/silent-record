@@ -166,7 +166,7 @@ public class VideoFragment extends ListFragment {
     private void showFileDeleteDialog(final AdapterView.AdapterContextMenuInfo info) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Confirm Delete");
-        builder.setMessage("Do you want to delete this video ?");
+        builder.setMessage("Do you want to delete this file ?");
         builder.setCancelable(false);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override

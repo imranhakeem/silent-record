@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#000000">
@@ -28,14 +27,12 @@
             android:title="Notification Widget"
             android:defaultValue="false"/>
     </PreferenceCategory>
-
     <PreferenceCategory
         android:title="Security">
         <SwitchPreference
             android:key="password_key"
             android:title="App Lock"
             android:defaultValue="false"/>
-
         <EditTextPreference
             android:key="pin_code"
             android:title="Set PIN Code"
@@ -48,11 +45,10 @@
         android:title="Video">
         <SwitchPreference
             android:key="video_visibility"
-            android:title="Hide videos" />
-    </PreferenceCategory>
+            android:title="Hide Videos" />
 
     <ListPreference
-        android:title="Video Resolutions"
+        android:title="Video Resolution"
         android:key="video_resolution"
         android:entries="@array/video_resolution"
         android:entryValues="@array/video_resolution_values"
@@ -69,16 +65,17 @@
     <EditTextPreference
         android:title="Max Video Duration"
         android:hint="Time in Minutes"
+        android:inputType="number"
         android:maxLength="2"
         android:defaultValue="5"
         android:key="max_video"/>
-
     <ListPreference
-        android:title="Scene Modes"
+        android:title="Scene Mode"
         android:key="video_scene_mode"
         android:entries="@array/video_scene_modes"
         android:entryValues="@array/video_scene_values"
         android:negativeButtonText="OK"/>
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Picture">
