@@ -96,7 +96,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
         setOrientation(parameters);
         parameters.setSceneMode(Values.getVideoSceneMode());
         parameters.setZoom(Integer.valueOf(Helpers.readZoomSettings()));
-        if (mHelpers.isFlashLightEnabled()) {
+        if (Helpers.isFlashLightEnabled()) {
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
         } else {
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
