@@ -29,6 +29,7 @@ public class PictureService extends Service implements CameraStateChangeListener
 
     private Flashlight mFlashlight;
     private static boolean sIsTakingPicture;
+    Helpers mHelpers;
 
     private void setIsTakingPicture(boolean takingPicture) {
         sIsTakingPicture = takingPicture;
@@ -40,6 +41,7 @@ public class PictureService extends Service implements CameraStateChangeListener
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        mHelpers = new Helpers(getApplicationContext());
         setIsTakingPicture(true);
         int camera = CameraCharacteristics.getCameraIndex(Helpers.getSelectedCamera());
         mFlashlight = new Flashlight(getApplicationContext());
@@ -74,21 +76,28 @@ public class PictureService extends Service implements CameraStateChangeListener
         parameters.setPictureSize(
                 Values.getPictureDimension()[0], Values.getPictureDimension()[1]);
         parameters.setSceneMode(Values.getPictureSceneMode());
+        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
         camera.setParameters(parameters);
         camera.startPreview();
-        camera.autoFocus(new Camera.AutoFocusCallback() {
-            @Override
-            public void onAutoFocus(boolean b, final Camera camera) {
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Silencer.silentSystemStream(2000);
-                        camera.takePicture(PictureService.this, null, null, PictureService.this);
-                        Toast.makeText(getApplicationContext(), "Photo Captured", Toast.LENGTH_SHORT).show();
-                    }
-                }, 500);
-            }
-        });
+        if (mHelpers.isAutoFocusEnabled()) {
+            camera.autoFocus(new Camera.AutoFocusCallback() {
+                @Override
+                public void onAutoFocus(boolean b, final Camera camera) {
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Silencer.silentSystemStream(2000);
+                            camera.takePicture(PictureService.this, null, null, PictureService.this);
+                            Toast.makeText(getApplicationContext(), "Photo Captured", Toast.LENGTH_SHORT).show();
+                        }
+                    }, 500);
+                }
+            });
+        } else {
+            Silencer.silentSystemStream(2000);
+            camera.takePicture(PictureService.this, null, null, PictureService.this);
+            Toast.makeText(getApplicationContext(), "Photo Captured", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

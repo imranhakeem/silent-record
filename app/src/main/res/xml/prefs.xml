@@ -85,6 +85,12 @@
         android:title="Hide Pictures"
         android:defaultValue="false" />
 
+        <SwitchPreference
+            android:key="auto_focus"
+            android:title="Auto Focus"
+            android:defaultValue="false"/>
+
+
         <ListPreference
             android:title="Picture Resolutions"
             android:key="image_resolution"
