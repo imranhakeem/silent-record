@@ -40,5 +40,4 @@ public class ImagesActivity extends Fragment implements View.OnClickListener{
         }
 
     }
-
 }
