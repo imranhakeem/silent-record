@@ -31,6 +31,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
     private Flashlight mFlashlight;
     private static boolean sIsRecording;
     private static RecordService sInstance;
+    private Helpers mHelpers;
 
     private void setIsRecording(boolean recording) {
         sIsRecording = recording;
@@ -54,6 +55,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        mHelpers = new Helpers(getApplicationContext());
         setInstance(this);
         setIsRecording(true);
         int camera = CameraCharacteristics.getCameraIndex(Helpers.getSelectedCamera());
@@ -94,6 +96,11 @@ public class RecordService extends Service implements CameraStateChangeListener 
         setOrientation(parameters);
         parameters.setSceneMode(Values.getVideoSceneMode());
         parameters.setZoom(Integer.valueOf(Helpers.readZoomSettings()));
+        if (mHelpers.isFlashLightEnabled()) {
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+        } else {
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        }
         camera.setParameters(parameters);
         camera.unlock();
         String path = Environment.getExternalStorageDirectory() + "/" + "SpyVideos" + "/"+ getTimeStamp() + ".mp4";
