@@ -33,8 +33,8 @@ public class Values {
         return preferences.getString("picture_scene_mode", "auto");
     }
 
-    public static String getVideoSceneMode() {
-        SharedPreferences preferences = AppGlobals.getPreferenceManager();
-        return preferences.getString("video_scene_mode", "auto");
-    }
+//    public static String getVideoSceneMode() {
+//        SharedPreferences preferences = AppGlobals.getPreferenceManager();
+//        return preferences.getString("video_scene_mode", "auto");
+//    }
 }

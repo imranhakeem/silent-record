@@ -92,7 +92,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
     private void startRecording(Camera camera, SurfaceHolder holder) {
         Camera.Parameters parameters = camera.getParameters();
         setOrientation(parameters);
-        parameters.setSceneMode(Values.getVideoSceneMode());
+//        parameters.setSceneMode(Values.getVideoSceneMode());
         parameters.setZoom(Integer.valueOf(Helpers.readZoomSettings()));
         camera.setParameters(parameters);
         camera.unlock();
