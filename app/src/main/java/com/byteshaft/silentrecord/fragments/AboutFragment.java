@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 
 
@@ -89,4 +90,9 @@ public class AboutFragment extends Fragment {
         return new Intent(Intent.ACTION_VIEW);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppGlobals.setIsUnlocked(true);
+    }
 }

@@ -289,4 +289,9 @@ public class SettingFragment extends PreferenceFragment implements
             setDefaultEntryIfNotPreviouslySet(mCameraFaces);
         }
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppGlobals.setIsUnlocked(true);
+    }
 }
