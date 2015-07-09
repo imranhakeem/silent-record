@@ -26,7 +26,7 @@ public class NotificationHandler extends BroadcastReceiver {
                     AppGlobals.getContext().stopService(recordService);
                 } else {
                     if (!FlashlightGlobals.isResourceOccupied() && !PictureService.isTakingPicture()) {
-                        AppGlobals.getContext().stopService(recordService);
+                        AppGlobals.getContext().startService(recordService);
                     }
                 }
             }
