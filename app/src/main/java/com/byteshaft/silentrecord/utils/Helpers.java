@@ -272,6 +272,12 @@ public class Helpers extends ContextWrapper {
         return sharedPreferences.getBoolean("notification_widget", true);
     }
 
+    public boolean isAutoFocusEnabled() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("auto_focus", false);
+
+    }
+
     public static String getValueFromKey(String value) {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getString(value, " ");
