@@ -16,8 +16,14 @@
             android:key="camera_zoom_control"
             android:defaultValue="0"
             android:entries="@array/camera_zoom_controls"
-            android:negativeButtonText="OK">
-        </ListPreference>
+            android:negativeButtonText="OK"/>
+
+        <SwitchPreference
+            android:title="Flash Light"
+            android:key="flash_light"
+            android:defaultValue="false"
+            />
+
     </PreferenceCategory>
 
     <PreferenceCategory

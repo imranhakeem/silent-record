@@ -76,7 +76,11 @@ public class PictureService extends Service implements CameraStateChangeListener
         parameters.setPictureSize(
                 Values.getPictureDimension()[0], Values.getPictureDimension()[1]);
         parameters.setSceneMode(Values.getPictureSceneMode());
-        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        if (mHelpers.isFlashLightEnabled()) {
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+        } else {
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        }
         camera.setParameters(parameters);
         camera.startPreview();
         if (mHelpers.isAutoFocusEnabled()) {
