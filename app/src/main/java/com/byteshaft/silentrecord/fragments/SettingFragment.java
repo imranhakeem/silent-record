@@ -30,7 +30,7 @@ public class SettingFragment extends PreferenceFragment implements
     private EditTextPreference editTextPreference;
     private ListPreference VideoResolution;
     private ListPreference pictureSceneMode;
-    private ListPreference videoSceneMode;
+//    private ListPreference videoSceneMode;
     private ListPreference imageResolution;
     private ListPreference cameraZoomControl;
     private ListPreference mCameraFaces;
@@ -146,25 +146,25 @@ public class SettingFragment extends PreferenceFragment implements
 
     private void handleSceneModes(String selectedCamera) {
         pictureSceneMode = (ListPreference) findPreference("picture_scene_mode");
-        videoSceneMode = (ListPreference) findPreference("video_scene_mode");
+//        videoSceneMode = (ListPreference) findPreference("video_scene_mode");
 
         String[] supportedModes = CameraCharacteristics.getSupportedSceneModes(selectedCamera);
         if (supportedModes == null) {
             pictureSceneMode.setEnabled(false);
-            videoSceneMode.setEnabled(false);
+//            videoSceneMode.setEnabled(false);
             return;
         } else {
             pictureSceneMode.setEnabled(true);
-            videoSceneMode.setEnabled(true);
+//            videoSceneMode.setEnabled(true);
         }
 
         setEntriesAndValues(pictureSceneMode, supportedModes);
         setDefaultEntryIfNotPreviouslySet(pictureSceneMode);
         pictureSceneMode.setSummary(Helpers.getValueFromKey("picture_scene_mode"));
 
-        setEntriesAndValues(videoSceneMode, supportedModes);
-        setDefaultEntryIfNotPreviouslySet(videoSceneMode);
-        videoSceneMode.setSummary(Helpers.getValueFromKey("video_scene_mode"));
+//        setEntriesAndValues(videoSceneMode, supportedModes);
+//        setDefaultEntryIfNotPreviouslySet(videoSceneMode);
+//        videoSceneMode.setSummary(Helpers.getValueFromKey("video_scene_mode"));
     }
 
     @Override
@@ -241,9 +241,9 @@ public class SettingFragment extends PreferenceFragment implements
             case "picture_scene_mode":
                 pictureSceneMode.setSummary(Helpers.getValueFromKey(key));
                 break;
-            case "video_scene_mode":
-                videoSceneMode.setSummary(Helpers.getValueFromKey(key));
-                break;
+//            case "video_scene_mode":
+//                videoSceneMode.setSummary(mHelpers.getValueFromKey(key));
+//                break;
             case "image_resolution":
                 imageResolution.setSummary(Helpers.getValueFromKey(key));
                 break;
@@ -259,7 +259,7 @@ public class SettingFragment extends PreferenceFragment implements
         VideoResolution.setValue(null);
         imageResolution.setValue(null);
         pictureSceneMode.setValue(null);
-        videoSceneMode.setValue(null);
+//        videoSceneMode.setValue(null);
         cameraZoomControl.setValue(null);
     }
 

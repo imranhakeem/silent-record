@@ -75,12 +75,12 @@
         android:maxLength="2"
         android:defaultValue="5"
         android:key="max_video"/>
-    <ListPreference
-        android:title="Scene Mode"
-        android:key="video_scene_mode"
-        android:entries="@array/video_scene_modes"
-        android:entryValues="@array/video_scene_values"
-        android:negativeButtonText="OK"/>
+    <!--<ListPreference-->
+        <!--android:title="Scene Mode"-->
+        <!--android:key="video_scene_mode"-->
+        <!--android:entries="@array/video_scene_modes"-->
+        <!--android:entryValues="@array/video_scene_values"-->
+        <!--android:negativeButtonText="OK"/>-->
     </PreferenceCategory>
 
     <PreferenceCategory
