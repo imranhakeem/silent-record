@@ -9,6 +9,7 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.util.Log;
 import android.os.Environment;
@@ -272,7 +273,17 @@ public class Helpers extends ContextWrapper {
         return sharedPreferences.getBoolean("notification_widget", true);
     }
 
-    public boolean isAutoFocusEnabled() {
+    public boolean isFlashLightAvailable() {
+        return getApplicationContext().getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    public static boolean isFlashLightEnabled() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("flash_light", false);
+    }
+
+    public static boolean isAutoFocusEnabled() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("auto_focus", false);
 
