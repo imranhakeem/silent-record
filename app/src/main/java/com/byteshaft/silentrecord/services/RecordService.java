@@ -81,6 +81,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
     public void onTaskRemoved(Intent rootIntent) {
         if (isRecording()) {
             stopRecording();
+            stopSelf();
         }
         setIsRecording(false);
         super.onTaskRemoved(rootIntent);
