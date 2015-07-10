@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.Helpers;
@@ -195,5 +196,10 @@ public class VideoFragment extends ListFragment {
         mListAdapter = new ThumbnailCreation(getActivity().getApplicationContext(),
                 R.layout.row, mFilesNames);
         getListView().setAdapter(mListAdapter);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppGlobals.setIsUnlocked(true);
     }
 }

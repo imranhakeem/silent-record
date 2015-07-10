@@ -24,6 +24,7 @@ public class SettingFragment extends PreferenceFragment implements
 
     private Helpers mHelpers;
     private SwitchPreference notificationSwitch;
+    private SwitchPreference flashPreference;
     public static SwitchPreference widgetSwitch;
 //    private SwitchPreference notificationSwitch;
     private EditTextPreference editTextPreference;
@@ -48,7 +49,7 @@ public class SettingFragment extends PreferenceFragment implements
     }
 
     private void loadAndSetUpSettingsFragment() {
-        String selectedCamera = mHelpers.getValueFromKey("default_camera");
+        String selectedCamera = Helpers.getValueFromKey("default_camera");
         pinEditText = (EditTextPreference) findPreference("pin_code");
 
         widgetSwitch = (SwitchPreference) findPreference("notifidget");
@@ -61,8 +62,13 @@ public class SettingFragment extends PreferenceFragment implements
 //        SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notification_widget");
 //        notificationSwitch.setOnPreferenceChangeListener(this);
 
+        flashPreference = (SwitchPreference) findPreference("flash_light");
+        if (!mHelpers.isFlashLightAvailable()) {
+            flashPreference.setEnabled(false);
+        }
+
         defaultCamera = (ListPreference) findPreference("default_camera");
-        defaultCamera.setSummary(mHelpers.getValueFromKey("default_camera"));
+        defaultCamera.setSummary(Helpers.getValueFromKey("default_camera"));
 
 
         VideoResolution = (ListPreference) findPreference("video_resolution");
@@ -227,22 +233,22 @@ public class SettingFragment extends PreferenceFragment implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
             case "max_video":
-                editTextPreference.setSummary(mHelpers.getValueFromKey(key)+" minutes");
+                editTextPreference.setSummary(Helpers.getValueFromKey(key)+" minutes");
                 break;
             case "video_resolution":
-                VideoResolution.setSummary(mHelpers.getValueFromKey(key));
+                VideoResolution.setSummary(Helpers.getValueFromKey(key));
                 break;
             case "picture_scene_mode":
-                pictureSceneMode.setSummary(mHelpers.getValueFromKey(key));
+                pictureSceneMode.setSummary(Helpers.getValueFromKey(key));
                 break;
 //            case "video_scene_mode":
 //                videoSceneMode.setSummary(mHelpers.getValueFromKey(key));
 //                break;
             case "image_resolution":
-                imageResolution.setSummary(mHelpers.getValueFromKey(key));
+                imageResolution.setSummary(Helpers.getValueFromKey(key));
                 break;
             case "default_camera":
-                defaultCamera.setSummary(mHelpers.getValueFromKey(key));
+                defaultCamera.setSummary(Helpers.getValueFromKey(key));
                 resetAllValues();
                 loadAndSetUpSettingsFragment();
                 break;
@@ -282,5 +288,10 @@ public class SettingFragment extends PreferenceFragment implements
             );
             setDefaultEntryIfNotPreviouslySet(mCameraFaces);
         }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppGlobals.setIsUnlocked(true);
     }
 }

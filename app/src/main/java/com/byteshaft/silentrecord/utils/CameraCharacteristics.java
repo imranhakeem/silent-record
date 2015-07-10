@@ -2,6 +2,7 @@ package com.byteshaft.silentrecord.utils;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 
 import com.byteshaft.silentrecord.AppGlobals;
