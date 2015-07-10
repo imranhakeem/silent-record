@@ -47,4 +47,10 @@ public class ReportFragment extends Fragment {
         });
         return reportView;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppGlobals.setIsUnlocked(true);
+    }
 }
