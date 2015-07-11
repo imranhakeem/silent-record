@@ -52,11 +52,6 @@
                 <action android:name="com.byteshaft.NOTIFICATION_STOP" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.LollipopNotificationReceiver">
-            <intent-filter>
-                <action android:name="com.byteshaft.LOLLIPOP_NOTIFICATION_START"/>
-            </intent-filter>
-        </receiver>
         <receiver android:name=".receivers.BootStateReceiver"
             android:enabled="true">
             <intent-filter>
@@ -82,5 +77,6 @@
         <service android:name=".services.RecordService" android:enabled="true"/>
         <service android:name=".services.PictureService" android:enabled="true"/>
         <service android:name=".services.NotificationService" android:enabled="true"/>
+        <service android:name=".services.WidgetUpdateService" android:enabled="true"/>
     </application>
 </manifest>

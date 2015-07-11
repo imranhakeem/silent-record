@@ -9,18 +9,28 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.byteshaft.silentrecord.R;
+import com.byteshaft.silentrecord.services.WidgetUpdateService;
+import com.byteshaft.silentrecord.utils.Helpers;
 
 public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
+        if (!WidgetUpdateService.isRunning()) {
+            Intent updateServiceIntent = new Intent(context, WidgetUpdateService.class);
+            context.startService(updateServiceIntent);
+        }
         ComponentName thisWidget = new ComponentName(context, WidgetProvider.class);
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
         for (int widgetId : allWidgetIds) {
             RemoteViews remoteViews = setUpWidgetView(context);
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
         }
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
     }
 
     static RemoteViews setUpWidgetView(Context context) {
@@ -43,10 +53,16 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
+        Helpers.setIsWidgetEnabledOnHome(true);
+        Intent updateServiceIntent = new Intent(context, WidgetUpdateService.class);
+        context.startService(updateServiceIntent);
     }
 
     @Override
     public void onDisabled(Context context) {
+        Helpers.setIsWidgetEnabledOnHome(false);
+        Intent updateServiceIntent = new Intent(context, WidgetUpdateService.class);
+        context.stopService(updateServiceIntent);
     }
 }
 

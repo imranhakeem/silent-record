@@ -313,4 +313,14 @@ public class Helpers extends ContextWrapper {
         KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
+
+    public static void setIsWidgetEnabledOnHome(boolean enabled) {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        sharedPreferences.edit().putBoolean("widget_enabled", enabled).apply();
+    }
+
+    public static boolean isWidgetEnabledOnHome() {
+        SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+        return sharedPreferences.getBoolean("widget_enabled", false);
+    }
 }
