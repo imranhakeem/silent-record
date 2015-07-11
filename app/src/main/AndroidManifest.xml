@@ -75,5 +75,4 @@
         <service android:name=".services.PictureService" android:enabled="true"/>
         <service android:name=".services.NotificationService" android:enabled="true"/>
     </application>
-
 </manifest>
