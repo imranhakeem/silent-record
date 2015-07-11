@@ -63,13 +63,12 @@ public class SettingFragment extends PreferenceFragment implements
 //        notificationSwitch.setOnPreferenceChangeListener(this);
 
         flashPreference = (SwitchPreference) findPreference("flash_light");
+        flashPreference.setDefaultValue(false);
         if (!mHelpers.isFlashLightAvailable()) {
             flashPreference.setEnabled(false);
         }
-
         defaultCamera = (ListPreference) findPreference("default_camera");
         defaultCamera.setSummary(Helpers.getValueFromKey("default_camera"));
-
 
         VideoResolution = (ListPreference) findPreference("video_resolution");
         setEntriesAndValues(

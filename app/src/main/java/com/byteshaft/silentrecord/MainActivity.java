@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         getSupportActionBar().setElevation(0);
-        setContentView(R.layout.activity_main);
         AppGlobals.sActivityForeground = true;
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.VIDEOS);
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.PICTURES);

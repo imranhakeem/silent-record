@@ -69,6 +69,9 @@
             android:name=".PasswordActivity"
             android:label="@string/title_activity_password" >
         </activity>
+        <activity android:name=".ConfirmationDialog"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            />
         <activity
             android:name=".ExiterActivity"
             android:theme="@android:style/Theme.NoDisplay"
@@ -80,5 +83,4 @@
         <service android:name=".services.PictureService" android:enabled="true"/>
         <service android:name=".services.NotificationService" android:enabled="true"/>
     </application>
-
 </manifest>

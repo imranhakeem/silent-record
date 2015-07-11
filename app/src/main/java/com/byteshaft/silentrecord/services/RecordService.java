@@ -112,8 +112,6 @@ public class RecordService extends Service implements CameraStateChangeListener 
         mMediaRecorder.start(camera, holder, time);
         Toast.makeText(getApplicationContext(), "Recording Started", Toast.LENGTH_SHORT).show();
         ExiterActivity.exitApp(getApplicationContext());
-
-
         if (Helpers.isWidgetSwitchOn()) {
             Intent service = new Intent(getApplicationContext(), NotificationService.class);
             stopService(service);
