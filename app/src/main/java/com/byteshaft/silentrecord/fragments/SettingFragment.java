@@ -10,7 +10,6 @@ import android.preference.SwitchPreference;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
-import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.services.NotificationService;
 import com.byteshaft.silentrecord.services.RecordService;

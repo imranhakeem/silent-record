@@ -13,11 +13,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.byteshaft.silentrecord.AppGlobals;
+import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
-import com.byteshaft.silentrecord.R;
 
 import java.text.ParseException;
 import java.util.Calendar;

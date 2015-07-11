@@ -4,17 +4,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
-import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.ExiterActivity;
-import com.byteshaft.silentrecord.MainActivity;
-import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.notification.RecordingNotification;
 import com.byteshaft.silentrecord.utils.AppConstants;
@@ -22,7 +18,6 @@ import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.CustomMediaRecorder;
 import com.byteshaft.silentrecord.utils.Helpers;
 import com.byteshaft.silentrecord.utils.Silencer;
-import com.byteshaft.silentrecord.utils.Values;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

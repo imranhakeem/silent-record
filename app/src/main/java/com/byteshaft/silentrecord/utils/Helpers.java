@@ -11,21 +11,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.util.Log;
 import android.os.Environment;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
+
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
-import java.text.ParseException;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 
 public class Helpers extends ContextWrapper {

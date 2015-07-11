@@ -3,7 +3,6 @@ package com.byteshaft.silentrecord;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.services.PictureService;
@@ -23,7 +22,13 @@ public class NotificationHandler extends BroadcastReceiver {
                 }
             } else if (action.equals("record_video")) {
                 if (RecordService.isRecording()) {
-                    AppGlobals.getContext().stopService(recordService);
+                    // Hide the notification bar
+                    Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+                    context.sendBroadcast(it);
+                    // Pop the stop confirmation dialog
+                    Intent dialog = new Intent(context, ConfirmationDialog.class);
+                    dialog.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(dialog);
                 } else {
                     if (!FlashlightGlobals.isResourceOccupied() && !PictureService.isTakingPicture()) {
                         AppGlobals.getContext().startService(recordService);

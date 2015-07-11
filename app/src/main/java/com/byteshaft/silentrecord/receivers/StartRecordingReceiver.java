@@ -53,10 +53,7 @@ public class StartRecordingReceiver extends BroadcastReceiver {
                         ScheduleActivity.mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background);
                         ScheduleActivity.mPictureButton.setVisibility(View.VISIBLE);
                     }
-
                 }
-
-            }
-
         }
     }
+}
