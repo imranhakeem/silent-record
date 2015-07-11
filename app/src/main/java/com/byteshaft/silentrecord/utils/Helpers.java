@@ -3,6 +3,7 @@ package com.byteshaft.silentrecord.utils;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -305,5 +306,11 @@ public class Helpers extends ContextWrapper {
     public static boolean isNotifcationWidgetEnabled() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("notifidget", false);
+    }
+
+    public static boolean isScreenLocked() {
+        Context context = AppGlobals.getContext();
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        return km.inKeyguardRestrictedInputMode();
     }
 }
