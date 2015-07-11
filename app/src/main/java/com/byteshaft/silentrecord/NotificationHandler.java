@@ -7,6 +7,7 @@ import android.content.Intent;
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.services.PictureService;
 import com.byteshaft.silentrecord.services.RecordService;
+import com.byteshaft.silentrecord.utils.Helpers;
 
 public class NotificationHandler extends BroadcastReceiver {
 
@@ -22,13 +23,17 @@ public class NotificationHandler extends BroadcastReceiver {
                 }
             } else if (action.equals("record_video")) {
                 if (RecordService.isRecording()) {
-                    // Hide the notification bar
-                    Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-                    context.sendBroadcast(it);
-                    // Pop the stop confirmation dialog
-                    Intent dialog = new Intent(context, ConfirmationDialog.class);
-                    dialog.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(dialog);
+                    if (Helpers.isScreenLocked()) {
+                        AppGlobals.getContext().stopService(recordService);
+                    } else {
+                        // Hide the notification bar
+                        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+                        context.sendBroadcast(it);
+                        // Pop the stop confirmation dialog
+                        Intent dialog = new Intent(context, ConfirmationDialog.class);
+                        dialog.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(dialog);
+                    }
                 } else {
                     if (!FlashlightGlobals.isResourceOccupied() && !PictureService.isTakingPicture()) {
                         AppGlobals.getContext().startService(recordService);
