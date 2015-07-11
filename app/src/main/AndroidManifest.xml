@@ -71,7 +71,7 @@
         </activity>
         <activity android:name=".ConfirmationDialog"
             android:theme="@style/Theme.AppCompat.Dialog"
-            />
+            android:excludeFromRecents="true" />
         <activity
             android:name=".ExiterActivity"
             android:theme="@android:style/Theme.NoDisplay"

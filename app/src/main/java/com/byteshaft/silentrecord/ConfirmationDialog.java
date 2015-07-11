@@ -10,30 +10,17 @@ import com.byteshaft.silentrecord.services.RecordService;
 
 
 public class ConfirmationDialog extends Activity {
-    AlertDialog.Builder alertDialog;
-    private static boolean dialogPresent = false;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (dialogPresent) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            dialogPresent = false;
-            startActivity(intent);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirmation_dialog);
-        alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Stop Recording");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Stop Recording ?");
         alertDialog.setMessage("Do you really want to stop the recording ?");
         alertDialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogPresent = true;
                 Intent intent = new Intent(getApplicationContext(), RecordService.class);
                 if (RecordService.isRecording()) {
                     AppGlobals.getContext().stopService(intent);
@@ -42,14 +29,13 @@ public class ConfirmationDialog extends Activity {
                 }
             }
         });
-            alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogPresent = true;
-                    dialogInterface.dismiss();
-                    finish();
-                }
-            });
-            alertDialog.show();
-        }
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                finish();
+            }
+        });
+        alertDialog.show();
+    }
 }
