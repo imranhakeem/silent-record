@@ -69,7 +69,7 @@ public class PictureService extends Service implements CameraStateChangeListener
         return null;
     }
 
-    private void takePicture(Camera camera) {
+    private void takePicture(final Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
         setOrientation(parameters);
         parameters.setZoom(Integer.valueOf(Helpers.readZoomSettings()));
@@ -98,9 +98,15 @@ public class PictureService extends Service implements CameraStateChangeListener
                 }
             });
         } else {
-            Silencer.silentSystemStream(2000);
-            camera.takePicture(PictureService.this, null, null, PictureService.this);
-            Toast.makeText(getApplicationContext(), "Photo Captured", Toast.LENGTH_SHORT).show();
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Silencer.silentSystemStream(2000);
+                    camera.takePicture(PictureService.this, null, null, PictureService.this);
+                    Toast.makeText(getApplicationContext(), "Photo Captured", Toast.LENGTH_SHORT).show();
+                }
+            }, 500);
+
         }
     }
 
