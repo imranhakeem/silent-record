@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.services.NotificationService;
+import com.byteshaft.silentrecord.services.WidgetUpdateService;
 import com.byteshaft.silentrecord.utils.Helpers;
 
 import java.text.ParseException;
@@ -21,6 +22,10 @@ public class BootStateReceiver extends BroadcastReceiver {
         if (Helpers.isWidgetSwitchOn()) {
             Intent service = new Intent(context.getApplicationContext(), NotificationService.class);
             context.getApplicationContext().startService(service);
+        }
+        if (Helpers.isWidgetEnabledOnHome()) {
+            Intent widgetUpdateServiceIntent = new Intent(context, WidgetUpdateService.class);
+            context.startService(widgetUpdateServiceIntent);
         }
         mHelpers = new Helpers(context);
         Log.i(AppGlobals.getLogTag(getClass()), "Reading previous alarm values");

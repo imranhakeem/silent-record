@@ -1,17 +1,15 @@
 package com.byteshaft.silentrecord.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
+import android.os.Build;
 import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.FlashlightGlobals;
 import com.byteshaft.silentrecord.AppGlobals;
-import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.services.PictureService;
 import com.byteshaft.silentrecord.services.RecordService;
 import com.byteshaft.silentrecord.utils.Helpers;
@@ -42,9 +40,16 @@ public class WidgetReceiver extends BroadcastReceiver {
                 }
             }
         }
-        RemoteViews remoteViews = WidgetProvider.setUpWidgetView(context);
+        updateWidget(context);
+    }
+
+    public static void updateWidget(Context context) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
         ComponentName widgetComponent = new ComponentName(context, WidgetProvider.class);
-        widgetManager.updateAppWidget(widgetComponent, remoteViews);
+        int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
+        Intent intent = new Intent(context.getApplicationContext(), WidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+        context.sendBroadcast(intent);
     }
 }

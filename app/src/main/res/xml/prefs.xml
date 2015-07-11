@@ -19,7 +19,7 @@
             android:negativeButtonText="OK"/>
 
         <SwitchPreference
-            android:title="Flash Light"
+            android:title="Flashlight"
             android:key="flash_light"
             android:defaultValue="false"
             />
