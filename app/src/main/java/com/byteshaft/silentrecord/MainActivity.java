@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     private Resources mResources;
     private Fragment mFragment;
     boolean isMainActivityActive = false;
-    private static MainActivity sInstance;
     public static boolean correctPIN;
 
     @Override
@@ -54,18 +53,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         super.onPause();
         isMainActivityActive = false;
 
-    }
-
-    private void setInstance(MainActivity activity) {
-        sInstance = activity;
-    }
-
-    public static MainActivity getInstance() {
-        return sInstance;
-    }
-
-    public static boolean isRunning() {
-        return sInstance != null;
     }
 
     @Override
@@ -101,11 +88,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_main);
-        if (AppGlobals.sActivityLaunched) {
-            getWindow().setWindowAnimations(0);
-            overridePendingTransition(0, 0);
-        }
-        setInstance(this);
         AppGlobals.sActivityForeground = true;
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.VIDEOS);
         Helpers.createDirectoryIfNotExists(AppGlobals.DIRECTORY.PICTURES);

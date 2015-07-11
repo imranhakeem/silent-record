@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
 import com.byteshaft.silentrecord.AppGlobals;
+import com.byteshaft.silentrecord.ExiterActivity;
 import com.byteshaft.silentrecord.MainActivity;
 import com.byteshaft.silentrecord.notification.LollipopNotification;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
@@ -113,23 +114,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
         int time = (int) TimeUnit.MINUTES.toMillis(Integer.valueOf(Helpers.readMaxVideoValue()));
         mMediaRecorder.start(camera, holder, time);
         Toast.makeText(getApplicationContext(), "Recording Started", Toast.LENGTH_SHORT).show();
-        if (MainActivity.isRunning()) {
-            MainActivity.getInstance().finish();
-            AppGlobals.sActivityLaunched = true;
-            MainActivity.getInstance().overridePendingTransition(0, 0);
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_NEW_TASK
-            | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
-            MainActivity.getInstance().overridePendingTransition(0,0);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    MainActivity.getInstance().finish();
-                    MainActivity.getInstance().overridePendingTransition(0, 0);
-                }
-            },120);
-        }
+        ExiterActivity.exitApp(getApplicationContext());
 
 
         if (Helpers.isWidgetSwitchOn()) {
@@ -162,7 +147,6 @@ public class RecordService extends Service implements CameraStateChangeListener 
     }
 
     private void stopRecording() {
-        AppGlobals.sActivityLaunched = false;
         Silencer.silentSystemStream(2000);
         mMediaRecorder.stop();
         mFlashlight.releaseAllResources();
