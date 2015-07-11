@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.byteshaft.silentrecord" >
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -71,6 +72,13 @@
         <activity android:name=".ConfirmationDialog"
             android:theme="@style/Theme.AppCompat.Dialog"
             />
+        <activity
+            android:name=".ExiterActivity"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:autoRemoveFromRecents="true"
+            tools:ignore="UnusedAttribute">
+
+        </activity>
         <service android:name=".services.RecordService" android:enabled="true"/>
         <service android:name=".services.PictureService" android:enabled="true"/>
         <service android:name=".services.NotificationService" android:enabled="true"/>

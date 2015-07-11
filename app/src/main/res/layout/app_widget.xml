@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@drawable/widget_background"
-    android:layout_margin="@dimen/widget_margin">
+    android:padding="@dimen/widget_margin">
 
     <TextView
         android:id="@+id/textview_widget"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_margin="2dp">
+        android:layout_margin="4dp">
 
         <ImageView
             android:id="@+id/photo_button_widget"
@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight=".50"
-            android:background="@drawable/widget_effect_one"/>
+            android:src="@drawable/widget_effect_one"/>
 
         <ImageView
             android:id="@+id/video_button_widget"
@@ -36,6 +36,6 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight=".50"
-            android:background="@drawable/widget_effect_two"/>
+            android:src="@drawable/widget_effect_two"/>
     </LinearLayout>
 </RelativeLayout>
