@@ -75,7 +75,6 @@ public class RecordService extends Service implements CameraStateChangeListener 
         if (isRecording()) {
             stopRecording();
         }
-        setIsRecording(false);
         System.out.println("Service stopped");
         setInstance(null);
         super.onDestroy();
@@ -84,10 +83,8 @@ public class RecordService extends Service implements CameraStateChangeListener 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         if (isRecording()) {
-            stopRecording();
             stopSelf();
         }
-        setIsRecording(false);
         super.onTaskRemoved(rootIntent);
     }
 
@@ -151,6 +148,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
         mMediaRecorder.stop();
         mFlashlight.releaseAllResources();
         Toast.makeText(getApplicationContext(), "Recording Stopped", Toast.LENGTH_SHORT).show();
+        setIsRecording(false);
 //        if (Helpers.isWidgetSwitchOn()) {
 //            LollipopNotification.showNotification();
 //        }
