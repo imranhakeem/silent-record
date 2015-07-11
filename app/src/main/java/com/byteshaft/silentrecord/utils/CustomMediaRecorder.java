@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.view.SurfaceHolder;
 
 import com.byteshaft.silentrecord.AppGlobals;
-import com.byteshaft.silentrecord.notification.RecordingNotification;
 
 import java.io.IOException;
 

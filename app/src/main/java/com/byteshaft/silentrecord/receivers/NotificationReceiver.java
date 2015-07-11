@@ -4,9 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.ConfirmationDialog;
-import com.byteshaft.silentrecord.services.RecordService;
 
 public class NotificationReceiver extends BroadcastReceiver {
 

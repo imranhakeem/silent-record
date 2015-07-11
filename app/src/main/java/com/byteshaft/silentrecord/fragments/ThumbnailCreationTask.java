@@ -4,16 +4,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 
-import com.byteshaft.silentrecord.MainActivity;
 import com.byteshaft.silentrecord.utils.Helpers;
-
-import java.util.ArrayList;
 
 public class ThumbnailCreationTask extends AsyncTask<Void, Void, Bitmap> {
 
