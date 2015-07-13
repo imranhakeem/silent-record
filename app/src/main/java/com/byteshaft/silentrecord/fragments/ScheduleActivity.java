@@ -1,7 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -141,7 +140,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                             mPictureButton.setBackgroundResource(R.drawable.pic_alarm_set);
                             Helpers.setPicAlarm(true);
                             mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "pic");
-                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + (mDay+1) + "/" + mMonth + "/" + mYear);
+                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + (mMonth+1) + "/" + mYear);
                             mBtnDatePicker.setClickable(false);
                             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
                         } else {
@@ -175,7 +174,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                             mVideoButton.setBackgroundResource(R.drawable.video_alarm_set);
                             Helpers.setVideoAlarm(true);
                             mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "video");
-                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + (mDay+1) + "/" + mMonth + "/" + mYear);
+                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + (mMonth+1) + "/" + mYear);
                             mBtnDatePicker.setClickable(false);
                             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
                         } else {
