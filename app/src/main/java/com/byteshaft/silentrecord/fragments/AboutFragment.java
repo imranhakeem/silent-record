@@ -25,6 +25,7 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.about_fragment, container, false);
+        AppGlobals.setIsMainActivityShown(false);
 
         ImageView imageView0 = (ImageView) rootView.findViewById(R.id.websiteImageView);
         imageView0.setOnClickListener(new View.OnClickListener() {

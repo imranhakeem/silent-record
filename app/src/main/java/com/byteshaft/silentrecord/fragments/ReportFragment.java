@@ -23,6 +23,7 @@ public class ReportFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        AppGlobals.setIsMainActivityShown(false);
         View reportView = inflater.inflate(R.layout.report_fragment, container, false);
         subjectEditText = (EditText) reportView.findViewById(R.id.editText_report_subject);
         descriptionEditText = (EditText) reportView.findViewById(R.id.editText_report_description);

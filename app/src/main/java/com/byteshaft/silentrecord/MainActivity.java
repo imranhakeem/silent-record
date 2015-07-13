@@ -44,15 +44,8 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     private MaterialTabHost mMaterialTabHost;
     private Resources mResources;
     private Fragment mFragment;
-    boolean isMainActivityActive = false;
+    public static boolean isMainActivityActive = false;
     public static boolean correctPIN;
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        isMainActivityActive = false;
-
-    }
 
     @Override
     protected void onResume() {
@@ -61,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
             new CameraCharacteristics(this);
             Helpers.setIsAppRunningForTheFirstTime(false);
         }
-        isMainActivityActive = true;
         String pin = Helpers.getValueFromKey("pin_code");
         if (Helpers.isPasswordEnabled() && !pin.equals(" ") && !AppGlobals.isUnlocked() && !pin.isEmpty()) {
             openPinActivity();
@@ -71,19 +63,21 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        if (!isMainActivityActive) {
+        if (!AppGlobals.isMainActivityShown()) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
+            AppGlobals.setIsMainActivityShown(true);
             overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
         }
         PasswordActivity.wasShown = false;
+        super.onBackPressed();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.MyAppTheme);
         super.onCreate(savedInstanceState);
+        AppGlobals.setIsMainActivityShown(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#689F39")));
         getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_main);
