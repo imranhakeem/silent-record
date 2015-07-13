@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.byteshaft.silentrecord.AppGlobals;
@@ -34,6 +36,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     private Helpers mHelpers;
     public static Button mPictureButton;
     public static Button mVideoButton;
+    private Button mButtonMax;
     private int mYear;
     private int mMonth;
     private int mDay;
@@ -50,9 +53,11 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
         mBtnDatePicker = (Button) view.findViewById(R.id.btnSetDate);
         mPictureButton = (Button) view.findViewById(R.id.button_photo_schedule);
         mVideoButton = (Button) view.findViewById(R.id.button_video_schedule);
+        mButtonMax = (Button) view.findViewById(R.id.buttonMax);
         mBtnDatePicker.setOnClickListener(this);
         mPictureButton.setOnClickListener(this);
         mVideoButton.setOnClickListener(this);
+        mButtonMax.setOnClickListener(this);
         mHours = datePreference.getInt("hours", 0);
         mMinutes = datePreference.getInt("minutes", 0);
         mDay = datePreference.getInt("day", 0);
@@ -135,7 +140,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                             mPictureButton.setBackgroundResource(R.drawable.pic_alarm_set);
                             Helpers.setPicAlarm(true);
                             mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "pic");
-                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + mMonth + "/" + mYear);
+                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + (mMonth+1) + "/" + mYear);
                             mBtnDatePicker.setClickable(false);
                             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
                         } else {
@@ -169,7 +174,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                             mVideoButton.setBackgroundResource(R.drawable.video_alarm_set);
                             Helpers.setVideoAlarm(true);
                             mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "video");
-                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + mMonth + "/" + mYear);
+                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + (mMonth+1) + "/" + mYear);
                             mBtnDatePicker.setClickable(false);
                             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
                         } else {
@@ -180,7 +185,41 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                     }
                 }
                 break;
+            case R.id.buttonMax:
+                showDialog();
+                break;
         }
+    }
+
+    private void showDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.dialog);
+        final EditText editText = (EditText) dialog.findViewById(R.id.editText);
+        dialog.setTitle("Max Time");
+        Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
+        Button buttonOk = (Button) dialog.findViewById(R.id.buttonOk);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!editText.getText().toString().isEmpty()) {
+                    SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+                    sharedPreferences.edit().putString("max_video", editText.getText().
+                            toString()).apply();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(getActivity(), "please enter max duration", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        // if button is clicked, close the custom dialog
+
+        dialog.show();
     }
 
     @Override
