@@ -67,7 +67,8 @@
         </receiver>
         <activity
             android:name=".PasswordActivity"
-            android:label="@string/title_activity_password" >
+            android:label="@string/title_activity_password"
+            android:screenOrientation="portrait">
         </activity>
         <service android:name=".services.RecordService" android:enabled="true"/>
         <service android:name=".services.PictureService" android:enabled="true"/>
