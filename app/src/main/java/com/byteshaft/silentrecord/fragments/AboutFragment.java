@@ -1,6 +1,8 @@
 package com.byteshaft.silentrecord.fragments;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,12 +14,18 @@ import android.widget.ImageView;
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 
+import java.util.List;
 
 
 public class AboutFragment extends Fragment {
+
+    Intent intent;
+    String faceBookID = "340927136101273";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.about_fragment, container, false);
+        AppGlobals.setIsMainActivityShown(false);
 
         ImageView imageView0 = (ImageView) rootView.findViewById(R.id.websiteImageView);
         imageView0.setOnClickListener(new View.OnClickListener() {
@@ -35,12 +43,7 @@ public class AboutFragment extends Fragment {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("http://facebook.com/byteshaft"));
-                startActivity(intent);
-//                openFacebookIfAppIsInstalledOtherWiseOpenInBrowser();
+                openFacebookIfAppIsInstalledOtherWiseOpenInBrowser();
             }
         });
 
@@ -48,11 +51,7 @@ public class AboutFragment extends Fragment {
         imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("http://twitter.com/byteshaft"));
-                startActivity(intent);
+                openTwitterIfAppIsInstalledOtherWiseOpenInBrowser();
             }
         });
 
@@ -60,11 +59,7 @@ public class AboutFragment extends Fragment {
         imageView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("http://www.linkedin.com/"));
-                startActivity(intent);
+                openLinkedInIfAppIsInstalledOtherWiseOpenInBrowser();
             }
         });
 
@@ -81,13 +76,38 @@ public class AboutFragment extends Fragment {
         return rootView;
     }
 
-    public Intent openFacebookIfAppIsInstalledOtherWiseOpenInBrowser() {
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/340927136101273"));
-        } catch (Exception e) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/byteshaft")));
+    public void openLinkedInIfAppIsInstalledOtherWiseOpenInBrowser() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("linkedin://167965688"));
+        final PackageManager packageManager = AppGlobals.getContext().getPackageManager();
+        final List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        if (list.isEmpty()) {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.linkedin.com/profile/view?id=167965688"));
         }
-        return new Intent(Intent.ACTION_VIEW);
+        startActivity(intent);
+    }
+
+    public void openFacebookIfAppIsInstalledOtherWiseOpenInBrowser() {
+        try {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + faceBookID));
+            startActivity(intent);
+        } catch (Exception e) {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + faceBookID));
+            startActivity(intent);
+        }
+    }
+
+    public void openTwitterIfAppIsInstalledOtherWiseOpenInBrowser() {
+        Intent twitterIntent;
+        try {
+            // get the Twitter app if possible
+            AppGlobals.getContext().getPackageManager().getPackageInfo("com.twitter.android", 0);
+            twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=3184467546"));
+            twitterIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } catch (Exception e) {
+            // no Twitter app, revert to browser
+            twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/byteshaft"));
+        }
+        startActivity(twitterIntent);
     }
 
     @Override

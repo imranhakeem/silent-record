@@ -19,6 +19,15 @@ public class AppGlobals extends Application {
     private static Context sContext;
     static String LOG_TAG = "silent_recorder";
     private static boolean sIsUnlocked;
+    private static boolean sIsMainActivityShown;
+
+    public static void setIsMainActivityShown(boolean shown) {
+        sIsMainActivityShown = shown;
+    }
+
+    public static boolean isMainActivityShown() {
+        return sIsMainActivityShown;
+    }
 
     public static class DIRECTORY {
         public static final String PICTURES = "SpyPics";

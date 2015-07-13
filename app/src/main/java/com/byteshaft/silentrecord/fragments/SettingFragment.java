@@ -9,6 +9,7 @@ import android.preference.Preference;
 import android.preference.SwitchPreference;
 
 import com.byteshaft.silentrecord.AppGlobals;
+import com.byteshaft.silentrecord.MainActivity;
 import com.byteshaft.silentrecord.R;
 import com.byteshaft.silentrecord.notification.NotificationWidget;
 import com.byteshaft.silentrecord.services.NotificationService;
@@ -44,6 +45,7 @@ public class SettingFragment extends PreferenceFragment implements
         mHelpers = new Helpers(getActivity());
         setUpCameraSelection();
         loadAndSetUpSettingsFragment();
+        AppGlobals.setIsMainActivityShown(false);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
