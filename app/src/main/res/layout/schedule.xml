@@ -32,5 +32,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:background="@drawable/video_alarm_notset"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/max_record"
+        android:id="@+id/buttonMax"
+        android:textColor="#D50000"
+        android:layout_below="@+id/btnSetDate"
+        android:layout_alignLeft="@+id/btnSetDate"
+        android:layout_alignStart="@+id/btnSetDate" />
 </RelativeLayout>
 </ScrollView>
