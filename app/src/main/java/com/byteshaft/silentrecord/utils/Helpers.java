@@ -12,12 +12,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
 import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.R;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
 
 import java.io.File;
@@ -225,31 +228,37 @@ public class Helpers extends ContextWrapper {
         for (File file : directory.listFiles()) {
             String fileName = file.getName();
             if (!fileName.startsWith(".")) {
-                File hiddenFile = new File(directory, "." + fileName);
+//                File hiddenFile = new File(directory, "." + fileName);
+                File hiddenFile = new File(FilenameUtils.removeExtension(file.getAbsolutePath()));
                 file.renameTo(hiddenFile);
             }
         }
+        refreshMediaScan(directory);
     }
 
     public static void unHideFilesInDirectory(String directoryName) {
         File directory;
+        String extension;
         switch (directoryName) {
             case AppGlobals.DIRECTORY.VIDEOS:
                 directory = AppGlobals.getVideosDirectory();
+                extension = ".mp4";
                 break;
             case AppGlobals.DIRECTORY.PICTURES:
                 directory = AppGlobals.getPicturesDirectory();
+                extension = ".jpg";
                 break;
             default:
                 return;
         }
         for (File file : directory.listFiles()) {
             String fileName = file.getName();
-            if (fileName.startsWith(".")) {
-                File unhidden = new File(directory, fileName.substring(1));
+            if (!fileName.endsWith(extension)) {
+                File unhidden = new File(directory, fileName + extension);
                 file.renameTo(unhidden);
             }
         }
+        refreshMediaScan(directory);
     }
 
     public static boolean isWidgetSwitchOn() {
@@ -322,5 +331,18 @@ public class Helpers extends ContextWrapper {
     public static boolean isWidgetEnabledOnHome() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
         return sharedPreferences.getBoolean("widget_enabled", false);
+    }
+
+    public static void refreshMediaScan(File directory) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            AppGlobals.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                    Uri.parse("file://" + directory.getAbsolutePath())));
+        } else {
+            for (File file : directory.listFiles()) {
+                System.out.println(file.getAbsolutePath());
+                AppGlobals.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                        Uri.parse("file://" + file.getAbsolutePath())));
+            }
+        }
     }
 }

@@ -7,6 +7,8 @@ import android.os.Environment;
 
 import com.byteshaft.silentrecord.AppGlobals;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 
 public class VideoFragmentHelpers {
@@ -58,41 +60,34 @@ public class VideoFragmentHelpers {
     }
 
     public boolean hideFile(String fileName) {
-        File directory = null;
-        switch (mContentType) {
-            case AppGlobals.DIRECTORY.VIDEOS:
-                directory = AppGlobals.getVideosDirectory();
-                break;
-            case AppGlobals.DIRECTORY.PICTURES:
-                directory = AppGlobals.getPicturesDirectory();
-                break;
-        }
+        boolean success = false;
+        File directory = getDirectoryByContentType(mContentType);
+        String extension = getExtensionByContentType(mContentType);
         File file1 = new File(directory, fileName);
-        if (!fileName.startsWith(".")) {
-            File file2 = new File(directory, "." + fileName);
-            return file1.renameTo(file2);
-        } else {
-            return false;
+        if (fileName.endsWith(extension)) {
+            File hiddenFile = new File(FilenameUtils.removeExtension(file1.getAbsolutePath()));
+            success = file1.renameTo(hiddenFile);
+            if (success) {
+                Helpers.refreshMediaScan(directory);
+            }
         }
+        return success;
     }
 
     public boolean unHideFile(String fileName) {
-        File directory = null;
-        switch (mContentType) {
-            case AppGlobals.DIRECTORY.VIDEOS:
-                directory = AppGlobals.getVideosDirectory();
-                break;
-            case AppGlobals.DIRECTORY.PICTURES:
-                directory = AppGlobals.getPicturesDirectory();
-                break;
-        }
+        boolean success = false;
+        File directory = getDirectoryByContentType(mContentType);
+        String extension = getExtensionByContentType(mContentType);
+
         File file1 = new File(directory, fileName);
-        if (fileName.startsWith(".")) {
-            File file2 = new File(directory, fileName.substring(1));
-            return file1.renameTo(file2);
-        } else {
-            return false;
+        if (!fileName.endsWith(extension)) {
+            File file2 = new File(directory, fileName + extension);
+            success = file1.renameTo(file2);
+            if (success) {
+                Helpers.refreshMediaScan(directory);
+            }
         }
+        return success;
     }
 
     public String getExecuteText() {
@@ -107,10 +102,32 @@ public class VideoFragmentHelpers {
     }
 
     public String getVisibilityText(String fileName) {
-        if (fileName.startsWith(".")) {
+        if (!fileName.endsWith(getExtensionByContentType(mContentType))) {
             return AppConstants.TEXT_FILE_SHOW;
         } else {
             return AppConstants.TEXT_FILE_HIDE;
+        }
+    }
+
+    public static String getExtensionByContentType(String contentType) {
+        switch (contentType) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                return ".mp4";
+            case AppGlobals.DIRECTORY.PICTURES:
+                return ".jpg";
+            default:
+                return null;
+        }
+    }
+
+    public static File getDirectoryByContentType(String contentType) {
+        switch (contentType) {
+            case AppGlobals.DIRECTORY.VIDEOS:
+                return AppGlobals.getVideosDirectory();
+            case AppGlobals.DIRECTORY.PICTURES:
+                return AppGlobals.getPicturesDirectory();
+            default:
+                return null;
         }
     }
 }
