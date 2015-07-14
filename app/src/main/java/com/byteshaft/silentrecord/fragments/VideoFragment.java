@@ -35,6 +35,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.util.ArrayList;
 
 public class VideoFragment extends ListFragment {
@@ -60,6 +62,7 @@ public class VideoFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        AppGlobals.setIsMainActivityShown(false);
         return inflater.inflate(R.layout.video_fragment, container, false);
     }
 
@@ -187,13 +190,16 @@ public class VideoFragment extends ListFragment {
                 break;
             case AppConstants.TEXT_FILE_HIDE:
                 if (mHelpers.hideFile(mFilesNames.get(info.position))) {
-                    mFilesNames.set(info.position, "." + mFilesNames.get(info.position));
+                    mFilesNames.set(info.position, FilenameUtils.removeExtension(mFilesNames.get(info.position)));
                     mListAdapter.notifyDataSetChanged();
                 }
                 break;
             case AppConstants.TEXT_FILE_SHOW:
                 if (mHelpers.unHideFile(mFilesNames.get(info.position))) {
-                    mFilesNames.set(info.position, mFilesNames.get(info.position).substring(1));
+                    mFilesNames.set(
+                            info.position,
+                            mFilesNames.get(info.position)
+                                    + VideoFragmentHelpers.getExtensionByContentType(mContentType));
                     mListAdapter.notifyDataSetChanged();
                 }
                 break;

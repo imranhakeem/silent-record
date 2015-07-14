@@ -1,5 +1,6 @@
 package com.byteshaft.silentrecord.fragments;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.byteshaft.silentrecord.AppGlobals;
@@ -39,6 +41,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     private int mDay;
     private int mHours;
     private int mMinutes;
+    private int duration;
     private SharedPreferences datePreference;
 
     @Override
@@ -58,6 +61,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
         mDay = datePreference.getInt("day", 0);
         mMonth = datePreference.getInt("month", 0);
         mYear = datePreference.getInt("year", 0);
+        duration = datePreference.getInt("duration", 0);
         setBackgroundForButtonPresent();
         final Calendar calendar = Calendar.getInstance();
         datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR),
@@ -83,13 +87,13 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
     private void setBackgroundForButtonPresent() {
         if (Helpers.getPicAlarmStatus()) {
             mPictureButton.setBackgroundResource(R.drawable.pic_alarm_set);
-            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + mMonth + "/" + mYear);
+            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + (mMonth + 1) + "/" + mYear);
             mBtnDatePicker.setClickable(false);
             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
             mVideoButton.setVisibility(View.INVISIBLE);
         } else if (Helpers.getVideoAlarmStatus()) {
             mVideoButton.setBackgroundResource(R.drawable.video_alarm_set);
-            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + mMonth + "/" + mYear);
+            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + (mMonth+1) + "/" + mYear + "\nMax Duration: " + duration + "Min");
             mBtnDatePicker.setClickable(false);
             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
             mPictureButton.setVisibility(View.INVISIBLE);
@@ -135,7 +139,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                             mPictureButton.setBackgroundResource(R.drawable.pic_alarm_set);
                             Helpers.setPicAlarm(true);
                             mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "pic");
-                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + mMonth + "/" + mYear);
+                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + (mMonth + 1) + "/" + mYear);
                             mBtnDatePicker.setClickable(false);
                             mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
                         } else {
@@ -160,27 +164,68 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
                     Helpers.setTime(false);
                     Toast.makeText(getActivity(),"Schedule is removed", Toast.LENGTH_SHORT).show();
                 } else if (Helpers.getTime() && Helpers.getDate()) {
-                    String time = mDay+"/"+(mMonth+1)+"/"+mYear+" "+ mHours + ":" + mMinutes;
-                    try {
-                        Date now = Helpers.getTimeFormat().parse(mHelpers.getAmPm());
-                        Date date = Helpers.getTimeFormat().parse(time);
-                        if (date.after(now)) {
-                            mPictureButton.setVisibility(View.INVISIBLE);
-                            mVideoButton.setBackgroundResource(R.drawable.video_alarm_set);
-                            Helpers.setVideoAlarm(true);
-                            mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "video");
-                            mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + mMonth + "/" + mYear);
-                            mBtnDatePicker.setClickable(false);
-                            mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
-                        } else {
-                            Toast.makeText(getActivity(), "invalid time selection", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (ParseException e) {
-                        Log.i(AppGlobals.getLogTag(getClass()), "parse exception");
-                    }
+                    showMaxTimeDialog();
                 }
                 break;
         }
+    }
+
+    private void showMaxTimeDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.dialog);
+        final EditText editText = (EditText) dialog.findViewById(R.id.editText);
+        dialog.setTitle("Max Recording Duration");
+        Button buttonCancel = (Button) dialog.findViewById(R.id.button_cancel);
+        Button buttonOk = (Button) dialog.findViewById(R.id.button_ok);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!editText.getText().toString().isEmpty()) {
+                    SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
+                    try {
+                        duration = Integer.parseInt(editText.getText().toString());
+                    } catch(NumberFormatException nfe) {
+                        Toast.makeText(getActivity(), "Invalid Input", Toast.LENGTH_SHORT).show();
+                    }
+                    if (duration > 0) {
+                        datePreference.edit().putInt("duration", duration).apply();
+                        sharedPreferences.edit().putString("max_video", editText.getText().
+                                toString()).apply();
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(), "Max Duration: " + duration + "Min", Toast.LENGTH_SHORT).show();
+                        String time = mDay+"/"+(mMonth+1)+"/"+mYear+" "+ mHours + ":" + mMinutes;
+                        try {
+                            Date now = Helpers.getTimeFormat().parse(mHelpers.getAmPm());
+                            Date date = Helpers.getTimeFormat().parse(time);
+                            if (date.after(now)) {
+                                mPictureButton.setVisibility(View.INVISIBLE);
+                                mVideoButton.setBackgroundResource(R.drawable.video_alarm_set);
+                                Helpers.setVideoAlarm(true);
+                                mHelpers.setAlarm(mYear, mMonth, mDay, mHours, mMinutes, "video");
+                                mBtnDatePicker.setText("Schedule is set\n" + mHours + ":" + mMinutes + " - " + mDay + "/" + (mMonth + 1) + "/" + mYear + "\nMax Duration: " + duration + "Min");
+                                mBtnDatePicker.setClickable(false);
+                                mBtnDatePicker.setBackgroundResource(R.drawable.schedule_background_set);
+                            } else {
+                                Toast.makeText(getActivity(), "invalid time selection", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (ParseException e) {
+                            Log.i(AppGlobals.getLogTag(getClass()), "parse exception");
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "Invalid Input", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Input field is empty", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        dialog.show();
     }
 
     @Override
@@ -198,7 +243,7 @@ public class ScheduleActivity extends Fragment implements View.OnClickListener,
 
     @Override
     public void onTimeSet(RadialPickerLayout radialPickerLayout, int hours, int minutes) {
-        Toast.makeText(getActivity(),"Time: "+ hours + ":"+ minutes, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Time: " + hours + ":" + minutes, Toast.LENGTH_SHORT).show();
         datePreference.edit().putInt("hours", hours).apply();
         datePreference.edit().putInt("minutes", minutes).apply();
         mHours = hours;
