@@ -51,6 +51,7 @@ public class VideoFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        AppGlobals.setIsMainActivityShown(false);
         return inflater.inflate(R.layout.video_fragment, container, false);
     }
 
