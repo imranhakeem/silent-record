@@ -228,7 +228,7 @@ public class Helpers extends ContextWrapper {
         for (File file : directory.listFiles()) {
             String fileName = file.getName();
             if (!fileName.startsWith(".")) {
-//                File hiddenFile = new File(directory, "." + fileName);
+                updateFile(file);
                 File hiddenFile = new File(FilenameUtils.removeExtension(file.getAbsolutePath()));
                 file.renameTo(hiddenFile);
             }
@@ -254,8 +254,10 @@ public class Helpers extends ContextWrapper {
         for (File file : directory.listFiles()) {
             String fileName = file.getName();
             if (!fileName.endsWith(extension)) {
+                updateFile(file);
                 File unhidden = new File(directory, fileName + extension);
                 file.renameTo(unhidden);
+                updateFile(unhidden);
             }
         }
         refreshMediaScan(directory);
@@ -339,10 +341,14 @@ public class Helpers extends ContextWrapper {
                     Uri.parse("file://" + directory.getAbsolutePath())));
         } else {
             for (File file : directory.listFiles()) {
-                System.out.println(file.getAbsolutePath());
-                AppGlobals.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                        Uri.parse("file://" + file.getAbsolutePath())));
+                updateFile(file);
             }
         }
+    }
+
+    public static void updateFile(File file) {
+        Uri contentUri = Uri.fromFile(file);
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,contentUri);
+        AppGlobals.getContext().sendBroadcast(mediaScanIntent);
     }
 }
