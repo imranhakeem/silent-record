@@ -5,17 +5,24 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +44,8 @@ public class VideoFragment extends ListFragment {
     private ThumbnailCreation mListAdapter;
     private String mContentType;
     private VideoFragmentHelpers mHelpers;
+    private int mPosition;
+    private ArrayList<Integer> mItemsToBeDeleted;
 
     public VideoFragment() {
         super();
@@ -57,6 +66,80 @@ public class VideoFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mItemsToBeDeleted = new ArrayList<>();
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        getListView().setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                View view = getListView().getChildAt(i);
+                if (mItemsToBeDeleted.contains(i)) {
+                    mItemsToBeDeleted.remove(i);
+                    view.setBackgroundColor(Color.WHITE);
+                } else {
+                    mItemsToBeDeleted.add(i);
+                    view.setBackgroundColor(Color.LTGRAY);
+
+                }
+                if (mItemsToBeDeleted.size() == 0) {
+                    mItemsToBeDeleted.clear();
+                    actionMode.finish();
+                }
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                MenuInflater inflater = actionMode.getMenuInflater();
+                inflater.inflate(R.menu.delete, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                System.out.println("onPrepareActionMode");
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.delete:
+                        for (int i =0; i>= mItemsToBeDeleted.size(); i++) {
+                            if (mHelpers.deleteFile(mHelpers.getPathForFile(mFilesNames.get(i)))) {
+                                mListAdapter.remove(mListAdapter.getItem(i));
+                                mListAdapter.notifyDataSetChanged();
+                                Toast.makeText(mContext, "file deleted", Toast.LENGTH_SHORT).show();
+                            }
+                            Log.i("debug", "delete stuff");
+                        }
+                        actionMode.finish();
+                        return true;
+                    default:
+                        return false;
+
+                    case R.id.hide:
+                        if (mHelpers.hideFile(mFilesNames.get(mPosition))) {
+                            mFilesNames.set(mPosition, "." + mFilesNames.get(mPosition));
+                            mListAdapter.notifyDataSetChanged();
+                            actionMode.finish();
+                        }
+                        break;
+                    case R.id.show:
+                        if (mHelpers.unHideFile(mFilesNames.get(mPosition))) {
+                            mFilesNames.set(mPosition, mFilesNames.get(mPosition).substring(1));
+                            mListAdapter.notifyDataSetChanged();
+                            actionMode.finish();
+                        }
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+
+            }
+        });
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -65,7 +148,7 @@ public class VideoFragment extends ListFragment {
             }
         });
         getListView().setDivider(null);
-        registerForContextMenu(getListView());
+//        registerForContextMenu(getListView());
     }
 
     @Override
