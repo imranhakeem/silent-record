@@ -3,6 +3,7 @@ package com.byteshaft.silentrecord.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 
 import com.byteshaft.silentrecord.AppGlobals;
@@ -68,7 +69,11 @@ public class VideoFragmentHelpers {
             File hiddenFile = new File(FilenameUtils.removeExtension(file1.getAbsolutePath()));
             success = file1.renameTo(hiddenFile);
             if (success) {
-                Helpers.refreshMediaScan(directory);
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    Helpers.updateFile(file1);
+                } else {
+                    Helpers.refreshMediaScan(directory);
+                }
             }
         }
         return success;
@@ -84,7 +89,12 @@ public class VideoFragmentHelpers {
             File file2 = new File(directory, fileName + extension);
             success = file1.renameTo(file2);
             if (success) {
-                Helpers.refreshMediaScan(directory);
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    Helpers.updateFile(file1);
+                    Helpers.updateFile(file2);
+                } else {
+                    Helpers.refreshMediaScan(directory);
+                }
             }
         }
         return success;
