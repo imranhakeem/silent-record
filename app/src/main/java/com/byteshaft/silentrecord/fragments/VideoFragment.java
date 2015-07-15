@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -48,6 +50,9 @@ public class VideoFragment extends ListFragment {
     private VideoFragmentHelpers mHelpers;
     private int mPosition;
     private ArrayList<Integer> mItemsToBeDeleted;
+    private SparseBooleanArray mSelectedItems;
+    private SparseArray<String> mFileNamesReal;
+    private Parcelable state;
 
     public VideoFragment() {
         super();
@@ -75,20 +80,12 @@ public class VideoFragment extends ListFragment {
 
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                View view = getListView().getChildAt(i);
-                if (mItemsToBeDeleted.contains(i)) {
-                    mItemsToBeDeleted.remove(i);
-                    view.setBackgroundColor(Color.WHITE);
+                if (b) {
+                    mSelectedItems.put(i, true);
                 } else {
-                    mItemsToBeDeleted.add(i);
-                    view.setBackgroundColor(Color.LTGRAY);
-
+                    mSelectedItems.put(i, false);
                 }
-                if (mItemsToBeDeleted.size() == 0) {
-                    mItemsToBeDeleted.clear();
-                    actionMode.finish();
-                }
-
+                mListAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -108,39 +105,45 @@ public class VideoFragment extends ListFragment {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.delete:
-                        for (int i =0; i>= mItemsToBeDeleted.size(); i++) {
-                            if (mHelpers.deleteFile(mHelpers.getPathForFile(mFilesNames.get(i)))) {
-                                mListAdapter.remove(mListAdapter.getItem(i));
-                                mListAdapter.notifyDataSetChanged();
-                                Toast.makeText(mContext, "file deleted", Toast.LENGTH_SHORT).show();
+                        for (int i =0; i < mFilesNames.size(); i++) {
+                            if (mSelectedItems.get(i)) {
+                                if (mHelpers.deleteFile(mHelpers.getPathForFile(mFilesNames.get(i)))) {
+                                    Toast.makeText(mContext, "file deleted", Toast.LENGTH_SHORT).show();
+                                }
                             }
                             Log.i("debug", "delete stuff");
                         }
-                        actionMode.finish();
+                        reloadAdapterAndRestoreView(actionMode);
                         return true;
-                    default:
-                        return false;
-
                     case R.id.hide:
-                        if (mHelpers.hideFile(mFilesNames.get(mPosition))) {
-                            mFilesNames.set(mPosition, "." + mFilesNames.get(mPosition));
-                            mListAdapter.notifyDataSetChanged();
-                            actionMode.finish();
+                        for (int i =0; i < mFilesNames.size(); i++) {
+                            if (mSelectedItems.get(i)) {
+                                if (mHelpers.hideFile(mFilesNames.get(i))) {
+                                    Toast.makeText(mContext, "file hidden", Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         }
-                        break;
+                        reloadAdapterAndRestoreView(actionMode);
+                        return true;
                     case R.id.show:
-                        if (mHelpers.unHideFile(mFilesNames.get(mPosition))) {
-                            mFilesNames.set(mPosition, mFilesNames.get(mPosition).substring(1));
-                            mListAdapter.notifyDataSetChanged();
-                            actionMode.finish();
+                        for (int i =0; i < mFilesNames.size(); i++) {
+                            if (mSelectedItems.get(i)) {
+                                if (mHelpers.unHideFile(mFilesNames.get(i))) {
+                                    Toast.makeText(mContext, "file(s) show", Toast.LENGTH_SHORT).show();
+//                                    mFilesNames.set(i, mFilesNames.get(i) + VideoFragmentHelpers.
+//                                            getExtensionByContentType(mContentType));
+//                                    mListAdapter.notifyDataSetChanged();
+                                }
+                            }
                         }
+                        reloadAdapterAndRestoreView(actionMode);
+                        return true;
                 }
                 return false;
             }
 
             @Override
             public void onDestroyActionMode(ActionMode actionMode) {
-
             }
         });
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -152,6 +155,14 @@ public class VideoFragment extends ListFragment {
         });
         getListView().setDivider(null);
 //        registerForContextMenu(getListView());
+    }
+
+    private void reloadAdapterAndRestoreView(ActionMode actionMode) {
+        mSelectedItems.clear();
+        actionMode.finish();
+        state = getListView().onSaveInstanceState();
+        populateListView();
+        getListView().onRestoreInstanceState(state);
     }
 
     @Override
@@ -249,6 +260,12 @@ public class VideoFragment extends ListFragment {
             holder.thumbnail.setImageBitmap(null);
             String path = "file://" + mHelpers.getPathForFile(mFiles.get(position));
             mImageLoader.displayImage(path, holder.thumbnail, mOptions, null);
+            if (mSelectedItems.get(position)) {
+                convertView.setBackgroundColor(Color.LTGRAY);
+            } else {
+                convertView.setBackgroundColor(Color.WHITE);
+            }
+
             return convertView;
         }
     }
@@ -281,11 +298,25 @@ public class VideoFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        populateListView();
+    }
+
+//    private void
+
+    private void populateListView() {
         mFilesNames = Helpers.getFileNamesFromDirectory(mContentType);
         mListAdapter = new ThumbnailCreation(getActivity().getApplicationContext(),
                 R.layout.row, mFilesNames);
         getListView().setAdapter(mListAdapter);
+        mSelectedItems = new SparseBooleanArray(mFilesNames.size());
+        mFileNamesReal = new SparseArray<>(mFilesNames.size());
+        for (int i = 0; i < mFilesNames.size(); i++) {
+            mSelectedItems.put(i, false);
+            mFileNamesReal.put(i, mFilesNames.get(i));
+        }
     }
+
+
     @Override
     public void onPause() {
         super.onPause();
