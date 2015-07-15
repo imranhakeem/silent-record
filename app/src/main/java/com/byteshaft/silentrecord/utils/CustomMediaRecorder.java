@@ -3,11 +3,13 @@ package com.byteshaft.silentrecord.utils;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Handler;
 import android.view.SurfaceHolder;
 
 import com.byteshaft.silentrecord.AppGlobals;
 
+import java.io.File;
 import java.io.IOException;
 
 public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.OnErrorListener {
@@ -15,6 +17,7 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
     private static CustomMediaRecorder sInstance;
     private Handler mHandler;
     private boolean mHandlerSet;
+    private String mPath;
 
     public CustomMediaRecorder() {
         super();
@@ -65,6 +68,19 @@ public class CustomMediaRecorder extends MediaRecorder implements MediaRecorder.
             getHandler().removeCallbacks(mRecordingStopper);
         }
         reset();
+        File directory = AppGlobals.getVideosDirectory();
+        File file = new File(mPath);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            Helpers.updateFile(file);
+        } else {
+            Helpers.refreshMediaScan(directory);
+        }
+    }
+
+    @Override
+    public void setOutputFile(String path) throws IllegalStateException {
+        super.setOutputFile(path);
+        mPath = path;
     }
 
     private int getBitRateForResolution(int width, int height) {

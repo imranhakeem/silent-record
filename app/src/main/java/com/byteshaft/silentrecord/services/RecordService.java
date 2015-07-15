@@ -89,6 +89,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
     }
 
     private void startRecording(Camera camera, SurfaceHolder holder) {
+        camera.setDisplayOrientation(0);
         Camera.Parameters parameters = camera.getParameters();
         setOrientation(parameters);
 //        parameters.setSceneMode(Values.getVideoSceneMode());
@@ -116,7 +117,6 @@ public class RecordService extends Service implements CameraStateChangeListener 
                     AppConstants.NOTIFICATION_ID,
                     RecordingNotification.getNotification().build());
         }
-//        updateNotification(null);
     }
 
     private String getTimeStamp() {
@@ -132,7 +132,7 @@ public class RecordService extends Service implements CameraStateChangeListener 
         if (selectedCamera.equals(AppConstants.CAMERA_FRONT)) {
             parameters.setRotation(270);
         } else if (selectedCamera.equals(AppConstants.CAMERA_REAR)) {
-            parameters.setRotation(90);
+            parameters.setRotation(0);
         }
     }
 

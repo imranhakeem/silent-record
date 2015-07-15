@@ -3,6 +3,7 @@ package com.byteshaft.silentrecord.services;
 import android.app.Service;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.view.SurfaceHolder;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import com.byteshaft.ezflashlight.CameraStateChangeListener;
 import com.byteshaft.ezflashlight.Flashlight;
+import com.byteshaft.silentrecord.AppGlobals;
 import com.byteshaft.silentrecord.utils.AppConstants;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
@@ -70,6 +72,7 @@ public class PictureService extends Service implements CameraStateChangeListener
     }
 
     private void takePicture(final Camera camera) {
+        camera.setDisplayOrientation(0);
         Camera.Parameters parameters = camera.getParameters();
         setOrientation(parameters);
         parameters.setZoom(Integer.valueOf(Helpers.readZoomSettings()));
@@ -147,6 +150,12 @@ public class PictureService extends Service implements CameraStateChangeListener
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        File directory = AppGlobals.getPicturesDirectory();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            Helpers.updateFile(file);
+        } else {
+            Helpers.refreshMediaScan(directory);
         }
         stopSelf();
     }
