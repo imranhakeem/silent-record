@@ -6,7 +6,7 @@
     <color name="sage">#FFFFFF</color>
     <color name="customColor">#fff</color>
     <color name="Selection_Color">#d3d3d3</color>
+    <color name="selected_list_item_color">#FFF</color>
     <color name="dialogBackground">#dedede</color>
-
 </resources>
 
