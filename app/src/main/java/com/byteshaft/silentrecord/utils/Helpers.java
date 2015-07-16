@@ -265,7 +265,7 @@ public class Helpers extends ContextWrapper {
 
     public static boolean isWidgetSwitchOn() {
         SharedPreferences sharedPreferences = AppGlobals.getPreferenceManager();
-        return sharedPreferences.getBoolean("notifidget", false);
+        return sharedPreferences.getBoolean("notifidget", true);
     }
 
     public static boolean isImageHiderOn() {

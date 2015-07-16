@@ -26,6 +26,8 @@ import com.byteshaft.silentrecord.fragments.ScheduleActivity;
 import com.byteshaft.silentrecord.fragments.SettingFragment;
 import com.byteshaft.silentrecord.fragments.VideoFragment;
 import com.byteshaft.silentrecord.fragments.VideosActivity;
+import com.byteshaft.silentrecord.services.NotificationService;
+import com.byteshaft.silentrecord.services.WidgetUpdateService;
 import com.byteshaft.silentrecord.utils.CameraCharacteristics;
 import com.byteshaft.silentrecord.utils.Helpers;
 
@@ -58,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         if (Helpers.isPasswordEnabled() && !pin.equals(" ") && !AppGlobals.isUnlocked() && !pin.isEmpty()) {
             openPinActivity();
             finish();
+        }
+        if (Helpers.isWidgetSwitchOn()) {
+            Intent service = new Intent(this, NotificationService.class);
+            startService(service);
         }
     }
 

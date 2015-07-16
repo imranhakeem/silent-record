@@ -31,7 +31,7 @@
         <SwitchPreference
             android:key="notifidget"
             android:title="Notification Widget"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Security">
